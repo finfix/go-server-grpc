@@ -655,7 +655,7 @@ func (x *SendNotificationResponse) GetError() *Error {
 
 type GetVersionRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	ApplicationType ApplicationType        `protobuf:"varint,1,opt,name=applicationType,proto3,enum=applicationType.ApplicationType" json:"applicationType,omitempty"` // Тип приложения
+	ApplicationType ApplicationType        `protobuf:"varint,1,opt,name=applicationType,proto3,enum=applicationType.ApplicationType" json:"applicationType,omitempty"` // Тип приложения (ios, android, web)
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
