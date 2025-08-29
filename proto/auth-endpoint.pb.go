@@ -139,6 +139,7 @@ type DeviceInformation struct {
 	ModelName     string                 `protobuf:"bytes,2,opt,name=modelName,proto3" json:"modelName,omitempty"`               // Название модели
 	NameOS        OSType                 `protobuf:"varint,3,opt,name=nameOS,proto3,enum=osType.OSType" json:"nameOS,omitempty"` // Название операционной системы
 	VersionOS     string                 `protobuf:"bytes,4,opt,name=versionOS,proto3" json:"versionOS,omitempty"`               // Версия операционной системы
+	IpAddress     string                 `protobuf:"bytes,5,opt,name=ipAddress,proto3" json:"ipAddress,omitempty"`               // IP адрес
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -201,12 +202,20 @@ func (x *DeviceInformation) GetVersionOS() string {
 	return ""
 }
 
+func (x *DeviceInformation) GetIpAddress() string {
+	if x != nil {
+		return x.IpAddress
+	}
+	return ""
+}
+
 type SignInRequest struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Email         string                  `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`                   // Электронная почта пользователя
-	Password      string                  `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`             // Пароль пользователя
-	Application   *ApplicationInformation `protobuf:"bytes,3,opt,name=application,proto3,oneof" json:"application,omitempty"` // Информация о приложении
-	Device        *DeviceInformation      `protobuf:"bytes,4,opt,name=device,proto3,oneof" json:"device,omitempty"`           // Информация о девайсе
+	Email         string                  `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`             // Электронная почта пользователя
+	Password      string                  `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`       // Пароль пользователя
+	Application   *ApplicationInformation `protobuf:"bytes,3,opt,name=application,proto3" json:"application,omitempty"` // Информация о приложении
+	Device        *DeviceInformation      `protobuf:"bytes,4,opt,name=device,proto3" json:"device,omitempty"`           // Информация о девайсе
+	DeviceID      string                  `protobuf:"bytes,5,opt,name=deviceID,proto3" json:"deviceID,omitempty"`       // Идентификатор устройства
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -267,6 +276,13 @@ func (x *SignInRequest) GetDevice() *DeviceInformation {
 		return x.Device
 	}
 	return nil
+}
+
+func (x *SignInRequest) GetDeviceID() string {
+	if x != nil {
+		return x.DeviceID
+	}
+	return ""
 }
 
 type SignInResponse struct {
@@ -331,11 +347,12 @@ func (x *SignInResponse) GetToken() *Tokens {
 
 type SignUpRequest struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Name          string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                     // Имя пользователя
-	Email         string                  `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`                   // Электронная почта пользователя
-	Password      string                  `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`             // Пароль пользователя
-	Application   *ApplicationInformation `protobuf:"bytes,4,opt,name=application,proto3,oneof" json:"application,omitempty"` // Информация о приложении
-	Device        *DeviceInformation      `protobuf:"bytes,5,opt,name=device,proto3,oneof" json:"device,omitempty"`           // Информация о девайсе
+	Name          string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`               // Имя пользователя
+	Email         string                  `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`             // Электронная почта пользователя
+	Password      string                  `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`       // Пароль пользователя
+	Application   *ApplicationInformation `protobuf:"bytes,4,opt,name=application,proto3" json:"application,omitempty"` // Информация о приложении
+	Device        *DeviceInformation      `protobuf:"bytes,5,opt,name=device,proto3" json:"device,omitempty"`           // Информация о девайсе
+	DeviceID      string                  `protobuf:"bytes,6,opt,name=deviceID,proto3" json:"deviceID,omitempty"`       // Идентификатор устройства
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -403,6 +420,13 @@ func (x *SignUpRequest) GetDevice() *DeviceInformation {
 		return x.Device
 	}
 	return nil
+}
+
+func (x *SignUpRequest) GetDeviceID() string {
+	if x != nil {
+		return x.DeviceID
+	}
+	return ""
 }
 
 type SignUpResponse struct {
@@ -684,36 +708,35 @@ const file_proto_auth_auth_endpoint_proto_rawDesc = "" +
 	"\x16ApplicationInformation\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12\x14\n" +
 	"\x05build\x18\x02 \x01(\tR\x05build\x12\x1a\n" +
-	"\bbundleID\x18\x03 \x01(\tR\bbundleID\"\x97\x01\n" +
+	"\bbundleID\x18\x03 \x01(\tR\bbundleID\"\xb5\x01\n" +
 	"\x11DeviceInformation\x12\x1e\n" +
 	"\n" +
 	"deviceName\x18\x01 \x01(\tR\n" +
 	"deviceName\x12\x1c\n" +
 	"\tmodelName\x18\x02 \x01(\tR\tmodelName\x12&\n" +
 	"\x06nameOS\x18\x03 \x01(\x0e2\x0e.osType.OSTypeR\x06nameOS\x12\x1c\n" +
-	"\tversionOS\x18\x04 \x01(\tR\tversionOS\"\xd7\x01\n" +
+	"\tversionOS\x18\x04 \x01(\tR\tversionOS\x12\x1c\n" +
+	"\tipAddress\x18\x05 \x01(\tR\tipAddress\"\xce\x01\n" +
 	"\rSignInRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\x12C\n" +
-	"\vapplication\x18\x03 \x01(\v2\x1c.auth.ApplicationInformationH\x00R\vapplication\x88\x01\x01\x124\n" +
-	"\x06device\x18\x04 \x01(\v2\x17.auth.DeviceInformationH\x01R\x06device\x88\x01\x01B\x0e\n" +
-	"\f_applicationB\t\n" +
-	"\a_device\"\x92\x01\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12>\n" +
+	"\vapplication\x18\x03 \x01(\v2\x1c.auth.ApplicationInformationR\vapplication\x12/\n" +
+	"\x06device\x18\x04 \x01(\v2\x17.auth.DeviceInformationR\x06device\x12\x1a\n" +
+	"\bdeviceID\x18\x05 \x01(\tR\bdeviceID\"\x92\x01\n" +
 	"\x0eSignInResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
 	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01\x12'\n" +
 	"\x05token\x18\x03 \x01(\v2\f.auth.TokensH\x02R\x05token\x88\x01\x01B\b\n" +
 	"\x06_errorB\x05\n" +
 	"\x03_idB\b\n" +
-	"\x06_token\"\xeb\x01\n" +
+	"\x06_token\"\xe2\x01\n" +
 	"\rSignUpRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12C\n" +
-	"\vapplication\x18\x04 \x01(\v2\x1c.auth.ApplicationInformationH\x00R\vapplication\x88\x01\x01\x124\n" +
-	"\x06device\x18\x05 \x01(\v2\x17.auth.DeviceInformationH\x01R\x06device\x88\x01\x01B\x0e\n" +
-	"\f_applicationB\t\n" +
-	"\a_device\"\x92\x01\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12>\n" +
+	"\vapplication\x18\x04 \x01(\v2\x1c.auth.ApplicationInformationR\vapplication\x12/\n" +
+	"\x06device\x18\x05 \x01(\v2\x17.auth.DeviceInformationR\x06device\x12\x1a\n" +
+	"\bdeviceID\x18\x06 \x01(\tR\bdeviceID\"\x92\x01\n" +
 	"\x0eSignUpResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
 	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01\x12'\n" +
@@ -809,9 +832,7 @@ func file_proto_auth_auth_endpoint_proto_init() {
 	}
 	file_proto_error_error_proto_init()
 	file_proto_enums_osType_proto_init()
-	file_proto_auth_auth_endpoint_proto_msgTypes[3].OneofWrappers = []any{}
 	file_proto_auth_auth_endpoint_proto_msgTypes[4].OneofWrappers = []any{}
-	file_proto_auth_auth_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_auth_auth_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
 	file_proto_auth_auth_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
 	file_proto_auth_auth_endpoint_proto_msgTypes[9].OneofWrappers = []any{}

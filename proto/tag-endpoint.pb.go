@@ -24,10 +24,10 @@ const (
 
 type Tag struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	Id             []byte                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                          // Идентификатор подкатегории
-	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                      // Название подкатегории
-	AccountGroupID int32                  `protobuf:"varint,3,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"` // Идентификатор группы счетов
-	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`  // Дата и время создания
+	Id             []byte                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                         // Идентификатор подкатегории
+	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                     // Название подкатегории
+	AccountGroupID []byte                 `protobuf:"bytes,3,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"` // Идентификатор группы счетов
+	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"` // Дата и время создания
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -76,11 +76,11 @@ func (x *Tag) GetName() string {
 	return ""
 }
 
-func (x *Tag) GetAccountGroupID() int32 {
+func (x *Tag) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
 func (x *Tag) GetDatetimeCreate() *timestamppb.Timestamp {
@@ -92,8 +92,8 @@ func (x *Tag) GetDatetimeCreate() *timestamppb.Timestamp {
 
 type GetTagsRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                 // Токен доступа
-	AccountGroupIDs []int32                `protobuf:"varint,2,rep,packed,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов
+	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`         // Токен доступа
+	AccountGroupIDs [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -135,7 +135,7 @@ func (x *GetTagsRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *GetTagsRequest) GetAccountGroupIDs() []int32 {
+func (x *GetTagsRequest) GetAccountGroupIDs() [][]byte {
 	if x != nil {
 		return x.AccountGroupIDs
 	}
@@ -196,10 +196,11 @@ func (x *GetTagsResponse) GetTags() []*Tag {
 
 type CreateTagRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken    string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`        // Токен доступа
-	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                      // Название подкатегории
-	AccountGroupID int32                  `protobuf:"varint,3,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"` // Идентификатор группы счетов
-	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`  // Дата создания подкатегории
+	AccessToken    string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`       // Токен доступа
+	Id             []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                         // Идентификатор подкатегории
+	Name           string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                     // Название подкатегории
+	AccountGroupID []byte                 `protobuf:"bytes,4,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"` // Идентификатор группы счетов
+	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"` // Дата создания подкатегории
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -241,6 +242,13 @@ func (x *CreateTagRequest) GetAccessToken() string {
 	return ""
 }
 
+func (x *CreateTagRequest) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
 func (x *CreateTagRequest) GetName() string {
 	if x != nil {
 		return x.Name
@@ -248,11 +256,11 @@ func (x *CreateTagRequest) GetName() string {
 	return ""
 }
 
-func (x *CreateTagRequest) GetAccountGroupID() int32 {
+func (x *CreateTagRequest) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateTagRequest) GetDatetimeCreate() *timestamppb.Timestamp {
@@ -265,7 +273,6 @@ func (x *CreateTagRequest) GetDatetimeCreate() *timestamppb.Timestamp {
 type CreateTagResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
-	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3,oneof" json:"id,omitempty"`       // Идентификатор подкатегории
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -303,13 +310,6 @@ func (*CreateTagResponse) Descriptor() ([]byte, []int) {
 func (x *CreateTagResponse) GetError() *Error {
 	if x != nil {
 		return x.Error
-	}
-	return nil
-}
-
-func (x *CreateTagResponse) GetId() []byte {
-	if x != nil {
-		return x.Id
 	}
 	return nil
 }
@@ -514,16 +514,70 @@ func (x *DeleteTagResponse) GetError() *Error {
 	return nil
 }
 
-type GetTagsToTransactionsRequest struct {
+type TagToTransaction struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
+	TagID         []byte                 `protobuf:"bytes,1,opt,name=tagID,proto3" json:"tagID,omitempty"`                 // Идентификатор подкатегории
+	TransactionID []byte                 `protobuf:"bytes,2,opt,name=transactionID,proto3" json:"transactionID,omitempty"` // Идентификатор транзакции
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *TagToTransaction) Reset() {
+	*x = TagToTransaction{}
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TagToTransaction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TagToTransaction) ProtoMessage() {}
+
+func (x *TagToTransaction) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TagToTransaction.ProtoReflect.Descriptor instead.
+func (*TagToTransaction) Descriptor() ([]byte, []int) {
+	return file_proto_tag_tag_endpoint_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *TagToTransaction) GetTagID() []byte {
+	if x != nil {
+		return x.TagID
+	}
+	return nil
+}
+
+func (x *TagToTransaction) GetTransactionID() []byte {
+	if x != nil {
+		return x.TransactionID
+	}
+	return nil
+}
+
+type GetTagsToTransactionsRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`         // Токен доступа
+	AccountGroupIDs [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов
+	TransactionIDs  [][]byte               `protobuf:"bytes,3,rep,name=transactionIDs,proto3" json:"transactionIDs,omitempty"`   // Идентификаторы транзакций
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
 func (x *GetTagsToTransactionsRequest) Reset() {
 	*x = GetTagsToTransactionsRequest{}
-	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[9]
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -535,7 +589,7 @@ func (x *GetTagsToTransactionsRequest) String() string {
 func (*GetTagsToTransactionsRequest) ProtoMessage() {}
 
 func (x *GetTagsToTransactionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[9]
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -548,7 +602,7 @@ func (x *GetTagsToTransactionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagsToTransactionsRequest.ProtoReflect.Descriptor instead.
 func (*GetTagsToTransactionsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_tag_tag_endpoint_proto_rawDescGZIP(), []int{9}
+	return file_proto_tag_tag_endpoint_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetTagsToTransactionsRequest) GetAccessToken() string {
@@ -558,16 +612,31 @@ func (x *GetTagsToTransactionsRequest) GetAccessToken() string {
 	return ""
 }
 
+func (x *GetTagsToTransactionsRequest) GetAccountGroupIDs() [][]byte {
+	if x != nil {
+		return x.AccountGroupIDs
+	}
+	return nil
+}
+
+func (x *GetTagsToTransactionsRequest) GetTransactionIDs() [][]byte {
+	if x != nil {
+		return x.TransactionIDs
+	}
+	return nil
+}
+
 type GetTagsToTransactionsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Error              *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                     // Объект ошибки
+	TagsToTransactions []*TagToTransaction    `protobuf:"bytes,2,rep,name=tagsToTransactions,proto3" json:"tagsToTransactions,omitempty"` // Связи между подкатегориями и транзакциями
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *GetTagsToTransactionsResponse) Reset() {
 	*x = GetTagsToTransactionsResponse{}
-	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[10]
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -579,7 +648,7 @@ func (x *GetTagsToTransactionsResponse) String() string {
 func (*GetTagsToTransactionsResponse) ProtoMessage() {}
 
 func (x *GetTagsToTransactionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[10]
+	mi := &file_proto_tag_tag_endpoint_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -592,12 +661,19 @@ func (x *GetTagsToTransactionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagsToTransactionsResponse.ProtoReflect.Descriptor instead.
 func (*GetTagsToTransactionsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_tag_tag_endpoint_proto_rawDescGZIP(), []int{10}
+	return file_proto_tag_tag_endpoint_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetTagsToTransactionsResponse) GetError() *Error {
 	if x != nil {
 		return x.Error
+	}
+	return nil
+}
+
+func (x *GetTagsToTransactionsResponse) GetTagsToTransactions() []*TagToTransaction {
+	if x != nil {
+		return x.TagsToTransactions
 	}
 	return nil
 }
@@ -610,25 +686,24 @@ const file_proto_tag_tag_endpoint_proto_rawDesc = "" +
 	"\x03Tag\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12&\n" +
-	"\x0eaccountGroupID\x18\x03 \x01(\x05R\x0eaccountGroupID\x12B\n" +
+	"\x0eaccountGroupID\x18\x03 \x01(\fR\x0eaccountGroupID\x12B\n" +
 	"\x0edatetimeCreate\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"\\\n" +
 	"\x0eGetTagsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
-	"\x0faccountGroupIDs\x18\x02 \x03(\x05R\x0faccountGroupIDs\"b\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\"b\n" +
 	"\x0fGetTagsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x1c\n" +
 	"\x04tags\x18\x02 \x03(\v2\b.tag.TagR\x04tagsB\b\n" +
-	"\x06_error\"\xb4\x01\n" +
+	"\x06_error\"\xc4\x01\n" +
 	"\x10CreateTagRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12&\n" +
-	"\x0eaccountGroupID\x18\x03 \x01(\x05R\x0eaccountGroupID\x12B\n" +
-	"\x0edatetimeCreate\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"b\n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12&\n" +
+	"\x0eaccountGroupID\x18\x04 \x01(\fR\x0eaccountGroupID\x12B\n" +
+	"\x0edatetimeCreate\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"F\n" +
 	"\x11CreateTagResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
-	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01B\b\n" +
-	"\x06_errorB\x05\n" +
-	"\x03_id\"f\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"f\n" +
 	"\x10UpdateTagRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x17\n" +
@@ -642,11 +717,17 @@ const file_proto_tag_tag_endpoint_proto_rawDesc = "" +
 	"\x02id\x18\x02 \x01(\fR\x02id\"F\n" +
 	"\x11DeleteTagResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"@\n" +
+	"\x06_error\"N\n" +
+	"\x10TagToTransaction\x12\x14\n" +
+	"\x05tagID\x18\x01 \x01(\fR\x05tagID\x12$\n" +
+	"\rtransactionID\x18\x02 \x01(\fR\rtransactionID\"\x92\x01\n" +
 	"\x1cGetTagsToTransactionsRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\"R\n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x12&\n" +
+	"\x0etransactionIDs\x18\x03 \x03(\fR\x0etransactionIDs\"\x99\x01\n" +
 	"\x1dGetTagsToTransactionsResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12E\n" +
+	"\x12tagsToTransactions\x18\x02 \x03(\v2\x15.tag.TagToTransactionR\x12tagsToTransactionsB\b\n" +
 	"\x06_error2\xe1\x02\n" +
 	"\vTagEndpoint\x126\n" +
 	"\aGetTags\x12\x13.tag.GetTagsRequest\x1a\x14.tag.GetTagsResponse\"\x00\x12<\n" +
@@ -667,7 +748,7 @@ func file_proto_tag_tag_endpoint_proto_rawDescGZIP() []byte {
 	return file_proto_tag_tag_endpoint_proto_rawDescData
 }
 
-var file_proto_tag_tag_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_tag_tag_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_proto_tag_tag_endpoint_proto_goTypes = []any{
 	(*Tag)(nil),                           // 0: tag.Tag
 	(*GetTagsRequest)(nil),                // 1: tag.GetTagsRequest
@@ -678,35 +759,37 @@ var file_proto_tag_tag_endpoint_proto_goTypes = []any{
 	(*UpdateTagResponse)(nil),             // 6: tag.UpdateTagResponse
 	(*DeleteTagRequest)(nil),              // 7: tag.DeleteTagRequest
 	(*DeleteTagResponse)(nil),             // 8: tag.DeleteTagResponse
-	(*GetTagsToTransactionsRequest)(nil),  // 9: tag.GetTagsToTransactionsRequest
-	(*GetTagsToTransactionsResponse)(nil), // 10: tag.GetTagsToTransactionsResponse
-	(*timestamppb.Timestamp)(nil),         // 11: google.protobuf.Timestamp
-	(*Error)(nil),                         // 12: error.Error
+	(*TagToTransaction)(nil),              // 9: tag.TagToTransaction
+	(*GetTagsToTransactionsRequest)(nil),  // 10: tag.GetTagsToTransactionsRequest
+	(*GetTagsToTransactionsResponse)(nil), // 11: tag.GetTagsToTransactionsResponse
+	(*timestamppb.Timestamp)(nil),         // 12: google.protobuf.Timestamp
+	(*Error)(nil),                         // 13: error.Error
 }
 var file_proto_tag_tag_endpoint_proto_depIdxs = []int32{
-	11, // 0: tag.Tag.datetimeCreate:type_name -> google.protobuf.Timestamp
-	12, // 1: tag.GetTagsResponse.error:type_name -> error.Error
+	12, // 0: tag.Tag.datetimeCreate:type_name -> google.protobuf.Timestamp
+	13, // 1: tag.GetTagsResponse.error:type_name -> error.Error
 	0,  // 2: tag.GetTagsResponse.tags:type_name -> tag.Tag
-	11, // 3: tag.CreateTagRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
-	12, // 4: tag.CreateTagResponse.error:type_name -> error.Error
-	12, // 5: tag.UpdateTagResponse.error:type_name -> error.Error
-	12, // 6: tag.DeleteTagResponse.error:type_name -> error.Error
-	12, // 7: tag.GetTagsToTransactionsResponse.error:type_name -> error.Error
-	1,  // 8: tag.TagEndpoint.GetTags:input_type -> tag.GetTagsRequest
-	3,  // 9: tag.TagEndpoint.CreateTag:input_type -> tag.CreateTagRequest
-	5,  // 10: tag.TagEndpoint.UpdateTag:input_type -> tag.UpdateTagRequest
-	7,  // 11: tag.TagEndpoint.DeleteTag:input_type -> tag.DeleteTagRequest
-	9,  // 12: tag.TagEndpoint.GetTagsToTransactions:input_type -> tag.GetTagsToTransactionsRequest
-	2,  // 13: tag.TagEndpoint.GetTags:output_type -> tag.GetTagsResponse
-	4,  // 14: tag.TagEndpoint.CreateTag:output_type -> tag.CreateTagResponse
-	6,  // 15: tag.TagEndpoint.UpdateTag:output_type -> tag.UpdateTagResponse
-	8,  // 16: tag.TagEndpoint.DeleteTag:output_type -> tag.DeleteTagResponse
-	10, // 17: tag.TagEndpoint.GetTagsToTransactions:output_type -> tag.GetTagsToTransactionsResponse
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	12, // 3: tag.CreateTagRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
+	13, // 4: tag.CreateTagResponse.error:type_name -> error.Error
+	13, // 5: tag.UpdateTagResponse.error:type_name -> error.Error
+	13, // 6: tag.DeleteTagResponse.error:type_name -> error.Error
+	13, // 7: tag.GetTagsToTransactionsResponse.error:type_name -> error.Error
+	9,  // 8: tag.GetTagsToTransactionsResponse.tagsToTransactions:type_name -> tag.TagToTransaction
+	1,  // 9: tag.TagEndpoint.GetTags:input_type -> tag.GetTagsRequest
+	3,  // 10: tag.TagEndpoint.CreateTag:input_type -> tag.CreateTagRequest
+	5,  // 11: tag.TagEndpoint.UpdateTag:input_type -> tag.UpdateTagRequest
+	7,  // 12: tag.TagEndpoint.DeleteTag:input_type -> tag.DeleteTagRequest
+	10, // 13: tag.TagEndpoint.GetTagsToTransactions:input_type -> tag.GetTagsToTransactionsRequest
+	2,  // 14: tag.TagEndpoint.GetTags:output_type -> tag.GetTagsResponse
+	4,  // 15: tag.TagEndpoint.CreateTag:output_type -> tag.CreateTagResponse
+	6,  // 16: tag.TagEndpoint.UpdateTag:output_type -> tag.UpdateTagResponse
+	8,  // 17: tag.TagEndpoint.DeleteTag:output_type -> tag.DeleteTagResponse
+	11, // 18: tag.TagEndpoint.GetTagsToTransactions:output_type -> tag.GetTagsToTransactionsResponse
+	14, // [14:19] is the sub-list for method output_type
+	9,  // [9:14] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_proto_tag_tag_endpoint_proto_init() }
@@ -720,14 +803,14 @@ func file_proto_tag_tag_endpoint_proto_init() {
 	file_proto_tag_tag_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_tag_tag_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
 	file_proto_tag_tag_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
-	file_proto_tag_tag_endpoint_proto_msgTypes[10].OneofWrappers = []any{}
+	file_proto_tag_tag_endpoint_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_tag_tag_endpoint_proto_rawDesc), len(file_proto_tag_tag_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -24,10 +24,10 @@ const (
 
 type AccountBudget struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	Amount         *float64               `protobuf:"fixed64,1,opt,name=amount,proto3,oneof" json:"amount,omitempty"`                // Сумма бюджета
-	DaysOffset     *int32                 `protobuf:"varint,2,opt,name=daysOffset,proto3,oneof" json:"daysOffset,omitempty"`         // Смещение в днях
-	FixedSum       *float64               `protobuf:"fixed64,3,opt,name=fixedSum,proto3,oneof" json:"fixedSum,omitempty"`            // Фиксированная сумма
-	GradualFilling *bool                  `protobuf:"varint,4,opt,name=gradualFilling,proto3,oneof" json:"gradualFilling,omitempty"` // Постепенное пополнение
+	Amount         float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`                // Сумма бюджета
+	DaysOffset     uint32                 `protobuf:"varint,2,opt,name=daysOffset,proto3" json:"daysOffset,omitempty"`         // Смещение в днях
+	FixedSum       float64                `protobuf:"fixed64,3,opt,name=fixedSum,proto3" json:"fixedSum,omitempty"`            // Фиксированная сумма
+	GradualFilling bool                   `protobuf:"varint,4,opt,name=gradualFilling,proto3" json:"gradualFilling,omitempty"` // Постепенное пополнение
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -63,29 +63,29 @@ func (*AccountBudget) Descriptor() ([]byte, []int) {
 }
 
 func (x *AccountBudget) GetAmount() float64 {
-	if x != nil && x.Amount != nil {
-		return *x.Amount
+	if x != nil {
+		return x.Amount
 	}
 	return 0
 }
 
-func (x *AccountBudget) GetDaysOffset() int32 {
-	if x != nil && x.DaysOffset != nil {
-		return *x.DaysOffset
+func (x *AccountBudget) GetDaysOffset() uint32 {
+	if x != nil {
+		return x.DaysOffset
 	}
 	return 0
 }
 
 func (x *AccountBudget) GetFixedSum() float64 {
-	if x != nil && x.FixedSum != nil {
-		return *x.FixedSum
+	if x != nil {
+		return x.FixedSum
 	}
 	return 0
 }
 
 func (x *AccountBudget) GetGradualFilling() bool {
-	if x != nil && x.GradualFilling != nil {
-		return *x.GradualFilling
+	if x != nil {
+		return x.GradualFilling
 	}
 	return false
 }
@@ -100,12 +100,12 @@ type Account struct {
 	Visible            bool                   `protobuf:"varint,6,opt,name=visible,proto3" json:"visible,omitempty"`                        // Видимость счета
 	AccountingInCharts bool                   `protobuf:"varint,7,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`  // Учитывать ли счет в графиках
 	AccountingInHeader bool                   `protobuf:"varint,8,opt,name=accountingInHeader,proto3" json:"accountingInHeader,omitempty"`  // Будет ли счет учитываться в шапке
-	AccountGroupID     int32                  `protobuf:"varint,9,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`          // Идентификатор группы счета
-	ParentAccountID    int32                  `protobuf:"varint,10,opt,name=parentAccountID,proto3" json:"parentAccountID,omitempty"`       // Идентификатор родительского аккаунта
+	AccountGroupID     []byte                 `protobuf:"bytes,9,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`           // Идентификатор группы счета
+	ParentAccountID    []byte                 `protobuf:"bytes,10,opt,name=parentAccountID,proto3" json:"parentAccountID,omitempty"`        // Идентификатор родительского аккаунта
 	IsParent           bool                   `protobuf:"varint,11,opt,name=isParent,proto3" json:"isParent,omitempty"`                     // Является ли счет родительским
-	IconID             int32                  `protobuf:"varint,12,opt,name=iconID,proto3" json:"iconID,omitempty"`                         // Идентификатор иконки
-	SerialNumber       int32                  `protobuf:"varint,13,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`             // Порядковый номер счета
-	CreatedByUserID    int32                  `protobuf:"varint,14,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`       // Идентификатор пользователя, создавшего счет
+	IconID             []byte                 `protobuf:"bytes,12,opt,name=iconID,proto3" json:"iconID,omitempty"`                          // Идентификатор иконки
+	SerialNumber       uint32                 `protobuf:"varint,13,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`             // Порядковый номер счета
+	CreatedByUserID    []byte                 `protobuf:"bytes,14,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`        // Идентификатор пользователя, создавшего счет
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата и время создания счета
 	Budget             *AccountBudget         `protobuf:"bytes,16,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
 	unknownFields      protoimpl.UnknownFields
@@ -198,18 +198,18 @@ func (x *Account) GetAccountingInHeader() bool {
 	return false
 }
 
-func (x *Account) GetAccountGroupID() int32 {
+func (x *Account) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
-func (x *Account) GetParentAccountID() int32 {
+func (x *Account) GetParentAccountID() []byte {
 	if x != nil {
 		return x.ParentAccountID
 	}
-	return 0
+	return nil
 }
 
 func (x *Account) GetIsParent() bool {
@@ -219,25 +219,25 @@ func (x *Account) GetIsParent() bool {
 	return false
 }
 
-func (x *Account) GetIconID() int32 {
+func (x *Account) GetIconID() []byte {
 	if x != nil {
 		return x.IconID
 	}
-	return 0
+	return nil
 }
 
-func (x *Account) GetSerialNumber() int32 {
+func (x *Account) GetSerialNumber() uint32 {
 	if x != nil {
 		return x.SerialNumber
 	}
 	return 0
 }
 
-func (x *Account) GetCreatedByUserID() int32 {
+func (x *Account) GetCreatedByUserID() []byte {
 	if x != nil {
 		return x.CreatedByUserID
 	}
-	return 0
+	return nil
 }
 
 func (x *Account) GetDatetimeCreate() *timestamppb.Timestamp {
@@ -257,11 +257,11 @@ func (x *Account) GetBudget() *AccountBudget {
 type GetAccountsRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                       // Токен доступа
-	AccountGroupIDs    []int32                `protobuf:"varint,2,rep,packed,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"`       // Идентификаторы групп счетов
+	AccountGroupIDs    [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"`               // Идентификаторы групп счетов
 	AccountingInCharts *bool                  `protobuf:"varint,3,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"`  // Учитывать ли счет в графиках
 	AccountingInHeader *bool                  `protobuf:"varint,4,opt,name=accountingInHeader,proto3,oneof" json:"accountingInHeader,omitempty"`  // Учитывать ли счет в шапке
-	DateFrom           *string                `protobuf:"bytes,5,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"`                       // Дата начала выборки
-	DateTo             *string                `protobuf:"bytes,6,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`                           // Дата конца выборки
+	DateFrom           *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"`                       // Дата начала выборки
+	DateTo             *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`                           // Дата конца выборки
 	Type               *AccountType           `protobuf:"varint,7,opt,name=type,proto3,enum=accountType.AccountType,oneof" json:"type,omitempty"` // Тип счета
 	Visible            *bool                  `protobuf:"varint,8,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                        // Видимость счета
 	unknownFields      protoimpl.UnknownFields
@@ -305,7 +305,7 @@ func (x *GetAccountsRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *GetAccountsRequest) GetAccountGroupIDs() []int32 {
+func (x *GetAccountsRequest) GetAccountGroupIDs() [][]byte {
 	if x != nil {
 		return x.AccountGroupIDs
 	}
@@ -326,18 +326,18 @@ func (x *GetAccountsRequest) GetAccountingInHeader() bool {
 	return false
 }
 
-func (x *GetAccountsRequest) GetDateFrom() string {
-	if x != nil && x.DateFrom != nil {
-		return *x.DateFrom
+func (x *GetAccountsRequest) GetDateFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateFrom
 	}
-	return ""
+	return nil
 }
 
-func (x *GetAccountsRequest) GetDateTo() string {
-	if x != nil && x.DateTo != nil {
-		return *x.DateTo
+func (x *GetAccountsRequest) GetDateTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateTo
 	}
-	return ""
+	return nil
 }
 
 func (x *GetAccountsRequest) GetType() AccountType {
@@ -409,18 +409,19 @@ func (x *GetAccountsResponse) GetAccounts() []*Account {
 type CreateAccountRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                 // Токен доступа
-	Name               string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                               // Название счета
-	Type               AccountType            `protobuf:"varint,3,opt,name=type,proto3,enum=accountType.AccountType" json:"type,omitempty"` // Тип счета
-	Currency           string                 `protobuf:"bytes,4,opt,name=currency,proto3" json:"currency,omitempty"`                       // Валюта счета
-	AccountGroupID     int32                  `protobuf:"varint,5,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`          // Группа счета
-	AccountingInCharts bool                   `protobuf:"varint,6,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`  // Учитывать ли счет в графиках
-	AccountingInHeader bool                   `protobuf:"varint,7,opt,name=accountingInHeader,proto3" json:"accountingInHeader,omitempty"`  // Подсчет суммы счета в статистике
-	IconID             int32                  `protobuf:"varint,8,opt,name=iconID,proto3" json:"iconID,omitempty"`                          // Идентификатор иконки
-	IsParent           bool                   `protobuf:"varint,9,opt,name=isParent,proto3" json:"isParent,omitempty"`                      // Является ли счет родительским
-	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата создания счета
-	ParentAccountID    *int32                 `protobuf:"varint,11,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"` // Идентификатор родительского счета
-	Remainder          *float64               `protobuf:"fixed64,12,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`            // Остаток средств на счету
-	Budget             *AccountBudget         `protobuf:"bytes,13,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
+	Id                 []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                   // Идентификатор счета
+	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                               // Название счета
+	Type               AccountType            `protobuf:"varint,4,opt,name=type,proto3,enum=accountType.AccountType" json:"type,omitempty"` // Тип счета
+	Currency           string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`                       // Валюта счета
+	AccountGroupID     []byte                 `protobuf:"bytes,6,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`           // Группа счета
+	AccountingInCharts bool                   `protobuf:"varint,7,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`  // Учитывать ли счет в графиках
+	AccountingInHeader bool                   `protobuf:"varint,8,opt,name=accountingInHeader,proto3" json:"accountingInHeader,omitempty"`  // Подсчет суммы счета в статистике
+	IconID             []byte                 `protobuf:"bytes,9,opt,name=iconID,proto3" json:"iconID,omitempty"`                           // Идентификатор иконки
+	IsParent           bool                   `protobuf:"varint,10,opt,name=isParent,proto3" json:"isParent,omitempty"`                     // Является ли счет родительским
+	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата создания счета
+	ParentAccountID    []byte                 `protobuf:"bytes,12,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`  // Идентификатор родительского счета
+	Remainder          *float64               `protobuf:"fixed64,13,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`            // Остаток средств на счету
+	Budget             *AccountBudget         `protobuf:"bytes,14,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -462,6 +463,13 @@ func (x *CreateAccountRequest) GetAccessToken() string {
 	return ""
 }
 
+func (x *CreateAccountRequest) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
 func (x *CreateAccountRequest) GetName() string {
 	if x != nil {
 		return x.Name
@@ -483,11 +491,11 @@ func (x *CreateAccountRequest) GetCurrency() string {
 	return ""
 }
 
-func (x *CreateAccountRequest) GetAccountGroupID() int32 {
+func (x *CreateAccountRequest) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateAccountRequest) GetAccountingInCharts() bool {
@@ -504,11 +512,11 @@ func (x *CreateAccountRequest) GetAccountingInHeader() bool {
 	return false
 }
 
-func (x *CreateAccountRequest) GetIconID() int32 {
+func (x *CreateAccountRequest) GetIconID() []byte {
 	if x != nil {
 		return x.IconID
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateAccountRequest) GetIsParent() bool {
@@ -525,11 +533,11 @@ func (x *CreateAccountRequest) GetDatetimeCreate() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *CreateAccountRequest) GetParentAccountID() int32 {
-	if x != nil && x.ParentAccountID != nil {
-		return *x.ParentAccountID
+func (x *CreateAccountRequest) GetParentAccountID() []byte {
+	if x != nil {
+		return x.ParentAccountID
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateAccountRequest) GetRemainder() float64 {
@@ -549,11 +557,10 @@ func (x *CreateAccountRequest) GetBudget() *AccountBudget {
 type CreateAccountResponse struct {
 	state                        protoimpl.MessageState `protogen:"open.v1"`
 	Error                        *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                                                // Объект ошибки
-	Id                           []byte                 `protobuf:"bytes,2,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                      // Идентификатор созданного счета
-	SerialNumber                 *int32                 `protobuf:"varint,3,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`                                 // Порядковый номер счета
-	BalancingAccountID           *int32                 `protobuf:"varint,4,opt,name=balancingAccountID,proto3,oneof" json:"balancingAccountID,omitempty"`                     // Идентификатор балансировочного счета
-	BalancingAccountSerialNumber *int32                 `protobuf:"varint,5,opt,name=balancingAccountSerialNumber,proto3,oneof" json:"balancingAccountSerialNumber,omitempty"` // Порядковый номер балансировочного счета
-	BalancingTransactionID       *int32                 `protobuf:"varint,6,opt,name=balancingTransactionID,proto3,oneof" json:"balancingTransactionID,omitempty"`             // Идентификатор транзакции балансировки
+	SerialNumber                 *uint32                `protobuf:"varint,2,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`                                 // Порядковый номер счета
+	BalancingAccountID           []byte                 `protobuf:"bytes,3,opt,name=balancingAccountID,proto3,oneof" json:"balancingAccountID,omitempty"`                      // Идентификатор балансировочного счета
+	BalancingAccountSerialNumber *uint32                `protobuf:"varint,4,opt,name=balancingAccountSerialNumber,proto3,oneof" json:"balancingAccountSerialNumber,omitempty"` // Порядковый номер балансировочного счета
+	BalancingTransactionID       []byte                 `protobuf:"bytes,5,opt,name=balancingTransactionID,proto3,oneof" json:"balancingTransactionID,omitempty"`              // Идентификатор транзакции балансировки
 	unknownFields                protoimpl.UnknownFields
 	sizeCache                    protoimpl.SizeCache
 }
@@ -595,55 +602,48 @@ func (x *CreateAccountResponse) GetError() *Error {
 	return nil
 }
 
-func (x *CreateAccountResponse) GetId() []byte {
-	if x != nil {
-		return x.Id
-	}
-	return nil
-}
-
-func (x *CreateAccountResponse) GetSerialNumber() int32 {
+func (x *CreateAccountResponse) GetSerialNumber() uint32 {
 	if x != nil && x.SerialNumber != nil {
 		return *x.SerialNumber
 	}
 	return 0
 }
 
-func (x *CreateAccountResponse) GetBalancingAccountID() int32 {
-	if x != nil && x.BalancingAccountID != nil {
-		return *x.BalancingAccountID
+func (x *CreateAccountResponse) GetBalancingAccountID() []byte {
+	if x != nil {
+		return x.BalancingAccountID
 	}
-	return 0
+	return nil
 }
 
-func (x *CreateAccountResponse) GetBalancingAccountSerialNumber() int32 {
+func (x *CreateAccountResponse) GetBalancingAccountSerialNumber() uint32 {
 	if x != nil && x.BalancingAccountSerialNumber != nil {
 		return *x.BalancingAccountSerialNumber
 	}
 	return 0
 }
 
-func (x *CreateAccountResponse) GetBalancingTransactionID() int32 {
-	if x != nil && x.BalancingTransactionID != nil {
-		return *x.BalancingTransactionID
+func (x *CreateAccountResponse) GetBalancingTransactionID() []byte {
+	if x != nil {
+		return x.BalancingTransactionID
 	}
-	return 0
+	return nil
 }
 
 type UpdateAccountRequest struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
-	Id                 []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                        // Идентификатор счета
-	Name               *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                              // Название счета
-	AccountingInCharts *bool                  `protobuf:"varint,4,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"` // Будет ли счет учитываться в графиках
-	AccountingInHeader *bool                  `protobuf:"varint,5,opt,name=accountingInHeader,proto3,oneof" json:"accountingInHeader,omitempty"` // Будет ли счет учитываться в статистике
-	CurrencyCode       *string                `protobuf:"bytes,6,opt,name=currencyCode,proto3,oneof" json:"currencyCode,omitempty"`              // Валюта счета
-	IconID             *int32                 `protobuf:"varint,7,opt,name=iconID,proto3,oneof" json:"iconID,omitempty"`                         // Идентификатор иконки
-	ParentAccountID    *int32                 `protobuf:"varint,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`       // Идентификатор родительского счета
-	Remainder          *float64               `protobuf:"fixed64,9,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`                  // Остаток средств на счету
-	SerialNumber       *int32                 `protobuf:"varint,10,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`            // Порядковый номер счета
-	Visible            *bool                  `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
-	Budget             *AccountBudget         `protobuf:"bytes,12,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                         // Месячный бюджет
+	state              protoimpl.MessageState      `protogen:"open.v1"`
+	AccessToken        string                      `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
+	Id                 []byte                      `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                        // Идентификатор счета
+	Name               *string                     `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                              // Название счета
+	AccountingInCharts *bool                       `protobuf:"varint,4,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"` // Будет ли счет учитываться в графиках
+	AccountingInHeader *bool                       `protobuf:"varint,5,opt,name=accountingInHeader,proto3,oneof" json:"accountingInHeader,omitempty"` // Будет ли счет учитываться в статистике
+	Currency           *string                     `protobuf:"bytes,6,opt,name=currency,proto3,oneof" json:"currency,omitempty"`                      // Валюта счета
+	IconID             []byte                      `protobuf:"bytes,7,opt,name=iconID,proto3,oneof" json:"iconID,omitempty"`                          // Идентификатор иконки
+	ParentAccountID    []byte                      `protobuf:"bytes,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`        // Идентификатор родительского счета
+	Remainder          *float64                    `protobuf:"fixed64,9,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`                  // Остаток средств на счету
+	SerialNumber       *uint32                     `protobuf:"varint,10,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`            // Порядковый номер счета
+	Visible            *bool                       `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
+	Budget             *UpdateAccountBudgetRequest `protobuf:"bytes,12,opt,name=budget,proto3" json:"budget,omitempty"`                               // Месячный бюджет
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -713,25 +713,25 @@ func (x *UpdateAccountRequest) GetAccountingInHeader() bool {
 	return false
 }
 
-func (x *UpdateAccountRequest) GetCurrencyCode() string {
-	if x != nil && x.CurrencyCode != nil {
-		return *x.CurrencyCode
+func (x *UpdateAccountRequest) GetCurrency() string {
+	if x != nil && x.Currency != nil {
+		return *x.Currency
 	}
 	return ""
 }
 
-func (x *UpdateAccountRequest) GetIconID() int32 {
-	if x != nil && x.IconID != nil {
-		return *x.IconID
+func (x *UpdateAccountRequest) GetIconID() []byte {
+	if x != nil {
+		return x.IconID
 	}
-	return 0
+	return nil
 }
 
-func (x *UpdateAccountRequest) GetParentAccountID() int32 {
-	if x != nil && x.ParentAccountID != nil {
-		return *x.ParentAccountID
+func (x *UpdateAccountRequest) GetParentAccountID() []byte {
+	if x != nil {
+		return x.ParentAccountID
 	}
-	return 0
+	return nil
 }
 
 func (x *UpdateAccountRequest) GetRemainder() float64 {
@@ -741,7 +741,7 @@ func (x *UpdateAccountRequest) GetRemainder() float64 {
 	return 0
 }
 
-func (x *UpdateAccountRequest) GetSerialNumber() int32 {
+func (x *UpdateAccountRequest) GetSerialNumber() uint32 {
 	if x != nil && x.SerialNumber != nil {
 		return *x.SerialNumber
 	}
@@ -755,11 +755,79 @@ func (x *UpdateAccountRequest) GetVisible() bool {
 	return false
 }
 
-func (x *UpdateAccountRequest) GetBudget() *AccountBudget {
+func (x *UpdateAccountRequest) GetBudget() *UpdateAccountBudgetRequest {
 	if x != nil {
 		return x.Budget
 	}
 	return nil
+}
+
+type UpdateAccountBudgetRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Amount         *float64               `protobuf:"fixed64,1,opt,name=amount,proto3,oneof" json:"amount,omitempty"`                // Сумма бюджета
+	DaysOffset     *uint32                `protobuf:"varint,2,opt,name=daysOffset,proto3,oneof" json:"daysOffset,omitempty"`         // Смещение в днях
+	FixedSum       *float64               `protobuf:"fixed64,3,opt,name=fixedSum,proto3,oneof" json:"fixedSum,omitempty"`            // Фиксированная сумма
+	GradualFilling *bool                  `protobuf:"varint,4,opt,name=gradualFilling,proto3,oneof" json:"gradualFilling,omitempty"` // Постепенное пополнение
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *UpdateAccountBudgetRequest) Reset() {
+	*x = UpdateAccountBudgetRequest{}
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateAccountBudgetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateAccountBudgetRequest) ProtoMessage() {}
+
+func (x *UpdateAccountBudgetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateAccountBudgetRequest.ProtoReflect.Descriptor instead.
+func (*UpdateAccountBudgetRequest) Descriptor() ([]byte, []int) {
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdateAccountBudgetRequest) GetAmount() float64 {
+	if x != nil && x.Amount != nil {
+		return *x.Amount
+	}
+	return 0
+}
+
+func (x *UpdateAccountBudgetRequest) GetDaysOffset() uint32 {
+	if x != nil && x.DaysOffset != nil {
+		return *x.DaysOffset
+	}
+	return 0
+}
+
+func (x *UpdateAccountBudgetRequest) GetFixedSum() float64 {
+	if x != nil && x.FixedSum != nil {
+		return *x.FixedSum
+	}
+	return 0
+}
+
+func (x *UpdateAccountBudgetRequest) GetGradualFilling() bool {
+	if x != nil && x.GradualFilling != nil {
+		return *x.GradualFilling
+	}
+	return false
 }
 
 type UpdateAccountResponse struct {
@@ -771,7 +839,7 @@ type UpdateAccountResponse struct {
 
 func (x *UpdateAccountResponse) Reset() {
 	*x = UpdateAccountResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -783,7 +851,7 @@ func (x *UpdateAccountResponse) String() string {
 func (*UpdateAccountResponse) ProtoMessage() {}
 
 func (x *UpdateAccountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -796,7 +864,7 @@ func (x *UpdateAccountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateAccountResponse.ProtoReflect.Descriptor instead.
 func (*UpdateAccountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{7}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateAccountResponse) GetError() *Error {
@@ -816,7 +884,7 @@ type DeleteAccountRequest struct {
 
 func (x *DeleteAccountRequest) Reset() {
 	*x = DeleteAccountRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -828,7 +896,7 @@ func (x *DeleteAccountRequest) String() string {
 func (*DeleteAccountRequest) ProtoMessage() {}
 
 func (x *DeleteAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -841,7 +909,7 @@ func (x *DeleteAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteAccountRequest.ProtoReflect.Descriptor instead.
 func (*DeleteAccountRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{8}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteAccountRequest) GetAccessToken() string {
@@ -867,7 +935,7 @@ type DeleteAccountResponse struct {
 
 func (x *DeleteAccountResponse) Reset() {
 	*x = DeleteAccountResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -879,7 +947,7 @@ func (x *DeleteAccountResponse) String() string {
 func (*DeleteAccountResponse) ProtoMessage() {}
 
 func (x *DeleteAccountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -892,7 +960,7 @@ func (x *DeleteAccountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteAccountResponse.ProtoReflect.Descriptor instead.
 func (*DeleteAccountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{9}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteAccountResponse) GetError() *Error {
@@ -906,18 +974,14 @@ var File_proto_account_account_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd9\x01\n" +
-	"\rAccountBudget\x12\x1b\n" +
-	"\x06amount\x18\x01 \x01(\x01H\x00R\x06amount\x88\x01\x01\x12#\n" +
+	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8b\x01\n" +
+	"\rAccountBudget\x12\x16\n" +
+	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12\x1e\n" +
 	"\n" +
-	"daysOffset\x18\x02 \x01(\x05H\x01R\n" +
-	"daysOffset\x88\x01\x01\x12\x1f\n" +
-	"\bfixedSum\x18\x03 \x01(\x01H\x02R\bfixedSum\x88\x01\x01\x12+\n" +
-	"\x0egradualFilling\x18\x04 \x01(\bH\x03R\x0egradualFilling\x88\x01\x01B\t\n" +
-	"\a_amountB\r\n" +
-	"\v_daysOffsetB\v\n" +
-	"\t_fixedSumB\x11\n" +
-	"\x0f_gradualFilling\"\xe7\x04\n" +
+	"daysOffset\x18\x02 \x01(\rR\n" +
+	"daysOffset\x12\x1a\n" +
+	"\bfixedSum\x18\x03 \x01(\x01R\bfixedSum\x12&\n" +
+	"\x0egradualFilling\x18\x04 \x01(\bR\x0egradualFilling\"\xe7\x04\n" +
 	"\aAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
@@ -927,23 +991,23 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\avisible\x18\x06 \x01(\bR\avisible\x12.\n" +
 	"\x12accountingInCharts\x18\a \x01(\bR\x12accountingInCharts\x12.\n" +
 	"\x12accountingInHeader\x18\b \x01(\bR\x12accountingInHeader\x12&\n" +
-	"\x0eaccountGroupID\x18\t \x01(\x05R\x0eaccountGroupID\x12(\n" +
+	"\x0eaccountGroupID\x18\t \x01(\fR\x0eaccountGroupID\x12(\n" +
 	"\x0fparentAccountID\x18\n" +
-	" \x01(\x05R\x0fparentAccountID\x12\x1a\n" +
+	" \x01(\fR\x0fparentAccountID\x12\x1a\n" +
 	"\bisParent\x18\v \x01(\bR\bisParent\x12\x16\n" +
-	"\x06iconID\x18\f \x01(\x05R\x06iconID\x12\"\n" +
-	"\fserialNumber\x18\r \x01(\x05R\fserialNumber\x12(\n" +
-	"\x0fcreatedByUserID\x18\x0e \x01(\x05R\x0fcreatedByUserID\x12B\n" +
+	"\x06iconID\x18\f \x01(\fR\x06iconID\x12\"\n" +
+	"\fserialNumber\x18\r \x01(\rR\fserialNumber\x12(\n" +
+	"\x0fcreatedByUserID\x18\x0e \x01(\fR\x0fcreatedByUserID\x12B\n" +
 	"\x0edatetimeCreate\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x123\n" +
 	"\x06budget\x18\x10 \x01(\v2\x16.account.AccountBudgetH\x00R\x06budget\x88\x01\x01B\t\n" +
-	"\a_budget\"\xb5\x03\n" +
+	"\a_budget\"\xed\x03\n" +
 	"\x12GetAccountsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
-	"\x0faccountGroupIDs\x18\x02 \x03(\x05R\x0faccountGroupIDs\x123\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x123\n" +
 	"\x12accountingInCharts\x18\x03 \x01(\bH\x00R\x12accountingInCharts\x88\x01\x01\x123\n" +
-	"\x12accountingInHeader\x18\x04 \x01(\bH\x01R\x12accountingInHeader\x88\x01\x01\x12\x1f\n" +
-	"\bdateFrom\x18\x05 \x01(\tH\x02R\bdateFrom\x88\x01\x01\x12\x1b\n" +
-	"\x06dateTo\x18\x06 \x01(\tH\x03R\x06dateTo\x88\x01\x01\x121\n" +
+	"\x12accountingInHeader\x18\x04 \x01(\bH\x01R\x12accountingInHeader\x88\x01\x01\x12;\n" +
+	"\bdateFrom\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\bdateFrom\x88\x01\x01\x127\n" +
+	"\x06dateTo\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x03R\x06dateTo\x88\x01\x01\x121\n" +
 	"\x04type\x18\a \x01(\x0e2\x18.accountType.AccountTypeH\x04R\x04type\x88\x01\x01\x12\x1d\n" +
 	"\avisible\x18\b \x01(\bH\x05R\avisible\x88\x01\x01B\x15\n" +
 	"\x13_accountingInChartsB\x15\n" +
@@ -956,65 +1020,74 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x13GetAccountsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12,\n" +
 	"\baccounts\x18\x02 \x03(\v2\x10.account.AccountR\baccountsB\b\n" +
-	"\x06_error\"\xca\x04\n" +
+	"\x06_error\"\xda\x04\n" +
 	"\x14CreateAccountRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
-	"\x04type\x18\x03 \x01(\x0e2\x18.accountType.AccountTypeR\x04type\x12\x1a\n" +
-	"\bcurrency\x18\x04 \x01(\tR\bcurrency\x12&\n" +
-	"\x0eaccountGroupID\x18\x05 \x01(\x05R\x0eaccountGroupID\x12.\n" +
-	"\x12accountingInCharts\x18\x06 \x01(\bR\x12accountingInCharts\x12.\n" +
-	"\x12accountingInHeader\x18\a \x01(\bR\x12accountingInHeader\x12\x16\n" +
-	"\x06iconID\x18\b \x01(\x05R\x06iconID\x12\x1a\n" +
-	"\bisParent\x18\t \x01(\bR\bisParent\x12B\n" +
-	"\x0edatetimeCreate\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12-\n" +
-	"\x0fparentAccountID\x18\v \x01(\x05H\x00R\x0fparentAccountID\x88\x01\x01\x12!\n" +
-	"\tremainder\x18\f \x01(\x01H\x01R\tremainder\x88\x01\x01\x123\n" +
-	"\x06budget\x18\r \x01(\v2\x16.account.AccountBudgetH\x02R\x06budget\x88\x01\x01B\x12\n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12,\n" +
+	"\x04type\x18\x04 \x01(\x0e2\x18.accountType.AccountTypeR\x04type\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\x12&\n" +
+	"\x0eaccountGroupID\x18\x06 \x01(\fR\x0eaccountGroupID\x12.\n" +
+	"\x12accountingInCharts\x18\a \x01(\bR\x12accountingInCharts\x12.\n" +
+	"\x12accountingInHeader\x18\b \x01(\bR\x12accountingInHeader\x12\x16\n" +
+	"\x06iconID\x18\t \x01(\fR\x06iconID\x12\x1a\n" +
+	"\bisParent\x18\n" +
+	" \x01(\bR\bisParent\x12B\n" +
+	"\x0edatetimeCreate\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12-\n" +
+	"\x0fparentAccountID\x18\f \x01(\fH\x00R\x0fparentAccountID\x88\x01\x01\x12!\n" +
+	"\tremainder\x18\r \x01(\x01H\x01R\tremainder\x88\x01\x01\x123\n" +
+	"\x06budget\x18\x0e \x01(\v2\x16.account.AccountBudgetH\x02R\x06budget\x88\x01\x01B\x12\n" +
 	"\x10_parentAccountIDB\f\n" +
 	"\n" +
 	"_remainderB\t\n" +
-	"\a_budget\"\xae\x03\n" +
+	"\a_budget\"\x92\x03\n" +
 	"\x15CreateAccountResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
-	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01\x12'\n" +
-	"\fserialNumber\x18\x03 \x01(\x05H\x02R\fserialNumber\x88\x01\x01\x123\n" +
-	"\x12balancingAccountID\x18\x04 \x01(\x05H\x03R\x12balancingAccountID\x88\x01\x01\x12G\n" +
-	"\x1cbalancingAccountSerialNumber\x18\x05 \x01(\x05H\x04R\x1cbalancingAccountSerialNumber\x88\x01\x01\x12;\n" +
-	"\x16balancingTransactionID\x18\x06 \x01(\x05H\x05R\x16balancingTransactionID\x88\x01\x01B\b\n" +
-	"\x06_errorB\x05\n" +
-	"\x03_idB\x0f\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12'\n" +
+	"\fserialNumber\x18\x02 \x01(\rH\x01R\fserialNumber\x88\x01\x01\x123\n" +
+	"\x12balancingAccountID\x18\x03 \x01(\fH\x02R\x12balancingAccountID\x88\x01\x01\x12G\n" +
+	"\x1cbalancingAccountSerialNumber\x18\x04 \x01(\rH\x03R\x1cbalancingAccountSerialNumber\x88\x01\x01\x12;\n" +
+	"\x16balancingTransactionID\x18\x05 \x01(\fH\x04R\x16balancingTransactionID\x88\x01\x01B\b\n" +
+	"\x06_errorB\x0f\n" +
 	"\r_serialNumberB\x15\n" +
 	"\x13_balancingAccountIDB\x1f\n" +
 	"\x1d_balancingAccountSerialNumberB\x19\n" +
-	"\x17_balancingTransactionID\"\xfd\x04\n" +
+	"\x17_balancingTransactionID\"\xee\x04\n" +
 	"\x14UpdateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x17\n" +
 	"\x04name\x18\x03 \x01(\tH\x00R\x04name\x88\x01\x01\x123\n" +
 	"\x12accountingInCharts\x18\x04 \x01(\bH\x01R\x12accountingInCharts\x88\x01\x01\x123\n" +
-	"\x12accountingInHeader\x18\x05 \x01(\bH\x02R\x12accountingInHeader\x88\x01\x01\x12'\n" +
-	"\fcurrencyCode\x18\x06 \x01(\tH\x03R\fcurrencyCode\x88\x01\x01\x12\x1b\n" +
-	"\x06iconID\x18\a \x01(\x05H\x04R\x06iconID\x88\x01\x01\x12-\n" +
-	"\x0fparentAccountID\x18\b \x01(\x05H\x05R\x0fparentAccountID\x88\x01\x01\x12!\n" +
+	"\x12accountingInHeader\x18\x05 \x01(\bH\x02R\x12accountingInHeader\x88\x01\x01\x12\x1f\n" +
+	"\bcurrency\x18\x06 \x01(\tH\x03R\bcurrency\x88\x01\x01\x12\x1b\n" +
+	"\x06iconID\x18\a \x01(\fH\x04R\x06iconID\x88\x01\x01\x12-\n" +
+	"\x0fparentAccountID\x18\b \x01(\fH\x05R\x0fparentAccountID\x88\x01\x01\x12!\n" +
 	"\tremainder\x18\t \x01(\x01H\x06R\tremainder\x88\x01\x01\x12'\n" +
 	"\fserialNumber\x18\n" +
-	" \x01(\x05H\aR\fserialNumber\x88\x01\x01\x12\x1d\n" +
-	"\avisible\x18\v \x01(\bH\bR\avisible\x88\x01\x01\x123\n" +
-	"\x06budget\x18\f \x01(\v2\x16.account.AccountBudgetH\tR\x06budget\x88\x01\x01B\a\n" +
+	" \x01(\rH\aR\fserialNumber\x88\x01\x01\x12\x1d\n" +
+	"\avisible\x18\v \x01(\bH\bR\avisible\x88\x01\x01\x12;\n" +
+	"\x06budget\x18\f \x01(\v2#.account.UpdateAccountBudgetRequestR\x06budgetB\a\n" +
 	"\x05_nameB\x15\n" +
 	"\x13_accountingInChartsB\x15\n" +
-	"\x13_accountingInHeaderB\x0f\n" +
-	"\r_currencyCodeB\t\n" +
+	"\x13_accountingInHeaderB\v\n" +
+	"\t_currencyB\t\n" +
 	"\a_iconIDB\x12\n" +
 	"\x10_parentAccountIDB\f\n" +
 	"\n" +
 	"_remainderB\x0f\n" +
 	"\r_serialNumberB\n" +
 	"\n" +
-	"\b_visibleB\t\n" +
-	"\a_budget\"J\n" +
+	"\b_visible\"\xe6\x01\n" +
+	"\x1aUpdateAccountBudgetRequest\x12\x1b\n" +
+	"\x06amount\x18\x01 \x01(\x01H\x00R\x06amount\x88\x01\x01\x12#\n" +
+	"\n" +
+	"daysOffset\x18\x02 \x01(\rH\x01R\n" +
+	"daysOffset\x88\x01\x01\x12\x1f\n" +
+	"\bfixedSum\x18\x03 \x01(\x01H\x02R\bfixedSum\x88\x01\x01\x12+\n" +
+	"\x0egradualFilling\x18\x04 \x01(\bH\x03R\x0egradualFilling\x88\x01\x01B\t\n" +
+	"\a_amountB\r\n" +
+	"\v_daysOffsetB\v\n" +
+	"\t_fixedSumB\x11\n" +
+	"\x0f_gradualFilling\"J\n" +
 	"\x15UpdateAccountResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"H\n" +
@@ -1042,49 +1115,52 @@ func file_proto_account_account_endpoint_proto_rawDescGZIP() []byte {
 	return file_proto_account_account_endpoint_proto_rawDescData
 }
 
-var file_proto_account_account_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_proto_account_account_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_proto_account_account_endpoint_proto_goTypes = []any{
-	(*AccountBudget)(nil),         // 0: account.AccountBudget
-	(*Account)(nil),               // 1: account.Account
-	(*GetAccountsRequest)(nil),    // 2: account.GetAccountsRequest
-	(*GetAccountsResponse)(nil),   // 3: account.GetAccountsResponse
-	(*CreateAccountRequest)(nil),  // 4: account.CreateAccountRequest
-	(*CreateAccountResponse)(nil), // 5: account.CreateAccountResponse
-	(*UpdateAccountRequest)(nil),  // 6: account.UpdateAccountRequest
-	(*UpdateAccountResponse)(nil), // 7: account.UpdateAccountResponse
-	(*DeleteAccountRequest)(nil),  // 8: account.DeleteAccountRequest
-	(*DeleteAccountResponse)(nil), // 9: account.DeleteAccountResponse
-	(AccountType)(0),              // 10: accountType.AccountType
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
-	(*Error)(nil),                 // 12: error.Error
+	(*AccountBudget)(nil),              // 0: account.AccountBudget
+	(*Account)(nil),                    // 1: account.Account
+	(*GetAccountsRequest)(nil),         // 2: account.GetAccountsRequest
+	(*GetAccountsResponse)(nil),        // 3: account.GetAccountsResponse
+	(*CreateAccountRequest)(nil),       // 4: account.CreateAccountRequest
+	(*CreateAccountResponse)(nil),      // 5: account.CreateAccountResponse
+	(*UpdateAccountRequest)(nil),       // 6: account.UpdateAccountRequest
+	(*UpdateAccountBudgetRequest)(nil), // 7: account.UpdateAccountBudgetRequest
+	(*UpdateAccountResponse)(nil),      // 8: account.UpdateAccountResponse
+	(*DeleteAccountRequest)(nil),       // 9: account.DeleteAccountRequest
+	(*DeleteAccountResponse)(nil),      // 10: account.DeleteAccountResponse
+	(AccountType)(0),                   // 11: accountType.AccountType
+	(*timestamppb.Timestamp)(nil),      // 12: google.protobuf.Timestamp
+	(*Error)(nil),                      // 13: error.Error
 }
 var file_proto_account_account_endpoint_proto_depIdxs = []int32{
-	10, // 0: account.Account.type:type_name -> accountType.AccountType
-	11, // 1: account.Account.datetimeCreate:type_name -> google.protobuf.Timestamp
+	11, // 0: account.Account.type:type_name -> accountType.AccountType
+	12, // 1: account.Account.datetimeCreate:type_name -> google.protobuf.Timestamp
 	0,  // 2: account.Account.budget:type_name -> account.AccountBudget
-	10, // 3: account.GetAccountsRequest.type:type_name -> accountType.AccountType
-	12, // 4: account.GetAccountsResponse.error:type_name -> error.Error
-	1,  // 5: account.GetAccountsResponse.accounts:type_name -> account.Account
-	10, // 6: account.CreateAccountRequest.type:type_name -> accountType.AccountType
-	11, // 7: account.CreateAccountRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
-	0,  // 8: account.CreateAccountRequest.budget:type_name -> account.AccountBudget
-	12, // 9: account.CreateAccountResponse.error:type_name -> error.Error
-	0,  // 10: account.UpdateAccountRequest.budget:type_name -> account.AccountBudget
-	12, // 11: account.UpdateAccountResponse.error:type_name -> error.Error
-	12, // 12: account.DeleteAccountResponse.error:type_name -> error.Error
-	2,  // 13: account.AccountEndpoint.GetAccounts:input_type -> account.GetAccountsRequest
-	4,  // 14: account.AccountEndpoint.CreateAccount:input_type -> account.CreateAccountRequest
-	6,  // 15: account.AccountEndpoint.UpdateAccount:input_type -> account.UpdateAccountRequest
-	8,  // 16: account.AccountEndpoint.DeleteAccount:input_type -> account.DeleteAccountRequest
-	3,  // 17: account.AccountEndpoint.GetAccounts:output_type -> account.GetAccountsResponse
-	5,  // 18: account.AccountEndpoint.CreateAccount:output_type -> account.CreateAccountResponse
-	7,  // 19: account.AccountEndpoint.UpdateAccount:output_type -> account.UpdateAccountResponse
-	9,  // 20: account.AccountEndpoint.DeleteAccount:output_type -> account.DeleteAccountResponse
-	17, // [17:21] is the sub-list for method output_type
-	13, // [13:17] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	12, // 3: account.GetAccountsRequest.dateFrom:type_name -> google.protobuf.Timestamp
+	12, // 4: account.GetAccountsRequest.dateTo:type_name -> google.protobuf.Timestamp
+	11, // 5: account.GetAccountsRequest.type:type_name -> accountType.AccountType
+	13, // 6: account.GetAccountsResponse.error:type_name -> error.Error
+	1,  // 7: account.GetAccountsResponse.accounts:type_name -> account.Account
+	11, // 8: account.CreateAccountRequest.type:type_name -> accountType.AccountType
+	12, // 9: account.CreateAccountRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
+	0,  // 10: account.CreateAccountRequest.budget:type_name -> account.AccountBudget
+	13, // 11: account.CreateAccountResponse.error:type_name -> error.Error
+	7,  // 12: account.UpdateAccountRequest.budget:type_name -> account.UpdateAccountBudgetRequest
+	13, // 13: account.UpdateAccountResponse.error:type_name -> error.Error
+	13, // 14: account.DeleteAccountResponse.error:type_name -> error.Error
+	2,  // 15: account.AccountEndpoint.GetAccounts:input_type -> account.GetAccountsRequest
+	4,  // 16: account.AccountEndpoint.CreateAccount:input_type -> account.CreateAccountRequest
+	6,  // 17: account.AccountEndpoint.UpdateAccount:input_type -> account.UpdateAccountRequest
+	9,  // 18: account.AccountEndpoint.DeleteAccount:input_type -> account.DeleteAccountRequest
+	3,  // 19: account.AccountEndpoint.GetAccounts:output_type -> account.GetAccountsResponse
+	5,  // 20: account.AccountEndpoint.CreateAccount:output_type -> account.CreateAccountResponse
+	8,  // 21: account.AccountEndpoint.UpdateAccount:output_type -> account.UpdateAccountResponse
+	10, // 22: account.AccountEndpoint.DeleteAccount:output_type -> account.DeleteAccountResponse
+	19, // [19:23] is the sub-list for method output_type
+	15, // [15:19] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_proto_account_account_endpoint_proto_init() }
@@ -1094,7 +1170,6 @@ func file_proto_account_account_endpoint_proto_init() {
 	}
 	file_proto_error_error_proto_init()
 	file_proto_enums_accountType_proto_init()
-	file_proto_account_account_endpoint_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[1].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[2].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[3].OneofWrappers = []any{}
@@ -1102,14 +1177,15 @@ func file_proto_account_account_endpoint_proto_init() {
 	file_proto_account_account_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[7].OneofWrappers = []any{}
-	file_proto_account_account_endpoint_proto_msgTypes[9].OneofWrappers = []any{}
+	file_proto_account_account_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
+	file_proto_account_account_endpoint_proto_msgTypes[10].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_account_account_endpoint_proto_rawDesc), len(file_proto_account_account_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

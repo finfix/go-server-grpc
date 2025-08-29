@@ -26,17 +26,17 @@ type Transaction struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 []byte                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                           // Идентификатор транзакции
 	Type               TransactionType        `protobuf:"varint,2,opt,name=type,proto3,enum=transactionType.TransactionType" json:"type,omitempty"` // Тип транзакции
-	AccountFromID      int32                  `protobuf:"varint,3,opt,name=accountFromID,proto3" json:"accountFromID,omitempty"`                    // Идентификатор счета списания
-	AccountToID        int32                  `protobuf:"varint,4,opt,name=accountToID,proto3" json:"accountToID,omitempty"`                        // Идентификатор счета пополнения
+	AccountFromID      []byte                 `protobuf:"bytes,3,opt,name=accountFromID,proto3" json:"accountFromID,omitempty"`                     // Идентификатор счета списания
+	AccountToID        []byte                 `protobuf:"bytes,4,opt,name=accountToID,proto3" json:"accountToID,omitempty"`                         // Идентификатор счета пополнения
 	AmountFrom         float64                `protobuf:"fixed64,5,opt,name=amountFrom,proto3" json:"amountFrom,omitempty"`                         // Сумма сделки в первой валюте
 	AmountTo           float64                `protobuf:"fixed64,6,opt,name=amountTo,proto3" json:"amountTo,omitempty"`                             // Сумма сделки во второй валюте
-	DateTransaction    string                 `protobuf:"bytes,7,opt,name=dateTransaction,proto3" json:"dateTransaction,omitempty"`                 // Дата транзакции (пользовательские)
+	DateTransaction    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=dateTransaction,proto3" json:"dateTransaction,omitempty"`                 // Дата транзакции (пользовательские)
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`                   // Дата и время создания транзакции
 	IsExecuted         bool                   `protobuf:"varint,9,opt,name=isExecuted,proto3" json:"isExecuted,omitempty"`                          // Исполнена операция или нет
 	AccountingInCharts bool                   `protobuf:"varint,10,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`         // Учитывается ли транзакция в графиках или нет
-	AccountGroupID     int32                  `protobuf:"varint,11,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`                 // Идентификатор группы счетов
-	CreatedByUserID    int32                  `protobuf:"varint,12,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`               // Идентификатор пользователя, создавшего транзакцию
-	Note               *string                `protobuf:"bytes,13,opt,name=note,proto3,oneof" json:"note,omitempty"`                                // Заметка сделки
+	AccountGroupID     []byte                 `protobuf:"bytes,11,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`                  // Идентификатор группы счетов
+	CreatedByUserID    []byte                 `protobuf:"bytes,12,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`                // Идентификатор пользователя, создавшего транзакцию
+	Note               string                 `protobuf:"bytes,13,opt,name=note,proto3" json:"note,omitempty"`                                      // Заметка сделки
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -85,18 +85,18 @@ func (x *Transaction) GetType() TransactionType {
 	return TransactionType_Unspecified
 }
 
-func (x *Transaction) GetAccountFromID() int32 {
+func (x *Transaction) GetAccountFromID() []byte {
 	if x != nil {
 		return x.AccountFromID
 	}
-	return 0
+	return nil
 }
 
-func (x *Transaction) GetAccountToID() int32 {
+func (x *Transaction) GetAccountToID() []byte {
 	if x != nil {
 		return x.AccountToID
 	}
-	return 0
+	return nil
 }
 
 func (x *Transaction) GetAmountFrom() float64 {
@@ -113,11 +113,11 @@ func (x *Transaction) GetAmountTo() float64 {
 	return 0
 }
 
-func (x *Transaction) GetDateTransaction() string {
+func (x *Transaction) GetDateTransaction() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DateTransaction
 	}
-	return ""
+	return nil
 }
 
 func (x *Transaction) GetDatetimeCreate() *timestamppb.Timestamp {
@@ -141,23 +141,23 @@ func (x *Transaction) GetAccountingInCharts() bool {
 	return false
 }
 
-func (x *Transaction) GetAccountGroupID() int32 {
+func (x *Transaction) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
-func (x *Transaction) GetCreatedByUserID() int32 {
+func (x *Transaction) GetCreatedByUserID() []byte {
 	if x != nil {
 		return x.CreatedByUserID
 	}
-	return 0
+	return nil
 }
 
 func (x *Transaction) GetNote() string {
-	if x != nil && x.Note != nil {
-		return *x.Note
+	if x != nil {
+		return x.Note
 	}
 	return ""
 }
@@ -165,12 +165,12 @@ func (x *Transaction) GetNote() string {
 type GetTransactionsRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                               // Токен доступа
-	AccountGroupIDs []int32                `protobuf:"varint,2,rep,packed,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"`               // Идентификаторы групп счетов
-	AccountID       *int32                 `protobuf:"varint,3,opt,name=accountID,proto3,oneof" json:"accountID,omitempty"`                            // Транзакции какого счета нас интересуют
-	DateFrom        *string                `protobuf:"bytes,4,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"`                               // Дата, от которой начинать учитывать транзакции
-	DateTo          *string                `protobuf:"bytes,5,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`                                   // Дата, до которой учитывать транзакции
-	Limit           *int32                 `protobuf:"varint,6,opt,name=limit,proto3,oneof" json:"limit,omitempty"`                                    // Количество транзакций в списке для пагинации
-	Offset          *int32                 `protobuf:"varint,7,opt,name=offset,proto3,oneof" json:"offset,omitempty"`                                  // Смещение относительно начала списка для пагинации
+	AccountGroupIDs [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"`                       // Идентификаторы групп счетов
+	AccountID       []byte                 `protobuf:"bytes,3,opt,name=accountID,proto3,oneof" json:"accountID,omitempty"`                             // Транзакции какого счета нас интересуют
+	DateFrom        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"`                               // Дата, от которой начинать учитывать транзакции
+	DateTo          *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`                                   // Дата, до которой учитывать транзакции
+	Limit           *uint32                `protobuf:"varint,6,opt,name=limit,proto3,oneof" json:"limit,omitempty"`                                    // Количество транзакций в списке для пагинации
+	Offset          *uint32                `protobuf:"varint,7,opt,name=offset,proto3,oneof" json:"offset,omitempty"`                                  // Смещение относительно начала списка для пагинации
 	Type            *TransactionType       `protobuf:"varint,8,opt,name=type,proto3,enum=transactionType.TransactionType,oneof" json:"type,omitempty"` // Тип транзакции
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -213,42 +213,42 @@ func (x *GetTransactionsRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *GetTransactionsRequest) GetAccountGroupIDs() []int32 {
+func (x *GetTransactionsRequest) GetAccountGroupIDs() [][]byte {
 	if x != nil {
 		return x.AccountGroupIDs
 	}
 	return nil
 }
 
-func (x *GetTransactionsRequest) GetAccountID() int32 {
-	if x != nil && x.AccountID != nil {
-		return *x.AccountID
+func (x *GetTransactionsRequest) GetAccountID() []byte {
+	if x != nil {
+		return x.AccountID
 	}
-	return 0
+	return nil
 }
 
-func (x *GetTransactionsRequest) GetDateFrom() string {
-	if x != nil && x.DateFrom != nil {
-		return *x.DateFrom
+func (x *GetTransactionsRequest) GetDateFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateFrom
 	}
-	return ""
+	return nil
 }
 
-func (x *GetTransactionsRequest) GetDateTo() string {
-	if x != nil && x.DateTo != nil {
-		return *x.DateTo
+func (x *GetTransactionsRequest) GetDateTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateTo
 	}
-	return ""
+	return nil
 }
 
-func (x *GetTransactionsRequest) GetLimit() int32 {
+func (x *GetTransactionsRequest) GetLimit() uint32 {
 	if x != nil && x.Limit != nil {
 		return *x.Limit
 	}
 	return 0
 }
 
-func (x *GetTransactionsRequest) GetOffset() int32 {
+func (x *GetTransactionsRequest) GetOffset() uint32 {
 	if x != nil && x.Offset != nil {
 		return *x.Offset
 	}
@@ -317,18 +317,19 @@ func (x *GetTransactionsResponse) GetTransactions() []*Transaction {
 type CreateTransactionRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                          // Токен доступа
-	AccountFromID      int32                  `protobuf:"varint,2,opt,name=accountFromID,proto3" json:"accountFromID,omitempty"`                     // Идентификатор счета списания
-	AccountToID        int32                  `protobuf:"varint,3,opt,name=accountToID,proto3" json:"accountToID,omitempty"`                         // Идентификатор счета пополнения
-	AccountGroupID     int32                  `protobuf:"varint,4,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`                   // Идентификатор группы счетов
-	AmountFrom         float64                `protobuf:"fixed64,5,opt,name=amountFrom,proto3" json:"amountFrom,omitempty"`                          // Сумма списания с первого счета
-	AmountTo           float64                `protobuf:"fixed64,6,opt,name=amountTo,proto3" json:"amountTo,omitempty"`                              // Сумма пополнения второго счета (в случаях меж валютной транзакции цифры отличаются)
-	DateTransaction    string                 `protobuf:"bytes,7,opt,name=dateTransaction,proto3" json:"dateTransaction,omitempty"`                  // Дата транзакции
-	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`                    // Дата создания транзакции
-	IsExecuted         bool                   `protobuf:"varint,9,opt,name=isExecuted,proto3" json:"isExecuted,omitempty"`                           // Исполнена операция или нет (если нет, сделки как бы не существует)
-	AccountingInCharts bool                   `protobuf:"varint,10,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`          // Учитывается ли транзакция в графиках или нет
-	Type               TransactionType        `protobuf:"varint,11,opt,name=type,proto3,enum=transactionType.TransactionType" json:"type,omitempty"` // Тип транзакции
-	Note               *string                `protobuf:"bytes,12,opt,name=note,proto3,oneof" json:"note,omitempty"`                                 // Заметка для транзакции
-	TagIDs             []int32                `protobuf:"varint,13,rep,packed,name=tagIDs,proto3" json:"tagIDs,omitempty"`                           // Идентификаторы тегов
+	Id                 []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                            // Идентификатор транзакции
+	AccountFromID      []byte                 `protobuf:"bytes,3,opt,name=accountFromID,proto3" json:"accountFromID,omitempty"`                      // Идентификатор счета списания
+	AccountToID        []byte                 `protobuf:"bytes,4,opt,name=accountToID,proto3" json:"accountToID,omitempty"`                          // Идентификатор счета пополнения
+	AccountGroupID     []byte                 `protobuf:"bytes,5,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`                    // Идентификатор группы счетов
+	AmountFrom         float64                `protobuf:"fixed64,6,opt,name=amountFrom,proto3" json:"amountFrom,omitempty"`                          // Сумма списания с первого счета
+	AmountTo           float64                `protobuf:"fixed64,7,opt,name=amountTo,proto3" json:"amountTo,omitempty"`                              // Сумма пополнения второго счета (в случаях меж валютной транзакции цифры отличаются)
+	DateTransaction    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=dateTransaction,proto3" json:"dateTransaction,omitempty"`                  // Дата транзакции
+	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`                    // Дата создания транзакции
+	IsExecuted         bool                   `protobuf:"varint,10,opt,name=isExecuted,proto3" json:"isExecuted,omitempty"`                          // Исполнена операция или нет (если нет, сделки как бы не существует)
+	AccountingInCharts bool                   `protobuf:"varint,11,opt,name=accountingInCharts,proto3" json:"accountingInCharts,omitempty"`          // Учитывается ли транзакция в графиках или нет
+	Type               TransactionType        `protobuf:"varint,12,opt,name=type,proto3,enum=transactionType.TransactionType" json:"type,omitempty"` // Тип транзакции
+	Note               string                 `protobuf:"bytes,13,opt,name=note,proto3" json:"note,omitempty"`                                       // Заметка для транзакции
+	TagIDs             [][]byte               `protobuf:"bytes,14,rep,name=tagIDs,proto3" json:"tagIDs,omitempty"`                                   // Идентификаторы тегов
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -370,25 +371,32 @@ func (x *CreateTransactionRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *CreateTransactionRequest) GetAccountFromID() int32 {
+func (x *CreateTransactionRequest) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+func (x *CreateTransactionRequest) GetAccountFromID() []byte {
 	if x != nil {
 		return x.AccountFromID
 	}
-	return 0
+	return nil
 }
 
-func (x *CreateTransactionRequest) GetAccountToID() int32 {
+func (x *CreateTransactionRequest) GetAccountToID() []byte {
 	if x != nil {
 		return x.AccountToID
 	}
-	return 0
+	return nil
 }
 
-func (x *CreateTransactionRequest) GetAccountGroupID() int32 {
+func (x *CreateTransactionRequest) GetAccountGroupID() []byte {
 	if x != nil {
 		return x.AccountGroupID
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateTransactionRequest) GetAmountFrom() float64 {
@@ -405,11 +413,11 @@ func (x *CreateTransactionRequest) GetAmountTo() float64 {
 	return 0
 }
 
-func (x *CreateTransactionRequest) GetDateTransaction() string {
+func (x *CreateTransactionRequest) GetDateTransaction() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DateTransaction
 	}
-	return ""
+	return nil
 }
 
 func (x *CreateTransactionRequest) GetDatetimeCreate() *timestamppb.Timestamp {
@@ -441,13 +449,13 @@ func (x *CreateTransactionRequest) GetType() TransactionType {
 }
 
 func (x *CreateTransactionRequest) GetNote() string {
-	if x != nil && x.Note != nil {
-		return *x.Note
+	if x != nil {
+		return x.Note
 	}
 	return ""
 }
 
-func (x *CreateTransactionRequest) GetTagIDs() []int32 {
+func (x *CreateTransactionRequest) GetTagIDs() [][]byte {
 	if x != nil {
 		return x.TagIDs
 	}
@@ -457,7 +465,6 @@ func (x *CreateTransactionRequest) GetTagIDs() []int32 {
 type CreateTransactionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
-	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3,oneof" json:"id,omitempty"`       // Идентификатор транзакции
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -499,26 +506,19 @@ func (x *CreateTransactionResponse) GetError() *Error {
 	return nil
 }
 
-func (x *CreateTransactionResponse) GetId() []byte {
-	if x != nil {
-		return x.Id
-	}
-	return nil
-}
-
 type UpdateTransactionRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
 	Id                 []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                        // Идентификатор транзакции
-	AccountFromID      *int32                 `protobuf:"varint,3,opt,name=accountFromID,proto3,oneof" json:"accountFromID,omitempty"`           // Идентификатор счета списания
-	AccountToID        *int32                 `protobuf:"varint,4,opt,name=accountToID,proto3,oneof" json:"accountToID,omitempty"`               // Идентификатор счета пополнения
+	AccountFromID      []byte                 `protobuf:"bytes,3,opt,name=accountFromID,proto3,oneof" json:"accountFromID,omitempty"`            // Идентификатор счета списания
+	AccountToID        []byte                 `protobuf:"bytes,4,opt,name=accountToID,proto3,oneof" json:"accountToID,omitempty"`                // Идентификатор счета пополнения
 	AmountFrom         *float64               `protobuf:"fixed64,5,opt,name=amountFrom,proto3,oneof" json:"amountFrom,omitempty"`                // Сумма списания с первого счета
 	AmountTo           *float64               `protobuf:"fixed64,6,opt,name=amountTo,proto3,oneof" json:"amountTo,omitempty"`                    // Сумма пополнения второго счета
-	DateTransaction    *string                `protobuf:"bytes,7,opt,name=dateTransaction,proto3,oneof" json:"dateTransaction,omitempty"`        // Дата транзакции
+	DateTransaction    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=dateTransaction,proto3,oneof" json:"dateTransaction,omitempty"`        // Дата транзакции
 	IsExecuted         *bool                  `protobuf:"varint,8,opt,name=isExecuted,proto3,oneof" json:"isExecuted,omitempty"`                 // Исполнена операция или нет (если нет, сделки как бы не существует)
 	AccountingInCharts *bool                  `protobuf:"varint,9,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"` // Учитывается ли транзакция в графиках или нет
 	Note               *string                `protobuf:"bytes,10,opt,name=note,proto3,oneof" json:"note,omitempty"`                             // Заметка для транзакции
-	TagIDs             []int32                `protobuf:"varint,11,rep,packed,name=tagIDs,proto3" json:"tagIDs,omitempty"`                       // Идентификаторы тегов
+	TagIDs             [][]byte               `protobuf:"bytes,11,rep,name=tagIDs,proto3" json:"tagIDs,omitempty"`                               // Идентификаторы тегов
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -567,18 +567,18 @@ func (x *UpdateTransactionRequest) GetId() []byte {
 	return nil
 }
 
-func (x *UpdateTransactionRequest) GetAccountFromID() int32 {
-	if x != nil && x.AccountFromID != nil {
-		return *x.AccountFromID
+func (x *UpdateTransactionRequest) GetAccountFromID() []byte {
+	if x != nil {
+		return x.AccountFromID
 	}
-	return 0
+	return nil
 }
 
-func (x *UpdateTransactionRequest) GetAccountToID() int32 {
-	if x != nil && x.AccountToID != nil {
-		return *x.AccountToID
+func (x *UpdateTransactionRequest) GetAccountToID() []byte {
+	if x != nil {
+		return x.AccountToID
 	}
-	return 0
+	return nil
 }
 
 func (x *UpdateTransactionRequest) GetAmountFrom() float64 {
@@ -595,11 +595,11 @@ func (x *UpdateTransactionRequest) GetAmountTo() float64 {
 	return 0
 }
 
-func (x *UpdateTransactionRequest) GetDateTransaction() string {
-	if x != nil && x.DateTransaction != nil {
-		return *x.DateTransaction
+func (x *UpdateTransactionRequest) GetDateTransaction() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateTransaction
 	}
-	return ""
+	return nil
 }
 
 func (x *UpdateTransactionRequest) GetIsExecuted() bool {
@@ -623,7 +623,7 @@ func (x *UpdateTransactionRequest) GetNote() string {
 	return ""
 }
 
-func (x *UpdateTransactionRequest) GetTagIDs() []int32 {
+func (x *UpdateTransactionRequest) GetTagIDs() [][]byte {
 	if x != nil {
 		return x.TagIDs
 	}
@@ -774,35 +774,34 @@ var File_proto_transaction_transaction_endpoint_proto protoreflect.FileDescripto
 
 const file_proto_transaction_transaction_endpoint_proto_rawDesc = "" +
 	"\n" +
-	",proto/transaction/transaction-endpoint.proto\x12\vtransaction\x1a\x17proto/error/error.proto\x1a!proto/enums/transactionType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x04\n" +
+	",proto/transaction/transaction-endpoint.proto\x12\vtransaction\x1a\x17proto/error/error.proto\x1a!proto/enums/transactionType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x97\x04\n" +
 	"\vTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x124\n" +
 	"\x04type\x18\x02 \x01(\x0e2 .transactionType.TransactionTypeR\x04type\x12$\n" +
-	"\raccountFromID\x18\x03 \x01(\x05R\raccountFromID\x12 \n" +
-	"\vaccountToID\x18\x04 \x01(\x05R\vaccountToID\x12\x1e\n" +
+	"\raccountFromID\x18\x03 \x01(\fR\raccountFromID\x12 \n" +
+	"\vaccountToID\x18\x04 \x01(\fR\vaccountToID\x12\x1e\n" +
 	"\n" +
 	"amountFrom\x18\x05 \x01(\x01R\n" +
 	"amountFrom\x12\x1a\n" +
-	"\bamountTo\x18\x06 \x01(\x01R\bamountTo\x12(\n" +
-	"\x0fdateTransaction\x18\a \x01(\tR\x0fdateTransaction\x12B\n" +
+	"\bamountTo\x18\x06 \x01(\x01R\bamountTo\x12D\n" +
+	"\x0fdateTransaction\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x0fdateTransaction\x12B\n" +
 	"\x0edatetimeCreate\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12\x1e\n" +
 	"\n" +
 	"isExecuted\x18\t \x01(\bR\n" +
 	"isExecuted\x12.\n" +
 	"\x12accountingInCharts\x18\n" +
 	" \x01(\bR\x12accountingInCharts\x12&\n" +
-	"\x0eaccountGroupID\x18\v \x01(\x05R\x0eaccountGroupID\x12(\n" +
-	"\x0fcreatedByUserID\x18\f \x01(\x05R\x0fcreatedByUserID\x12\x17\n" +
-	"\x04note\x18\r \x01(\tH\x00R\x04note\x88\x01\x01B\a\n" +
-	"\x05_note\"\xfc\x02\n" +
+	"\x0eaccountGroupID\x18\v \x01(\fR\x0eaccountGroupID\x12(\n" +
+	"\x0fcreatedByUserID\x18\f \x01(\fR\x0fcreatedByUserID\x12\x12\n" +
+	"\x04note\x18\r \x01(\tR\x04note\"\xb4\x03\n" +
 	"\x16GetTransactionsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
-	"\x0faccountGroupIDs\x18\x02 \x03(\x05R\x0faccountGroupIDs\x12!\n" +
-	"\taccountID\x18\x03 \x01(\x05H\x00R\taccountID\x88\x01\x01\x12\x1f\n" +
-	"\bdateFrom\x18\x04 \x01(\tH\x01R\bdateFrom\x88\x01\x01\x12\x1b\n" +
-	"\x06dateTo\x18\x05 \x01(\tH\x02R\x06dateTo\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x06 \x01(\x05H\x03R\x05limit\x88\x01\x01\x12\x1b\n" +
-	"\x06offset\x18\a \x01(\x05H\x04R\x06offset\x88\x01\x01\x129\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x12!\n" +
+	"\taccountID\x18\x03 \x01(\fH\x00R\taccountID\x88\x01\x01\x12;\n" +
+	"\bdateFrom\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\bdateFrom\x88\x01\x01\x127\n" +
+	"\x06dateTo\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x06dateTo\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x06 \x01(\rH\x03R\x05limit\x88\x01\x01\x12\x1b\n" +
+	"\x06offset\x18\a \x01(\rH\x04R\x06offset\x88\x01\x01\x129\n" +
 	"\x04type\x18\b \x01(\x0e2 .transactionType.TransactionTypeH\x05R\x04type\x88\x01\x01B\f\n" +
 	"\n" +
 	"_accountIDB\v\n" +
@@ -814,49 +813,47 @@ const file_proto_transaction_transaction_endpoint_proto_rawDesc = "" +
 	"\x17GetTransactionsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12<\n" +
 	"\ftransactions\x18\x02 \x03(\v2\x18.transaction.TransactionR\ftransactionsB\b\n" +
-	"\x06_error\"\x96\x04\n" +
+	"\x06_error\"\xb4\x04\n" +
 	"\x18CreateTransactionRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12$\n" +
-	"\raccountFromID\x18\x02 \x01(\x05R\raccountFromID\x12 \n" +
-	"\vaccountToID\x18\x03 \x01(\x05R\vaccountToID\x12&\n" +
-	"\x0eaccountGroupID\x18\x04 \x01(\x05R\x0eaccountGroupID\x12\x1e\n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\x12$\n" +
+	"\raccountFromID\x18\x03 \x01(\fR\raccountFromID\x12 \n" +
+	"\vaccountToID\x18\x04 \x01(\fR\vaccountToID\x12&\n" +
+	"\x0eaccountGroupID\x18\x05 \x01(\fR\x0eaccountGroupID\x12\x1e\n" +
 	"\n" +
-	"amountFrom\x18\x05 \x01(\x01R\n" +
+	"amountFrom\x18\x06 \x01(\x01R\n" +
 	"amountFrom\x12\x1a\n" +
-	"\bamountTo\x18\x06 \x01(\x01R\bamountTo\x12(\n" +
-	"\x0fdateTransaction\x18\a \x01(\tR\x0fdateTransaction\x12B\n" +
-	"\x0edatetimeCreate\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12\x1e\n" +
+	"\bamountTo\x18\a \x01(\x01R\bamountTo\x12D\n" +
+	"\x0fdateTransaction\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x0fdateTransaction\x12B\n" +
+	"\x0edatetimeCreate\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12\x1e\n" +
 	"\n" +
-	"isExecuted\x18\t \x01(\bR\n" +
+	"isExecuted\x18\n" +
+	" \x01(\bR\n" +
 	"isExecuted\x12.\n" +
-	"\x12accountingInCharts\x18\n" +
-	" \x01(\bR\x12accountingInCharts\x124\n" +
-	"\x04type\x18\v \x01(\x0e2 .transactionType.TransactionTypeR\x04type\x12\x17\n" +
-	"\x04note\x18\f \x01(\tH\x00R\x04note\x88\x01\x01\x12\x16\n" +
-	"\x06tagIDs\x18\r \x03(\x05R\x06tagIDsB\a\n" +
-	"\x05_note\"j\n" +
+	"\x12accountingInCharts\x18\v \x01(\bR\x12accountingInCharts\x124\n" +
+	"\x04type\x18\f \x01(\x0e2 .transactionType.TransactionTypeR\x04type\x12\x12\n" +
+	"\x04note\x18\r \x01(\tR\x04note\x12\x16\n" +
+	"\x06tagIDs\x18\x0e \x03(\fR\x06tagIDs\"N\n" +
 	"\x19CreateTransactionResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
-	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01B\b\n" +
-	"\x06_errorB\x05\n" +
-	"\x03_id\"\x9f\x04\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"\xbb\x04\n" +
 	"\x18UpdateTransactionRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12)\n" +
-	"\raccountFromID\x18\x03 \x01(\x05H\x00R\raccountFromID\x88\x01\x01\x12%\n" +
-	"\vaccountToID\x18\x04 \x01(\x05H\x01R\vaccountToID\x88\x01\x01\x12#\n" +
+	"\raccountFromID\x18\x03 \x01(\fH\x00R\raccountFromID\x88\x01\x01\x12%\n" +
+	"\vaccountToID\x18\x04 \x01(\fH\x01R\vaccountToID\x88\x01\x01\x12#\n" +
 	"\n" +
 	"amountFrom\x18\x05 \x01(\x01H\x02R\n" +
 	"amountFrom\x88\x01\x01\x12\x1f\n" +
-	"\bamountTo\x18\x06 \x01(\x01H\x03R\bamountTo\x88\x01\x01\x12-\n" +
-	"\x0fdateTransaction\x18\a \x01(\tH\x04R\x0fdateTransaction\x88\x01\x01\x12#\n" +
+	"\bamountTo\x18\x06 \x01(\x01H\x03R\bamountTo\x88\x01\x01\x12I\n" +
+	"\x0fdateTransaction\x18\a \x01(\v2\x1a.google.protobuf.TimestampH\x04R\x0fdateTransaction\x88\x01\x01\x12#\n" +
 	"\n" +
 	"isExecuted\x18\b \x01(\bH\x05R\n" +
 	"isExecuted\x88\x01\x01\x123\n" +
 	"\x12accountingInCharts\x18\t \x01(\bH\x06R\x12accountingInCharts\x88\x01\x01\x12\x17\n" +
 	"\x04note\x18\n" +
 	" \x01(\tH\aR\x04note\x88\x01\x01\x12\x16\n" +
-	"\x06tagIDs\x18\v \x03(\x05R\x06tagIDsB\x10\n" +
+	"\x06tagIDs\x18\v \x03(\fR\x06tagIDsB\x10\n" +
 	"\x0e_accountFromIDB\x0e\n" +
 	"\f_accountToIDB\r\n" +
 	"\v_amountFromB\v\n" +
@@ -909,28 +906,33 @@ var file_proto_transaction_transaction_endpoint_proto_goTypes = []any{
 }
 var file_proto_transaction_transaction_endpoint_proto_depIdxs = []int32{
 	9,  // 0: transaction.Transaction.type:type_name -> transactionType.TransactionType
-	10, // 1: transaction.Transaction.datetimeCreate:type_name -> google.protobuf.Timestamp
-	9,  // 2: transaction.GetTransactionsRequest.type:type_name -> transactionType.TransactionType
-	11, // 3: transaction.GetTransactionsResponse.error:type_name -> error.Error
-	0,  // 4: transaction.GetTransactionsResponse.transactions:type_name -> transaction.Transaction
-	10, // 5: transaction.CreateTransactionRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
-	9,  // 6: transaction.CreateTransactionRequest.type:type_name -> transactionType.TransactionType
-	11, // 7: transaction.CreateTransactionResponse.error:type_name -> error.Error
-	11, // 8: transaction.UpdateTransactionResponse.error:type_name -> error.Error
-	11, // 9: transaction.DeleteTransactionResponse.error:type_name -> error.Error
-	1,  // 10: transaction.TransactionEndpoint.GetTransactions:input_type -> transaction.GetTransactionsRequest
-	3,  // 11: transaction.TransactionEndpoint.CreateTransaction:input_type -> transaction.CreateTransactionRequest
-	5,  // 12: transaction.TransactionEndpoint.UpdateTransaction:input_type -> transaction.UpdateTransactionRequest
-	7,  // 13: transaction.TransactionEndpoint.DeleteTransaction:input_type -> transaction.DeleteTransactionRequest
-	2,  // 14: transaction.TransactionEndpoint.GetTransactions:output_type -> transaction.GetTransactionsResponse
-	4,  // 15: transaction.TransactionEndpoint.CreateTransaction:output_type -> transaction.CreateTransactionResponse
-	6,  // 16: transaction.TransactionEndpoint.UpdateTransaction:output_type -> transaction.UpdateTransactionResponse
-	8,  // 17: transaction.TransactionEndpoint.DeleteTransaction:output_type -> transaction.DeleteTransactionResponse
-	14, // [14:18] is the sub-list for method output_type
-	10, // [10:14] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	10, // 1: transaction.Transaction.dateTransaction:type_name -> google.protobuf.Timestamp
+	10, // 2: transaction.Transaction.datetimeCreate:type_name -> google.protobuf.Timestamp
+	10, // 3: transaction.GetTransactionsRequest.dateFrom:type_name -> google.protobuf.Timestamp
+	10, // 4: transaction.GetTransactionsRequest.dateTo:type_name -> google.protobuf.Timestamp
+	9,  // 5: transaction.GetTransactionsRequest.type:type_name -> transactionType.TransactionType
+	11, // 6: transaction.GetTransactionsResponse.error:type_name -> error.Error
+	0,  // 7: transaction.GetTransactionsResponse.transactions:type_name -> transaction.Transaction
+	10, // 8: transaction.CreateTransactionRequest.dateTransaction:type_name -> google.protobuf.Timestamp
+	10, // 9: transaction.CreateTransactionRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
+	9,  // 10: transaction.CreateTransactionRequest.type:type_name -> transactionType.TransactionType
+	11, // 11: transaction.CreateTransactionResponse.error:type_name -> error.Error
+	10, // 12: transaction.UpdateTransactionRequest.dateTransaction:type_name -> google.protobuf.Timestamp
+	11, // 13: transaction.UpdateTransactionResponse.error:type_name -> error.Error
+	11, // 14: transaction.DeleteTransactionResponse.error:type_name -> error.Error
+	1,  // 15: transaction.TransactionEndpoint.GetTransactions:input_type -> transaction.GetTransactionsRequest
+	3,  // 16: transaction.TransactionEndpoint.CreateTransaction:input_type -> transaction.CreateTransactionRequest
+	5,  // 17: transaction.TransactionEndpoint.UpdateTransaction:input_type -> transaction.UpdateTransactionRequest
+	7,  // 18: transaction.TransactionEndpoint.DeleteTransaction:input_type -> transaction.DeleteTransactionRequest
+	2,  // 19: transaction.TransactionEndpoint.GetTransactions:output_type -> transaction.GetTransactionsResponse
+	4,  // 20: transaction.TransactionEndpoint.CreateTransaction:output_type -> transaction.CreateTransactionResponse
+	6,  // 21: transaction.TransactionEndpoint.UpdateTransaction:output_type -> transaction.UpdateTransactionResponse
+	8,  // 22: transaction.TransactionEndpoint.DeleteTransaction:output_type -> transaction.DeleteTransactionResponse
+	19, // [19:23] is the sub-list for method output_type
+	15, // [15:19] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_proto_transaction_transaction_endpoint_proto_init() }
@@ -940,10 +942,8 @@ func file_proto_transaction_transaction_endpoint_proto_init() {
 	}
 	file_proto_error_error_proto_init()
 	file_proto_enums_transactionType_proto_init()
-	file_proto_transaction_transaction_endpoint_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_transaction_transaction_endpoint_proto_msgTypes[1].OneofWrappers = []any{}
 	file_proto_transaction_transaction_endpoint_proto_msgTypes[2].OneofWrappers = []any{}
-	file_proto_transaction_transaction_endpoint_proto_msgTypes[3].OneofWrappers = []any{}
 	file_proto_transaction_transaction_endpoint_proto_msgTypes[4].OneofWrappers = []any{}
 	file_proto_transaction_transaction_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_transaction_transaction_endpoint_proto_msgTypes[6].OneofWrappers = []any{}

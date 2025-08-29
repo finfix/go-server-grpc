@@ -28,7 +28,7 @@ type AccountGroup struct {
 	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                     // Название группы счетов
 	Currency       string                 `protobuf:"bytes,3,opt,name=currency,proto3" json:"currency,omitempty"`             // Валюта группы счетов
 	Visible        bool                   `protobuf:"varint,4,opt,name=visible,proto3" json:"visible,omitempty"`              // Видимость группы счетов
-	SerialNumber   int32                  `protobuf:"varint,5,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`    // Порядковый номер группы счетов
+	SerialNumber   uint32                 `protobuf:"varint,5,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`    // Порядковый номер группы счетов
 	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"` // Дата и время создания группы счетов
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -92,7 +92,7 @@ func (x *AccountGroup) GetVisible() bool {
 	return false
 }
 
-func (x *AccountGroup) GetSerialNumber() int32 {
+func (x *AccountGroup) GetSerialNumber() uint32 {
 	if x != nil {
 		return x.SerialNumber
 	}
@@ -108,8 +108,8 @@ func (x *AccountGroup) GetDatetimeCreate() *timestamppb.Timestamp {
 
 type GetAccountGroupsRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                 // Токен доступа
-	AccountGroupIDs []int32                `protobuf:"varint,2,rep,packed,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов
+	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`         // Токен доступа
+	AccountGroupIDs [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -151,7 +151,7 @@ func (x *GetAccountGroupsRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *GetAccountGroupsRequest) GetAccountGroupIDs() []int32 {
+func (x *GetAccountGroupsRequest) GetAccountGroupIDs() [][]byte {
 	if x != nil {
 		return x.AccountGroupIDs
 	}
@@ -213,9 +213,10 @@ func (x *GetAccountGroupsResponse) GetAccountGroups() []*AccountGroup {
 type CreateAccountGroupRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken    string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`       // Токен доступа
-	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                     // Название группы счетов
-	Currency       string                 `protobuf:"bytes,3,opt,name=currency,proto3" json:"currency,omitempty"`             // Валюта группы счетов
-	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"` // Дата и время создания группы счетов
+	Id             []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                         // Идентификатор группы счетов
+	Name           string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                     // Название группы счетов
+	Currency       string                 `protobuf:"bytes,4,opt,name=currency,proto3" json:"currency,omitempty"`             // Валюта группы счетов
+	DatetimeCreate *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"` // Дата и время создания группы счетов
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -257,6 +258,13 @@ func (x *CreateAccountGroupRequest) GetAccessToken() string {
 	return ""
 }
 
+func (x *CreateAccountGroupRequest) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
 func (x *CreateAccountGroupRequest) GetName() string {
 	if x != nil {
 		return x.Name
@@ -281,8 +289,7 @@ func (x *CreateAccountGroupRequest) GetDatetimeCreate() *timestamppb.Timestamp {
 type CreateAccountGroupResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                // Объект ошибки
-	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3,oneof" json:"id,omitempty"`                      // Идентификатор созданной группы счетов
-	SerialNumber  *int32                 `protobuf:"varint,3,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"` // Порядковый номер группы счетов
+	SerialNumber  *uint32                `protobuf:"varint,2,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"` // Порядковый номер группы счетов
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -324,14 +331,7 @@ func (x *CreateAccountGroupResponse) GetError() *Error {
 	return nil
 }
 
-func (x *CreateAccountGroupResponse) GetId() []byte {
-	if x != nil {
-		return x.Id
-	}
-	return nil
-}
-
-func (x *CreateAccountGroupResponse) GetSerialNumber() int32 {
+func (x *CreateAccountGroupResponse) GetSerialNumber() uint32 {
 	if x != nil && x.SerialNumber != nil {
 		return *x.SerialNumber
 	}
@@ -345,7 +345,7 @@ type UpdateAccountGroupRequest struct {
 	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                  // Название группы счетов
 	Currency      *string                `protobuf:"bytes,4,opt,name=currency,proto3,oneof" json:"currency,omitempty"`          // Валюта группы счетов
 	Visible       *bool                  `protobuf:"varint,5,opt,name=visible,proto3,oneof" json:"visible,omitempty"`           // Видимость группы счетов
-	SerialNumber  *int32                 `protobuf:"varint,6,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"` // Порядковый номер группы счетов
+	SerialNumber  *uint32                `protobuf:"varint,6,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"` // Порядковый номер группы счетов
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -415,7 +415,7 @@ func (x *UpdateAccountGroupRequest) GetVisible() bool {
 	return false
 }
 
-func (x *UpdateAccountGroupRequest) GetSerialNumber() int32 {
+func (x *UpdateAccountGroupRequest) GetSerialNumber() uint32 {
 	if x != nil && x.SerialNumber != nil {
 		return *x.SerialNumber
 	}
@@ -572,26 +572,25 @@ const file_proto_accountGroup_accountGroup_endpoint_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bcurrency\x18\x03 \x01(\tR\bcurrency\x12\x18\n" +
 	"\avisible\x18\x04 \x01(\bR\avisible\x12\"\n" +
-	"\fserialNumber\x18\x05 \x01(\x05R\fserialNumber\x12B\n" +
+	"\fserialNumber\x18\x05 \x01(\rR\fserialNumber\x12B\n" +
 	"\x0edatetimeCreate\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"e\n" +
 	"\x17GetAccountGroupsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
-	"\x0faccountGroupIDs\x18\x02 \x03(\x05R\x0faccountGroupIDs\"\x8f\x01\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\"\x8f\x01\n" +
 	"\x18GetAccountGroupsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12@\n" +
 	"\raccountGroups\x18\x02 \x03(\v2\x1a.accountGroup.AccountGroupR\raccountGroupsB\b\n" +
-	"\x06_error\"\xb1\x01\n" +
+	"\x06_error\"\xc1\x01\n" +
 	"\x19CreateAccountGroupRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
-	"\bcurrency\x18\x03 \x01(\tR\bcurrency\x12B\n" +
-	"\x0edatetimeCreate\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"\xa5\x01\n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1a\n" +
+	"\bcurrency\x18\x04 \x01(\tR\bcurrency\x12B\n" +
+	"\x0edatetimeCreate\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"\x89\x01\n" +
 	"\x1aCreateAccountGroupResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12\x13\n" +
-	"\x02id\x18\x02 \x01(\fH\x01R\x02id\x88\x01\x01\x12'\n" +
-	"\fserialNumber\x18\x03 \x01(\x05H\x02R\fserialNumber\x88\x01\x01B\b\n" +
-	"\x06_errorB\x05\n" +
-	"\x03_idB\x0f\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12'\n" +
+	"\fserialNumber\x18\x02 \x01(\rH\x01R\fserialNumber\x88\x01\x01B\b\n" +
+	"\x06_errorB\x0f\n" +
 	"\r_serialNumber\"\x82\x02\n" +
 	"\x19UpdateAccountGroupRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
@@ -599,7 +598,7 @@ const file_proto_accountGroup_accountGroup_endpoint_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
 	"\bcurrency\x18\x04 \x01(\tH\x01R\bcurrency\x88\x01\x01\x12\x1d\n" +
 	"\avisible\x18\x05 \x01(\bH\x02R\avisible\x88\x01\x01\x12'\n" +
-	"\fserialNumber\x18\x06 \x01(\x05H\x03R\fserialNumber\x88\x01\x01B\a\n" +
+	"\fserialNumber\x18\x06 \x01(\rH\x03R\fserialNumber\x88\x01\x01B\a\n" +
 	"\x05_nameB\v\n" +
 	"\t_currencyB\n" +
 	"\n" +

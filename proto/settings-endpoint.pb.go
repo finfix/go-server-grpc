@@ -154,7 +154,7 @@ type Notification struct {
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`            // Заголовок уведомления
 	Subtitle      string                 `protobuf:"bytes,2,opt,name=subtitle,proto3" json:"subtitle,omitempty"`      // Подзаголовок уведомления
 	Message       string                 `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`        // Сообщение уведомления
-	BadgeCount    int32                  `protobuf:"varint,4,opt,name=badgeCount,proto3" json:"badgeCount,omitempty"` // Индикатор какое значение показывать в бадже
+	BadgeCount    uint32                 `protobuf:"varint,4,opt,name=badgeCount,proto3" json:"badgeCount,omitempty"` // Индикатор какое значение показывать в бадже
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -210,7 +210,7 @@ func (x *Notification) GetMessage() string {
 	return ""
 }
 
-func (x *Notification) GetBadgeCount() int32 {
+func (x *Notification) GetBadgeCount() uint32 {
 	if x != nil {
 		return x.BadgeCount
 	}
@@ -552,7 +552,7 @@ func (x *UpdateCurrenciesResponse) GetError() *Error {
 type SendNotificationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`   // Токен доступа
-	UserID        int32                  `protobuf:"varint,2,opt,name=userID,proto3" json:"userID,omitempty"`            // Идентификатор пользователя
+	UserID        []byte                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`             // Идентификатор пользователя
 	Notification  *Notification          `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification,omitempty"` // Данные уведомления
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -595,11 +595,11 @@ func (x *SendNotificationRequest) GetAccessToken() string {
 	return ""
 }
 
-func (x *SendNotificationRequest) GetUserID() int32 {
+func (x *SendNotificationRequest) GetUserID() []byte {
 	if x != nil {
 		return x.UserID
 	}
-	return 0
+	return nil
 }
 
 func (x *SendNotificationRequest) GetNotification() *Notification {
@@ -654,9 +654,10 @@ func (x *SendNotificationResponse) GetError() *Error {
 }
 
 type GetVersionRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationType ApplicationType        `protobuf:"varint,1,opt,name=applicationType,proto3,enum=applicationType.ApplicationType" json:"applicationType,omitempty"` // Тип приложения
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *GetVersionRequest) Reset() {
@@ -687,6 +688,13 @@ func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetVersionRequest.ProtoReflect.Descriptor instead.
 func (*GetVersionRequest) Descriptor() ([]byte, []int) {
 	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetVersionRequest) GetApplicationType() ApplicationType {
+	if x != nil {
+		return x.ApplicationType
+	}
+	return ApplicationType_Unspecified
 }
 
 type GetVersionResponse struct {
@@ -745,7 +753,7 @@ var File_proto_settings_settings_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"&proto/settings/settings-endpoint.proto\x12\bsettings\x1a\x17proto/error/error.proto\"d\n" +
+	"&proto/settings/settings-endpoint.proto\x12\bsettings\x1a\x17proto/error/error.proto\x1a!proto/enums/applicationType.proto\"d\n" +
 	"\bCurrency\x12\x18\n" +
 	"\aisoCode\x18\x01 \x01(\tR\aisoCode\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
@@ -760,7 +768,7 @@ const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\bsubtitle\x18\x02 \x01(\tR\bsubtitle\x12\x18\n" +
 	"\amessage\x18\x03 \x01(\tR\amessage\x12\x1e\n" +
 	"\n" +
-	"badgeCount\x18\x04 \x01(\x05R\n" +
+	"badgeCount\x18\x04 \x01(\rR\n" +
 	"badgeCount\"9\n" +
 	"\aVersion\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12\x14\n" +
@@ -786,12 +794,13 @@ const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\x06_error\"\x8f\x01\n" +
 	"\x17SendNotificationRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x16\n" +
-	"\x06userID\x18\x02 \x01(\x05R\x06userID\x12:\n" +
+	"\x06userID\x18\x02 \x01(\fR\x06userID\x12:\n" +
 	"\fnotification\x18\x03 \x01(\v2\x16.settings.NotificationR\fnotification\"M\n" +
 	"\x18SendNotificationResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x13\n" +
-	"\x11GetVersionRequest\"\x85\x01\n" +
+	"\x06_error\"_\n" +
+	"\x11GetVersionRequest\x12J\n" +
+	"\x0fapplicationType\x18\x01 \x01(\x0e2 .applicationType.ApplicationTypeR\x0fapplicationType\"\x85\x01\n" +
 	"\x12GetVersionResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x120\n" +
 	"\aversion\x18\x02 \x01(\v2\x11.settings.VersionH\x01R\aversion\x88\x01\x01B\b\n" +
@@ -835,6 +844,7 @@ var file_proto_settings_settings_endpoint_proto_goTypes = []any{
 	(*GetVersionRequest)(nil),        // 12: settings.GetVersionRequest
 	(*GetVersionResponse)(nil),       // 13: settings.GetVersionResponse
 	(*Error)(nil),                    // 14: error.Error
+	(ApplicationType)(0),             // 15: applicationType.ApplicationType
 }
 var file_proto_settings_settings_endpoint_proto_depIdxs = []int32{
 	14, // 0: settings.GetCurrenciesResponse.error:type_name -> error.Error
@@ -844,23 +854,24 @@ var file_proto_settings_settings_endpoint_proto_depIdxs = []int32{
 	14, // 4: settings.UpdateCurrenciesResponse.error:type_name -> error.Error
 	2,  // 5: settings.SendNotificationRequest.notification:type_name -> settings.Notification
 	14, // 6: settings.SendNotificationResponse.error:type_name -> error.Error
-	14, // 7: settings.GetVersionResponse.error:type_name -> error.Error
-	3,  // 8: settings.GetVersionResponse.version:type_name -> settings.Version
-	4,  // 9: settings.SettingsEndpoint.GetCurrencies:input_type -> settings.GetCurrenciesRequest
-	6,  // 10: settings.SettingsEndpoint.GetIcons:input_type -> settings.GetIconsRequest
-	8,  // 11: settings.SettingsEndpoint.UpdateCurrencies:input_type -> settings.UpdateCurrenciesRequest
-	10, // 12: settings.SettingsEndpoint.SendNotification:input_type -> settings.SendNotificationRequest
-	12, // 13: settings.SettingsEndpoint.GetVersion:input_type -> settings.GetVersionRequest
-	5,  // 14: settings.SettingsEndpoint.GetCurrencies:output_type -> settings.GetCurrenciesResponse
-	7,  // 15: settings.SettingsEndpoint.GetIcons:output_type -> settings.GetIconsResponse
-	9,  // 16: settings.SettingsEndpoint.UpdateCurrencies:output_type -> settings.UpdateCurrenciesResponse
-	11, // 17: settings.SettingsEndpoint.SendNotification:output_type -> settings.SendNotificationResponse
-	13, // 18: settings.SettingsEndpoint.GetVersion:output_type -> settings.GetVersionResponse
-	14, // [14:19] is the sub-list for method output_type
-	9,  // [9:14] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	15, // 7: settings.GetVersionRequest.applicationType:type_name -> applicationType.ApplicationType
+	14, // 8: settings.GetVersionResponse.error:type_name -> error.Error
+	3,  // 9: settings.GetVersionResponse.version:type_name -> settings.Version
+	4,  // 10: settings.SettingsEndpoint.GetCurrencies:input_type -> settings.GetCurrenciesRequest
+	6,  // 11: settings.SettingsEndpoint.GetIcons:input_type -> settings.GetIconsRequest
+	8,  // 12: settings.SettingsEndpoint.UpdateCurrencies:input_type -> settings.UpdateCurrenciesRequest
+	10, // 13: settings.SettingsEndpoint.SendNotification:input_type -> settings.SendNotificationRequest
+	12, // 14: settings.SettingsEndpoint.GetVersion:input_type -> settings.GetVersionRequest
+	5,  // 15: settings.SettingsEndpoint.GetCurrencies:output_type -> settings.GetCurrenciesResponse
+	7,  // 16: settings.SettingsEndpoint.GetIcons:output_type -> settings.GetIconsResponse
+	9,  // 17: settings.SettingsEndpoint.UpdateCurrencies:output_type -> settings.UpdateCurrenciesResponse
+	11, // 18: settings.SettingsEndpoint.SendNotification:output_type -> settings.SendNotificationResponse
+	13, // 19: settings.SettingsEndpoint.GetVersion:output_type -> settings.GetVersionResponse
+	15, // [15:20] is the sub-list for method output_type
+	10, // [10:15] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_proto_settings_settings_endpoint_proto_init() }
@@ -869,6 +880,7 @@ func file_proto_settings_settings_endpoint_proto_init() {
 		return
 	}
 	file_proto_error_error_proto_init()
+	file_proto_enums_applicationType_proto_init()
 	file_proto_settings_settings_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_settings_settings_endpoint_proto_msgTypes[7].OneofWrappers = []any{}
 	file_proto_settings_settings_endpoint_proto_msgTypes[9].OneofWrappers = []any{}
