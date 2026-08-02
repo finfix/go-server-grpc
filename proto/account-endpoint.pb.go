@@ -104,10 +104,10 @@ type Account struct {
 	ParentAccountID    []byte                 `protobuf:"bytes,10,opt,name=parentAccountID,proto3" json:"parentAccountID,omitempty"`        // Идентификатор родительского аккаунта
 	IsParent           bool                   `protobuf:"varint,11,opt,name=isParent,proto3" json:"isParent,omitempty"`                     // Является ли счет родительским
 	IconID             []byte                 `protobuf:"bytes,12,opt,name=iconID,proto3" json:"iconID,omitempty"`                          // Идентификатор иконки
-	SerialNumber       uint32                 `protobuf:"varint,13,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`             // Порядковый номер счета
 	CreatedByUserID    []byte                 `protobuf:"bytes,14,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`        // Идентификатор пользователя, создавшего счет
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата и время создания счета
 	Budget             *AccountBudget         `protobuf:"bytes,16,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
+	Rank               string                 `protobuf:"bytes,17,opt,name=rank,proto3" json:"rank,omitempty"`                              // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -226,13 +226,6 @@ func (x *Account) GetIconID() []byte {
 	return nil
 }
 
-func (x *Account) GetSerialNumber() uint32 {
-	if x != nil {
-		return x.SerialNumber
-	}
-	return 0
-}
-
 func (x *Account) GetCreatedByUserID() []byte {
 	if x != nil {
 		return x.CreatedByUserID
@@ -252,6 +245,13 @@ func (x *Account) GetBudget() *AccountBudget {
 		return x.Budget
 	}
 	return nil
+}
+
+func (x *Account) GetRank() string {
+	if x != nil {
+		return x.Rank
+	}
+	return ""
 }
 
 type GetAccountsRequest struct {
@@ -420,8 +420,8 @@ type CreateAccountRequest struct {
 	IsParent           bool                   `protobuf:"varint,10,opt,name=isParent,proto3" json:"isParent,omitempty"`                     // Является ли счет родительским
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата создания счета
 	ParentAccountID    []byte                 `protobuf:"bytes,12,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`  // Идентификатор родительского счета
-	Remainder          *float64               `protobuf:"fixed64,13,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`            // Остаток средств на счету
 	Budget             *AccountBudget         `protobuf:"bytes,14,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
+	Rank               string                 `protobuf:"bytes,15,opt,name=rank,proto3" json:"rank,omitempty"`                              // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -540,13 +540,6 @@ func (x *CreateAccountRequest) GetParentAccountID() []byte {
 	return nil
 }
 
-func (x *CreateAccountRequest) GetRemainder() float64 {
-	if x != nil && x.Remainder != nil {
-		return *x.Remainder
-	}
-	return 0
-}
-
 func (x *CreateAccountRequest) GetBudget() *AccountBudget {
 	if x != nil {
 		return x.Budget
@@ -554,15 +547,18 @@ func (x *CreateAccountRequest) GetBudget() *AccountBudget {
 	return nil
 }
 
+func (x *CreateAccountRequest) GetRank() string {
+	if x != nil {
+		return x.Rank
+	}
+	return ""
+}
+
 type CreateAccountResponse struct {
-	state                        protoimpl.MessageState `protogen:"open.v1"`
-	Error                        *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                                                // Объект ошибки
-	SerialNumber                 *uint32                `protobuf:"varint,2,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`                                 // Порядковый номер счета
-	BalancingAccountID           []byte                 `protobuf:"bytes,3,opt,name=balancingAccountID,proto3,oneof" json:"balancingAccountID,omitempty"`                      // Идентификатор балансировочного счета
-	BalancingAccountSerialNumber *uint32                `protobuf:"varint,4,opt,name=balancingAccountSerialNumber,proto3,oneof" json:"balancingAccountSerialNumber,omitempty"` // Порядковый номер балансировочного счета
-	BalancingTransactionID       []byte                 `protobuf:"bytes,5,opt,name=balancingTransactionID,proto3,oneof" json:"balancingTransactionID,omitempty"`              // Идентификатор транзакции балансировки
-	unknownFields                protoimpl.UnknownFields
-	sizeCache                    protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateAccountResponse) Reset() {
@@ -602,34 +598,6 @@ func (x *CreateAccountResponse) GetError() *Error {
 	return nil
 }
 
-func (x *CreateAccountResponse) GetSerialNumber() uint32 {
-	if x != nil && x.SerialNumber != nil {
-		return *x.SerialNumber
-	}
-	return 0
-}
-
-func (x *CreateAccountResponse) GetBalancingAccountID() []byte {
-	if x != nil {
-		return x.BalancingAccountID
-	}
-	return nil
-}
-
-func (x *CreateAccountResponse) GetBalancingAccountSerialNumber() uint32 {
-	if x != nil && x.BalancingAccountSerialNumber != nil {
-		return *x.BalancingAccountSerialNumber
-	}
-	return 0
-}
-
-func (x *CreateAccountResponse) GetBalancingTransactionID() []byte {
-	if x != nil {
-		return x.BalancingTransactionID
-	}
-	return nil
-}
-
 type UpdateAccountRequest struct {
 	state              protoimpl.MessageState      `protogen:"open.v1"`
 	AccessToken        string                      `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
@@ -640,10 +608,9 @@ type UpdateAccountRequest struct {
 	Currency           *string                     `protobuf:"bytes,6,opt,name=currency,proto3,oneof" json:"currency,omitempty"`                      // Валюта счета
 	IconID             []byte                      `protobuf:"bytes,7,opt,name=iconID,proto3,oneof" json:"iconID,omitempty"`                          // Идентификатор иконки
 	ParentAccountID    []byte                      `protobuf:"bytes,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`        // Идентификатор родительского счета
-	Remainder          *float64                    `protobuf:"fixed64,9,opt,name=remainder,proto3,oneof" json:"remainder,omitempty"`                  // Остаток средств на счету
-	SerialNumber       *uint32                     `protobuf:"varint,10,opt,name=serialNumber,proto3,oneof" json:"serialNumber,omitempty"`            // Порядковый номер счета
 	Visible            *bool                       `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
 	Budget             *UpdateAccountBudgetRequest `protobuf:"bytes,12,opt,name=budget,proto3" json:"budget,omitempty"`                               // Месячный бюджет
+	Rank               *string                     `protobuf:"bytes,13,opt,name=rank,proto3,oneof" json:"rank,omitempty"`                             // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -734,20 +701,6 @@ func (x *UpdateAccountRequest) GetParentAccountID() []byte {
 	return nil
 }
 
-func (x *UpdateAccountRequest) GetRemainder() float64 {
-	if x != nil && x.Remainder != nil {
-		return *x.Remainder
-	}
-	return 0
-}
-
-func (x *UpdateAccountRequest) GetSerialNumber() uint32 {
-	if x != nil && x.SerialNumber != nil {
-		return *x.SerialNumber
-	}
-	return 0
-}
-
 func (x *UpdateAccountRequest) GetVisible() bool {
 	if x != nil && x.Visible != nil {
 		return *x.Visible
@@ -760,6 +713,13 @@ func (x *UpdateAccountRequest) GetBudget() *UpdateAccountBudgetRequest {
 		return x.Budget
 	}
 	return nil
+}
+
+func (x *UpdateAccountRequest) GetRank() string {
+	if x != nil && x.Rank != nil {
+		return *x.Rank
+	}
+	return ""
 }
 
 type UpdateAccountBudgetRequest struct {
@@ -981,7 +941,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"daysOffset\x18\x02 \x01(\rR\n" +
 	"daysOffset\x12\x1a\n" +
 	"\bfixedSum\x18\x03 \x01(\x01R\bfixedSum\x12&\n" +
-	"\x0egradualFilling\x18\x04 \x01(\bR\x0egradualFilling\"\xe7\x04\n" +
+	"\x0egradualFilling\x18\x04 \x01(\bR\x0egradualFilling\"\xdd\x04\n" +
 	"\aAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
@@ -995,12 +955,12 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x0fparentAccountID\x18\n" +
 	" \x01(\fR\x0fparentAccountID\x12\x1a\n" +
 	"\bisParent\x18\v \x01(\bR\bisParent\x12\x16\n" +
-	"\x06iconID\x18\f \x01(\fR\x06iconID\x12\"\n" +
-	"\fserialNumber\x18\r \x01(\rR\fserialNumber\x12(\n" +
+	"\x06iconID\x18\f \x01(\fR\x06iconID\x12(\n" +
 	"\x0fcreatedByUserID\x18\x0e \x01(\fR\x0fcreatedByUserID\x12B\n" +
 	"\x0edatetimeCreate\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x123\n" +
-	"\x06budget\x18\x10 \x01(\v2\x16.account.AccountBudgetH\x00R\x06budget\x88\x01\x01B\t\n" +
-	"\a_budget\"\xed\x03\n" +
+	"\x06budget\x18\x10 \x01(\v2\x16.account.AccountBudgetH\x00R\x06budget\x88\x01\x01\x12\x12\n" +
+	"\x04rank\x18\x11 \x01(\tR\x04rankB\t\n" +
+	"\a_budgetJ\x04\b\r\x10\x0e\"\xed\x03\n" +
 	"\x12GetAccountsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
 	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x123\n" +
@@ -1020,7 +980,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x13GetAccountsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12,\n" +
 	"\baccounts\x18\x02 \x03(\v2\x10.account.AccountR\baccountsB\b\n" +
-	"\x06_error\"\xda\x04\n" +
+	"\x06_error\"\xc3\x04\n" +
 	"\x14CreateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x12\n" +
@@ -1034,24 +994,14 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\bisParent\x18\n" +
 	" \x01(\bR\bisParent\x12B\n" +
 	"\x0edatetimeCreate\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12-\n" +
-	"\x0fparentAccountID\x18\f \x01(\fH\x00R\x0fparentAccountID\x88\x01\x01\x12!\n" +
-	"\tremainder\x18\r \x01(\x01H\x01R\tremainder\x88\x01\x01\x123\n" +
-	"\x06budget\x18\x0e \x01(\v2\x16.account.AccountBudgetH\x02R\x06budget\x88\x01\x01B\x12\n" +
-	"\x10_parentAccountIDB\f\n" +
-	"\n" +
-	"_remainderB\t\n" +
-	"\a_budget\"\x92\x03\n" +
+	"\x0fparentAccountID\x18\f \x01(\fH\x00R\x0fparentAccountID\x88\x01\x01\x123\n" +
+	"\x06budget\x18\x0e \x01(\v2\x16.account.AccountBudgetH\x01R\x06budget\x88\x01\x01\x12\x12\n" +
+	"\x04rank\x18\x0f \x01(\tR\x04rankB\x12\n" +
+	"\x10_parentAccountIDB\t\n" +
+	"\a_budgetJ\x04\b\r\x10\x0e\"b\n" +
 	"\x15CreateAccountResponse\x12'\n" +
-	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12'\n" +
-	"\fserialNumber\x18\x02 \x01(\rH\x01R\fserialNumber\x88\x01\x01\x123\n" +
-	"\x12balancingAccountID\x18\x03 \x01(\fH\x02R\x12balancingAccountID\x88\x01\x01\x12G\n" +
-	"\x1cbalancingAccountSerialNumber\x18\x04 \x01(\rH\x03R\x1cbalancingAccountSerialNumber\x88\x01\x01\x12;\n" +
-	"\x16balancingTransactionID\x18\x05 \x01(\fH\x04R\x16balancingTransactionID\x88\x01\x01B\b\n" +
-	"\x06_errorB\x0f\n" +
-	"\r_serialNumberB\x15\n" +
-	"\x13_balancingAccountIDB\x1f\n" +
-	"\x1d_balancingAccountSerialNumberB\x19\n" +
-	"\x17_balancingTransactionID\"\xee\x04\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_errorJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06\"\xb1\x04\n" +
 	"\x14UpdateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x17\n" +
@@ -1060,23 +1010,21 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x12accountingInHeader\x18\x05 \x01(\bH\x02R\x12accountingInHeader\x88\x01\x01\x12\x1f\n" +
 	"\bcurrency\x18\x06 \x01(\tH\x03R\bcurrency\x88\x01\x01\x12\x1b\n" +
 	"\x06iconID\x18\a \x01(\fH\x04R\x06iconID\x88\x01\x01\x12-\n" +
-	"\x0fparentAccountID\x18\b \x01(\fH\x05R\x0fparentAccountID\x88\x01\x01\x12!\n" +
-	"\tremainder\x18\t \x01(\x01H\x06R\tremainder\x88\x01\x01\x12'\n" +
-	"\fserialNumber\x18\n" +
-	" \x01(\rH\aR\fserialNumber\x88\x01\x01\x12\x1d\n" +
-	"\avisible\x18\v \x01(\bH\bR\avisible\x88\x01\x01\x12;\n" +
-	"\x06budget\x18\f \x01(\v2#.account.UpdateAccountBudgetRequestR\x06budgetB\a\n" +
+	"\x0fparentAccountID\x18\b \x01(\fH\x05R\x0fparentAccountID\x88\x01\x01\x12\x1d\n" +
+	"\avisible\x18\v \x01(\bH\x06R\avisible\x88\x01\x01\x12;\n" +
+	"\x06budget\x18\f \x01(\v2#.account.UpdateAccountBudgetRequestR\x06budget\x12\x17\n" +
+	"\x04rank\x18\r \x01(\tH\aR\x04rank\x88\x01\x01B\a\n" +
 	"\x05_nameB\x15\n" +
 	"\x13_accountingInChartsB\x15\n" +
 	"\x13_accountingInHeaderB\v\n" +
 	"\t_currencyB\t\n" +
 	"\a_iconIDB\x12\n" +
-	"\x10_parentAccountIDB\f\n" +
+	"\x10_parentAccountIDB\n" +
 	"\n" +
-	"_remainderB\x0f\n" +
-	"\r_serialNumberB\n" +
-	"\n" +
-	"\b_visible\"\xe6\x01\n" +
+	"\b_visibleB\a\n" +
+	"\x05_rankJ\x04\b\t\x10\n" +
+	"J\x04\b\n" +
+	"\x10\v\"\xe6\x01\n" +
 	"\x1aUpdateAccountBudgetRequest\x12\x1b\n" +
 	"\x06amount\x18\x01 \x01(\x01H\x00R\x06amount\x88\x01\x01\x12#\n" +
 	"\n" +
