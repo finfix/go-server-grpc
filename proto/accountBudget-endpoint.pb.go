@@ -33,6 +33,7 @@ type AccountBudget struct {
 	EffectiveFrom   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=effectiveFrom,proto3" json:"effectiveFrom,omitempty"`     // Дата, с которой действует эта версия бюджета
 	CreatedByUserID []byte                 `protobuf:"bytes,8,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"` // Идентификатор пользователя, создавшего версию
 	DatetimeCreate  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`   // Дата и время создания версии
+	AccountGroupID  []byte                 `protobuf:"bytes,10,opt,name=accountGroupID,proto3" json:"accountGroupID,omitempty"`  // Идентификатор группы счетов
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -126,6 +127,13 @@ func (x *AccountBudget) GetCreatedByUserID() []byte {
 func (x *AccountBudget) GetDatetimeCreate() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DatetimeCreate
+	}
+	return nil
+}
+
+func (x *AccountBudget) GetAccountGroupID() []byte {
+	if x != nil {
+		return x.AccountGroupID
 	}
 	return nil
 }
@@ -274,30 +282,30 @@ func (x *CreateAccountBudgetResponse) GetError() *Error {
 	return nil
 }
 
-type GetAccountBudgetHistoryRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
-	AccountID     []byte                 `protobuf:"bytes,2,opt,name=accountID,proto3" json:"accountID,omitempty"`     // Идентификатор счета
-	DateFrom      *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"` // Дата, от которой показывать версии бюджета
-	DateTo        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`     // Дата, до которой показывать версии бюджета
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type GetAccountBudgetsRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken     string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`         // Токен доступа
+	AccountGroupIDs [][]byte               `protobuf:"bytes,2,rep,name=accountGroupIDs,proto3" json:"accountGroupIDs,omitempty"` // Идентификаторы групп счетов (пусто - все доступные пользователю группы)
+	DateFrom        *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=dateFrom,proto3,oneof" json:"dateFrom,omitempty"`         // Дата, от которой показывать версии бюджета
+	DateTo          *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=dateTo,proto3,oneof" json:"dateTo,omitempty"`             // Дата, до которой показывать версии бюджета
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
-func (x *GetAccountBudgetHistoryRequest) Reset() {
-	*x = GetAccountBudgetHistoryRequest{}
+func (x *GetAccountBudgetsRequest) Reset() {
+	*x = GetAccountBudgetsRequest{}
 	mi := &file_proto_accountBudget_accountBudget_endpoint_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetAccountBudgetHistoryRequest) String() string {
+func (x *GetAccountBudgetsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetAccountBudgetHistoryRequest) ProtoMessage() {}
+func (*GetAccountBudgetsRequest) ProtoMessage() {}
 
-func (x *GetAccountBudgetHistoryRequest) ProtoReflect() protoreflect.Message {
+func (x *GetAccountBudgetsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_accountBudget_accountBudget_endpoint_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -309,61 +317,61 @@ func (x *GetAccountBudgetHistoryRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetAccountBudgetHistoryRequest.ProtoReflect.Descriptor instead.
-func (*GetAccountBudgetHistoryRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetAccountBudgetsRequest.ProtoReflect.Descriptor instead.
+func (*GetAccountBudgetsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_accountBudget_accountBudget_endpoint_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetAccountBudgetHistoryRequest) GetAccessToken() string {
+func (x *GetAccountBudgetsRequest) GetAccessToken() string {
 	if x != nil {
 		return x.AccessToken
 	}
 	return ""
 }
 
-func (x *GetAccountBudgetHistoryRequest) GetAccountID() []byte {
+func (x *GetAccountBudgetsRequest) GetAccountGroupIDs() [][]byte {
 	if x != nil {
-		return x.AccountID
+		return x.AccountGroupIDs
 	}
 	return nil
 }
 
-func (x *GetAccountBudgetHistoryRequest) GetDateFrom() *timestamppb.Timestamp {
+func (x *GetAccountBudgetsRequest) GetDateFrom() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DateFrom
 	}
 	return nil
 }
 
-func (x *GetAccountBudgetHistoryRequest) GetDateTo() *timestamppb.Timestamp {
+func (x *GetAccountBudgetsRequest) GetDateTo() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DateTo
 	}
 	return nil
 }
 
-type GetAccountBudgetHistoryResponse struct {
+type GetAccountBudgetsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
-	Budgets       []*AccountBudget       `protobuf:"bytes,2,rep,name=budgets,proto3" json:"budgets,omitempty"`   // История версий бюджета, от новых к старым
+	Budgets       []*AccountBudget       `protobuf:"bytes,2,rep,name=budgets,proto3" json:"budgets,omitempty"`   // Все версии бюджета по всем счетам запрошенных групп счетов
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetAccountBudgetHistoryResponse) Reset() {
-	*x = GetAccountBudgetHistoryResponse{}
+func (x *GetAccountBudgetsResponse) Reset() {
+	*x = GetAccountBudgetsResponse{}
 	mi := &file_proto_accountBudget_accountBudget_endpoint_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetAccountBudgetHistoryResponse) String() string {
+func (x *GetAccountBudgetsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetAccountBudgetHistoryResponse) ProtoMessage() {}
+func (*GetAccountBudgetsResponse) ProtoMessage() {}
 
-func (x *GetAccountBudgetHistoryResponse) ProtoReflect() protoreflect.Message {
+func (x *GetAccountBudgetsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_accountBudget_accountBudget_endpoint_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -375,19 +383,19 @@ func (x *GetAccountBudgetHistoryResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetAccountBudgetHistoryResponse.ProtoReflect.Descriptor instead.
-func (*GetAccountBudgetHistoryResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetAccountBudgetsResponse.ProtoReflect.Descriptor instead.
+func (*GetAccountBudgetsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_accountBudget_accountBudget_endpoint_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetAccountBudgetHistoryResponse) GetError() *Error {
+func (x *GetAccountBudgetsResponse) GetError() *Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-func (x *GetAccountBudgetHistoryResponse) GetBudgets() []*AccountBudget {
+func (x *GetAccountBudgetsResponse) GetBudgets() []*AccountBudget {
 	if x != nil {
 		return x.Budgets
 	}
@@ -398,7 +406,7 @@ var File_proto_accountBudget_accountBudget_endpoint_proto protoreflect.FileDescr
 
 const file_proto_accountBudget_accountBudget_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"0proto/accountBudget/accountBudget-endpoint.proto\x12\raccountBudget\x1a\x17proto/error/error.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe9\x02\n" +
+	"0proto/accountBudget/accountBudget-endpoint.proto\x12\raccountBudget\x1a\x17proto/error/error.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x91\x03\n" +
 	"\rAccountBudget\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x1c\n" +
 	"\taccountID\x18\x02 \x01(\fR\taccountID\x12\x16\n" +
@@ -410,7 +418,9 @@ const file_proto_accountBudget_accountBudget_endpoint_proto_rawDesc = "" +
 	"\x0egradualFilling\x18\x06 \x01(\bR\x0egradualFilling\x12@\n" +
 	"\reffectiveFrom\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\reffectiveFrom\x12(\n" +
 	"\x0fcreatedByUserID\x18\b \x01(\fR\x0fcreatedByUserID\x12B\n" +
-	"\x0edatetimeCreate\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\"\xaa\x02\n" +
+	"\x0edatetimeCreate\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12&\n" +
+	"\x0eaccountGroupID\x18\n" +
+	" \x01(\fR\x0eaccountGroupID\"\xaa\x02\n" +
 	"\x1aCreateAccountBudgetRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x1c\n" +
@@ -424,21 +434,21 @@ const file_proto_accountBudget_accountBudget_endpoint_proto_rawDesc = "" +
 	"\reffectiveFrom\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\reffectiveFrom\"P\n" +
 	"\x1bCreateAccountBudgetResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xee\x01\n" +
-	"\x1eGetAccountBudgetHistoryRequest\x12 \n" +
-	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x1c\n" +
-	"\taccountID\x18\x02 \x01(\fR\taccountID\x12;\n" +
+	"\x06_error\"\xf4\x01\n" +
+	"\x18GetAccountBudgetsRequest\x12 \n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
+	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x12;\n" +
 	"\bdateFrom\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\bdateFrom\x88\x01\x01\x127\n" +
 	"\x06dateTo\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\x06dateTo\x88\x01\x01B\v\n" +
 	"\t_dateFromB\t\n" +
-	"\a_dateTo\"\x8c\x01\n" +
-	"\x1fGetAccountBudgetHistoryResponse\x12'\n" +
+	"\a_dateTo\"\x86\x01\n" +
+	"\x19GetAccountBudgetsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x126\n" +
 	"\abudgets\x18\x02 \x03(\v2\x1c.accountBudget.AccountBudgetR\abudgetsB\b\n" +
-	"\x06_error2\x83\x02\n" +
+	"\x06_error2\xf1\x01\n" +
 	"\x15AccountBudgetEndpoint\x12n\n" +
-	"\x13CreateAccountBudget\x12).accountBudget.CreateAccountBudgetRequest\x1a*.accountBudget.CreateAccountBudgetResponse\"\x00\x12z\n" +
-	"\x17GetAccountBudgetHistory\x12-.accountBudget.GetAccountBudgetHistoryRequest\x1a..accountBudget.GetAccountBudgetHistoryResponse\"\x00B\bZ\x06/protob\x06proto3"
+	"\x13CreateAccountBudget\x12).accountBudget.CreateAccountBudgetRequest\x1a*.accountBudget.CreateAccountBudgetResponse\"\x00\x12h\n" +
+	"\x11GetAccountBudgets\x12'.accountBudget.GetAccountBudgetsRequest\x1a(.accountBudget.GetAccountBudgetsResponse\"\x00B\bZ\x06/protob\x06proto3"
 
 var (
 	file_proto_accountBudget_accountBudget_endpoint_proto_rawDescOnce sync.Once
@@ -454,27 +464,27 @@ func file_proto_accountBudget_accountBudget_endpoint_proto_rawDescGZIP() []byte 
 
 var file_proto_accountBudget_accountBudget_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_accountBudget_accountBudget_endpoint_proto_goTypes = []any{
-	(*AccountBudget)(nil),                   // 0: accountBudget.AccountBudget
-	(*CreateAccountBudgetRequest)(nil),      // 1: accountBudget.CreateAccountBudgetRequest
-	(*CreateAccountBudgetResponse)(nil),     // 2: accountBudget.CreateAccountBudgetResponse
-	(*GetAccountBudgetHistoryRequest)(nil),  // 3: accountBudget.GetAccountBudgetHistoryRequest
-	(*GetAccountBudgetHistoryResponse)(nil), // 4: accountBudget.GetAccountBudgetHistoryResponse
-	(*timestamppb.Timestamp)(nil),           // 5: google.protobuf.Timestamp
-	(*Error)(nil),                           // 6: error.Error
+	(*AccountBudget)(nil),               // 0: accountBudget.AccountBudget
+	(*CreateAccountBudgetRequest)(nil),  // 1: accountBudget.CreateAccountBudgetRequest
+	(*CreateAccountBudgetResponse)(nil), // 2: accountBudget.CreateAccountBudgetResponse
+	(*GetAccountBudgetsRequest)(nil),    // 3: accountBudget.GetAccountBudgetsRequest
+	(*GetAccountBudgetsResponse)(nil),   // 4: accountBudget.GetAccountBudgetsResponse
+	(*timestamppb.Timestamp)(nil),       // 5: google.protobuf.Timestamp
+	(*Error)(nil),                       // 6: error.Error
 }
 var file_proto_accountBudget_accountBudget_endpoint_proto_depIdxs = []int32{
 	5,  // 0: accountBudget.AccountBudget.effectiveFrom:type_name -> google.protobuf.Timestamp
 	5,  // 1: accountBudget.AccountBudget.datetimeCreate:type_name -> google.protobuf.Timestamp
 	5,  // 2: accountBudget.CreateAccountBudgetRequest.effectiveFrom:type_name -> google.protobuf.Timestamp
 	6,  // 3: accountBudget.CreateAccountBudgetResponse.error:type_name -> error.Error
-	5,  // 4: accountBudget.GetAccountBudgetHistoryRequest.dateFrom:type_name -> google.protobuf.Timestamp
-	5,  // 5: accountBudget.GetAccountBudgetHistoryRequest.dateTo:type_name -> google.protobuf.Timestamp
-	6,  // 6: accountBudget.GetAccountBudgetHistoryResponse.error:type_name -> error.Error
-	0,  // 7: accountBudget.GetAccountBudgetHistoryResponse.budgets:type_name -> accountBudget.AccountBudget
+	5,  // 4: accountBudget.GetAccountBudgetsRequest.dateFrom:type_name -> google.protobuf.Timestamp
+	5,  // 5: accountBudget.GetAccountBudgetsRequest.dateTo:type_name -> google.protobuf.Timestamp
+	6,  // 6: accountBudget.GetAccountBudgetsResponse.error:type_name -> error.Error
+	0,  // 7: accountBudget.GetAccountBudgetsResponse.budgets:type_name -> accountBudget.AccountBudget
 	1,  // 8: accountBudget.AccountBudgetEndpoint.CreateAccountBudget:input_type -> accountBudget.CreateAccountBudgetRequest
-	3,  // 9: accountBudget.AccountBudgetEndpoint.GetAccountBudgetHistory:input_type -> accountBudget.GetAccountBudgetHistoryRequest
+	3,  // 9: accountBudget.AccountBudgetEndpoint.GetAccountBudgets:input_type -> accountBudget.GetAccountBudgetsRequest
 	2,  // 10: accountBudget.AccountBudgetEndpoint.CreateAccountBudget:output_type -> accountBudget.CreateAccountBudgetResponse
-	4,  // 11: accountBudget.AccountBudgetEndpoint.GetAccountBudgetHistory:output_type -> accountBudget.GetAccountBudgetHistoryResponse
+	4,  // 11: accountBudget.AccountBudgetEndpoint.GetAccountBudgets:output_type -> accountBudget.GetAccountBudgetsResponse
 	10, // [10:12] is the sub-list for method output_type
 	8,  // [8:10] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name

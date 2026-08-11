@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AccountBudgetEndpoint_CreateAccountBudget_FullMethodName     = "/accountBudget.AccountBudgetEndpoint/CreateAccountBudget"
-	AccountBudgetEndpoint_GetAccountBudgetHistory_FullMethodName = "/accountBudget.AccountBudgetEndpoint/GetAccountBudgetHistory"
+	AccountBudgetEndpoint_CreateAccountBudget_FullMethodName = "/accountBudget.AccountBudgetEndpoint/CreateAccountBudget"
+	AccountBudgetEndpoint_GetAccountBudgets_FullMethodName   = "/accountBudget.AccountBudgetEndpoint/GetAccountBudgets"
 )
 
 // AccountBudgetEndpointClient is the client API for AccountBudgetEndpoint service.
@@ -29,8 +29,8 @@ const (
 type AccountBudgetEndpointClient interface {
 	// CreateAccountBudget создание новой версии бюджета счета, действующей с указанной даты
 	CreateAccountBudget(ctx context.Context, in *CreateAccountBudgetRequest, opts ...grpc.CallOption) (*CreateAccountBudgetResponse, error)
-	// GetAccountBudgetHistory получение истории версий бюджета счета
-	GetAccountBudgetHistory(ctx context.Context, in *GetAccountBudgetHistoryRequest, opts ...grpc.CallOption) (*GetAccountBudgetHistoryResponse, error)
+	// GetAccountBudgets получение всех версий бюджета по всем счетам доступных пользователю групп счетов
+	GetAccountBudgets(ctx context.Context, in *GetAccountBudgetsRequest, opts ...grpc.CallOption) (*GetAccountBudgetsResponse, error)
 }
 
 type accountBudgetEndpointClient struct {
@@ -51,10 +51,10 @@ func (c *accountBudgetEndpointClient) CreateAccountBudget(ctx context.Context, i
 	return out, nil
 }
 
-func (c *accountBudgetEndpointClient) GetAccountBudgetHistory(ctx context.Context, in *GetAccountBudgetHistoryRequest, opts ...grpc.CallOption) (*GetAccountBudgetHistoryResponse, error) {
+func (c *accountBudgetEndpointClient) GetAccountBudgets(ctx context.Context, in *GetAccountBudgetsRequest, opts ...grpc.CallOption) (*GetAccountBudgetsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetAccountBudgetHistoryResponse)
-	err := c.cc.Invoke(ctx, AccountBudgetEndpoint_GetAccountBudgetHistory_FullMethodName, in, out, cOpts...)
+	out := new(GetAccountBudgetsResponse)
+	err := c.cc.Invoke(ctx, AccountBudgetEndpoint_GetAccountBudgets_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +67,8 @@ func (c *accountBudgetEndpointClient) GetAccountBudgetHistory(ctx context.Contex
 type AccountBudgetEndpointServer interface {
 	// CreateAccountBudget создание новой версии бюджета счета, действующей с указанной даты
 	CreateAccountBudget(context.Context, *CreateAccountBudgetRequest) (*CreateAccountBudgetResponse, error)
-	// GetAccountBudgetHistory получение истории версий бюджета счета
-	GetAccountBudgetHistory(context.Context, *GetAccountBudgetHistoryRequest) (*GetAccountBudgetHistoryResponse, error)
+	// GetAccountBudgets получение всех версий бюджета по всем счетам доступных пользователю групп счетов
+	GetAccountBudgets(context.Context, *GetAccountBudgetsRequest) (*GetAccountBudgetsResponse, error)
 	mustEmbedUnimplementedAccountBudgetEndpointServer()
 }
 
@@ -82,8 +82,8 @@ type UnimplementedAccountBudgetEndpointServer struct{}
 func (UnimplementedAccountBudgetEndpointServer) CreateAccountBudget(context.Context, *CreateAccountBudgetRequest) (*CreateAccountBudgetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateAccountBudget not implemented")
 }
-func (UnimplementedAccountBudgetEndpointServer) GetAccountBudgetHistory(context.Context, *GetAccountBudgetHistoryRequest) (*GetAccountBudgetHistoryResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetAccountBudgetHistory not implemented")
+func (UnimplementedAccountBudgetEndpointServer) GetAccountBudgets(context.Context, *GetAccountBudgetsRequest) (*GetAccountBudgetsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAccountBudgets not implemented")
 }
 func (UnimplementedAccountBudgetEndpointServer) mustEmbedUnimplementedAccountBudgetEndpointServer() {}
 func (UnimplementedAccountBudgetEndpointServer) testEmbeddedByValue()                               {}
@@ -124,20 +124,20 @@ func _AccountBudgetEndpoint_CreateAccountBudget_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccountBudgetEndpoint_GetAccountBudgetHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAccountBudgetHistoryRequest)
+func _AccountBudgetEndpoint_GetAccountBudgets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAccountBudgetsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccountBudgetEndpointServer).GetAccountBudgetHistory(ctx, in)
+		return srv.(AccountBudgetEndpointServer).GetAccountBudgets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AccountBudgetEndpoint_GetAccountBudgetHistory_FullMethodName,
+		FullMethod: AccountBudgetEndpoint_GetAccountBudgets_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccountBudgetEndpointServer).GetAccountBudgetHistory(ctx, req.(*GetAccountBudgetHistoryRequest))
+		return srv.(AccountBudgetEndpointServer).GetAccountBudgets(ctx, req.(*GetAccountBudgetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -154,8 +154,8 @@ var AccountBudgetEndpoint_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AccountBudgetEndpoint_CreateAccountBudget_Handler,
 		},
 		{
-			MethodName: "GetAccountBudgetHistory",
-			Handler:    _AccountBudgetEndpoint_GetAccountBudgetHistory_Handler,
+			MethodName: "GetAccountBudgets",
+			Handler:    _AccountBudgetEndpoint_GetAccountBudgets_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
