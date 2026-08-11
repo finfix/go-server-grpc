@@ -25,13 +25,14 @@ const (
 type AuditLogEntity int32
 
 const (
-	AuditLogEntity_Unspecified  AuditLogEntity = 0
-	AuditLogEntity_Transaction  AuditLogEntity = 1 // Транзакция
-	AuditLogEntity_Account      AuditLogEntity = 2 // Счет
-	AuditLogEntity_AccountGroup AuditLogEntity = 3 // Группа счетов
-	AuditLogEntity_Tag          AuditLogEntity = 4 // Подкатегория
-	AuditLogEntity_User         AuditLogEntity = 5 // Пользователь
-	AuditLogEntity_Currency     AuditLogEntity = 6 // Валюта
+	AuditLogEntity_Unspecified   AuditLogEntity = 0
+	AuditLogEntity_Transaction   AuditLogEntity = 1 // Транзакция
+	AuditLogEntity_Account       AuditLogEntity = 2 // Счет
+	AuditLogEntity_AccountGroup  AuditLogEntity = 3 // Группа счетов
+	AuditLogEntity_Tag           AuditLogEntity = 4 // Подкатегория
+	AuditLogEntity_User          AuditLogEntity = 5 // Пользователь
+	AuditLogEntity_Currency      AuditLogEntity = 6 // Валюта
+	AuditLogEntity_AccountBudget AuditLogEntity = 7 // Версия бюджета счета
 )
 
 // Enum value maps for AuditLogEntity.
@@ -44,15 +45,17 @@ var (
 		4: "Tag",
 		5: "User",
 		6: "Currency",
+		7: "AccountBudget",
 	}
 	AuditLogEntity_value = map[string]int32{
-		"Unspecified":  0,
-		"Transaction":  1,
-		"Account":      2,
-		"AccountGroup": 3,
-		"Tag":          4,
-		"User":         5,
-		"Currency":     6,
+		"Unspecified":   0,
+		"Transaction":   1,
+		"Account":       2,
+		"AccountGroup":  3,
+		"Tag":           4,
+		"User":          5,
+		"Currency":      6,
+		"AccountBudget": 7,
 	}
 )
 
@@ -432,7 +435,7 @@ const file_proto_auditLog_auditLog_endpoint_proto_rawDesc = "" +
 	"\x14GetAuditLogsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x120\n" +
 	"\tauditLogs\x18\x02 \x03(\v2\x12.auditLog.AuditLogR\tauditLogsB\b\n" +
-	"\x06_error*r\n" +
+	"\x06_error*\x85\x01\n" +
 	"\x0eAuditLogEntity\x12\x0f\n" +
 	"\vUnspecified\x10\x00\x12\x0f\n" +
 	"\vTransaction\x10\x01\x12\v\n" +
@@ -440,7 +443,8 @@ const file_proto_auditLog_auditLog_endpoint_proto_rawDesc = "" +
 	"\fAccountGroup\x10\x03\x12\a\n" +
 	"\x03Tag\x10\x04\x12\b\n" +
 	"\x04User\x10\x05\x12\f\n" +
-	"\bCurrency\x10\x06*K\n" +
+	"\bCurrency\x10\x06\x12\x11\n" +
+	"\rAccountBudget\x10\a*K\n" +
 	"\x0eAuditLogMethod\x12\x15\n" +
 	"\x11MethodUnspecified\x10\x00\x12\n" +
 	"\n" +

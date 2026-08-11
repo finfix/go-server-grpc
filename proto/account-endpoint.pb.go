@@ -22,74 +22,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AccountBudget struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Amount         float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`                // Сумма бюджета
-	DaysOffset     uint32                 `protobuf:"varint,2,opt,name=daysOffset,proto3" json:"daysOffset,omitempty"`         // Смещение в днях
-	FixedSum       float64                `protobuf:"fixed64,3,opt,name=fixedSum,proto3" json:"fixedSum,omitempty"`            // Фиксированная сумма
-	GradualFilling bool                   `protobuf:"varint,4,opt,name=gradualFilling,proto3" json:"gradualFilling,omitempty"` // Постепенное пополнение
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
-}
-
-func (x *AccountBudget) Reset() {
-	*x = AccountBudget{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AccountBudget) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AccountBudget) ProtoMessage() {}
-
-func (x *AccountBudget) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AccountBudget.ProtoReflect.Descriptor instead.
-func (*AccountBudget) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *AccountBudget) GetAmount() float64 {
-	if x != nil {
-		return x.Amount
-	}
-	return 0
-}
-
-func (x *AccountBudget) GetDaysOffset() uint32 {
-	if x != nil {
-		return x.DaysOffset
-	}
-	return 0
-}
-
-func (x *AccountBudget) GetFixedSum() float64 {
-	if x != nil {
-		return x.FixedSum
-	}
-	return 0
-}
-
-func (x *AccountBudget) GetGradualFilling() bool {
-	if x != nil {
-		return x.GradualFilling
-	}
-	return false
-}
-
 type Account struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 []byte                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                   // Идентификатор счета
@@ -106,7 +38,6 @@ type Account struct {
 	IconID             []byte                 `protobuf:"bytes,12,opt,name=iconID,proto3" json:"iconID,omitempty"`                          // Идентификатор иконки
 	CreatedByUserID    []byte                 `protobuf:"bytes,14,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`        // Идентификатор пользователя, создавшего счет
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата и время создания счета
-	Budget             *AccountBudget         `protobuf:"bytes,16,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
 	Rank               string                 `protobuf:"bytes,17,opt,name=rank,proto3" json:"rank,omitempty"`                              // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -114,7 +45,7 @@ type Account struct {
 
 func (x *Account) Reset() {
 	*x = Account{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[1]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -126,7 +57,7 @@ func (x *Account) String() string {
 func (*Account) ProtoMessage() {}
 
 func (x *Account) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[1]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -139,7 +70,7 @@ func (x *Account) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Account.ProtoReflect.Descriptor instead.
 func (*Account) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{1}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Account) GetId() []byte {
@@ -240,13 +171,6 @@ func (x *Account) GetDatetimeCreate() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Account) GetBudget() *AccountBudget {
-	if x != nil {
-		return x.Budget
-	}
-	return nil
-}
-
 func (x *Account) GetRank() string {
 	if x != nil {
 		return x.Rank
@@ -270,7 +194,7 @@ type GetAccountsRequest struct {
 
 func (x *GetAccountsRequest) Reset() {
 	*x = GetAccountsRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[2]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -282,7 +206,7 @@ func (x *GetAccountsRequest) String() string {
 func (*GetAccountsRequest) ProtoMessage() {}
 
 func (x *GetAccountsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[2]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -295,7 +219,7 @@ func (x *GetAccountsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccountsRequest.ProtoReflect.Descriptor instead.
 func (*GetAccountsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{2}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetAccountsRequest) GetAccessToken() string {
@@ -364,7 +288,7 @@ type GetAccountsResponse struct {
 
 func (x *GetAccountsResponse) Reset() {
 	*x = GetAccountsResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[3]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -376,7 +300,7 @@ func (x *GetAccountsResponse) String() string {
 func (*GetAccountsResponse) ProtoMessage() {}
 
 func (x *GetAccountsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[3]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -389,7 +313,7 @@ func (x *GetAccountsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccountsResponse.ProtoReflect.Descriptor instead.
 func (*GetAccountsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{3}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetAccountsResponse) GetError() *Error {
@@ -420,7 +344,6 @@ type CreateAccountRequest struct {
 	IsParent           bool                   `protobuf:"varint,10,opt,name=isParent,proto3" json:"isParent,omitempty"`                     // Является ли счет родительским
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата создания счета
 	ParentAccountID    []byte                 `protobuf:"bytes,12,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`  // Идентификатор родительского счета
-	Budget             *AccountBudget         `protobuf:"bytes,14,opt,name=budget,proto3,oneof" json:"budget,omitempty"`                    // Бюджет
 	Rank               string                 `protobuf:"bytes,15,opt,name=rank,proto3" json:"rank,omitempty"`                              // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -428,7 +351,7 @@ type CreateAccountRequest struct {
 
 func (x *CreateAccountRequest) Reset() {
 	*x = CreateAccountRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[4]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -440,7 +363,7 @@ func (x *CreateAccountRequest) String() string {
 func (*CreateAccountRequest) ProtoMessage() {}
 
 func (x *CreateAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[4]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -453,7 +376,7 @@ func (x *CreateAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAccountRequest.ProtoReflect.Descriptor instead.
 func (*CreateAccountRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{4}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateAccountRequest) GetAccessToken() string {
@@ -540,13 +463,6 @@ func (x *CreateAccountRequest) GetParentAccountID() []byte {
 	return nil
 }
 
-func (x *CreateAccountRequest) GetBudget() *AccountBudget {
-	if x != nil {
-		return x.Budget
-	}
-	return nil
-}
-
 func (x *CreateAccountRequest) GetRank() string {
 	if x != nil {
 		return x.Rank
@@ -563,7 +479,7 @@ type CreateAccountResponse struct {
 
 func (x *CreateAccountResponse) Reset() {
 	*x = CreateAccountResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[5]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -575,7 +491,7 @@ func (x *CreateAccountResponse) String() string {
 func (*CreateAccountResponse) ProtoMessage() {}
 
 func (x *CreateAccountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[5]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -588,7 +504,7 @@ func (x *CreateAccountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAccountResponse.ProtoReflect.Descriptor instead.
 func (*CreateAccountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{5}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateAccountResponse) GetError() *Error {
@@ -599,25 +515,24 @@ func (x *CreateAccountResponse) GetError() *Error {
 }
 
 type UpdateAccountRequest struct {
-	state              protoimpl.MessageState      `protogen:"open.v1"`
-	AccessToken        string                      `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
-	Id                 []byte                      `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                        // Идентификатор счета
-	Name               *string                     `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                              // Название счета
-	AccountingInCharts *bool                       `protobuf:"varint,4,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"` // Будет ли счет учитываться в графиках
-	AccountingInHeader *bool                       `protobuf:"varint,5,opt,name=accountingInHeader,proto3,oneof" json:"accountingInHeader,omitempty"` // Будет ли счет учитываться в статистике
-	Currency           *string                     `protobuf:"bytes,6,opt,name=currency,proto3,oneof" json:"currency,omitempty"`                      // Валюта счета
-	IconID             []byte                      `protobuf:"bytes,7,opt,name=iconID,proto3,oneof" json:"iconID,omitempty"`                          // Идентификатор иконки
-	ParentAccountID    []byte                      `protobuf:"bytes,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`        // Идентификатор родительского счета
-	Visible            *bool                       `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
-	Budget             *UpdateAccountBudgetRequest `protobuf:"bytes,12,opt,name=budget,proto3" json:"budget,omitempty"`                               // Месячный бюджет
-	Rank               *string                     `protobuf:"bytes,13,opt,name=rank,proto3,oneof" json:"rank,omitempty"`                             // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken        string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`                      // Токен доступа
+	Id                 []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                                        // Идентификатор счета
+	Name               *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`                              // Название счета
+	AccountingInCharts *bool                  `protobuf:"varint,4,opt,name=accountingInCharts,proto3,oneof" json:"accountingInCharts,omitempty"` // Будет ли счет учитываться в графиках
+	AccountingInHeader *bool                  `protobuf:"varint,5,opt,name=accountingInHeader,proto3,oneof" json:"accountingInHeader,omitempty"` // Будет ли счет учитываться в статистике
+	Currency           *string                `protobuf:"bytes,6,opt,name=currency,proto3,oneof" json:"currency,omitempty"`                      // Валюта счета
+	IconID             []byte                 `protobuf:"bytes,7,opt,name=iconID,proto3,oneof" json:"iconID,omitempty"`                          // Идентификатор иконки
+	ParentAccountID    []byte                 `protobuf:"bytes,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`        // Идентификатор родительского счета
+	Visible            *bool                  `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
+	Rank               *string                `protobuf:"bytes,13,opt,name=rank,proto3,oneof" json:"rank,omitempty"`                             // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
 
 func (x *UpdateAccountRequest) Reset() {
 	*x = UpdateAccountRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[6]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -629,7 +544,7 @@ func (x *UpdateAccountRequest) String() string {
 func (*UpdateAccountRequest) ProtoMessage() {}
 
 func (x *UpdateAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[6]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -642,7 +557,7 @@ func (x *UpdateAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateAccountRequest.ProtoReflect.Descriptor instead.
 func (*UpdateAccountRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{6}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateAccountRequest) GetAccessToken() string {
@@ -708,86 +623,11 @@ func (x *UpdateAccountRequest) GetVisible() bool {
 	return false
 }
 
-func (x *UpdateAccountRequest) GetBudget() *UpdateAccountBudgetRequest {
-	if x != nil {
-		return x.Budget
-	}
-	return nil
-}
-
 func (x *UpdateAccountRequest) GetRank() string {
 	if x != nil && x.Rank != nil {
 		return *x.Rank
 	}
 	return ""
-}
-
-type UpdateAccountBudgetRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Amount         *float64               `protobuf:"fixed64,1,opt,name=amount,proto3,oneof" json:"amount,omitempty"`                // Сумма бюджета
-	DaysOffset     *uint32                `protobuf:"varint,2,opt,name=daysOffset,proto3,oneof" json:"daysOffset,omitempty"`         // Смещение в днях
-	FixedSum       *float64               `protobuf:"fixed64,3,opt,name=fixedSum,proto3,oneof" json:"fixedSum,omitempty"`            // Фиксированная сумма
-	GradualFilling *bool                  `protobuf:"varint,4,opt,name=gradualFilling,proto3,oneof" json:"gradualFilling,omitempty"` // Постепенное пополнение
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
-}
-
-func (x *UpdateAccountBudgetRequest) Reset() {
-	*x = UpdateAccountBudgetRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateAccountBudgetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateAccountBudgetRequest) ProtoMessage() {}
-
-func (x *UpdateAccountBudgetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateAccountBudgetRequest.ProtoReflect.Descriptor instead.
-func (*UpdateAccountBudgetRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *UpdateAccountBudgetRequest) GetAmount() float64 {
-	if x != nil && x.Amount != nil {
-		return *x.Amount
-	}
-	return 0
-}
-
-func (x *UpdateAccountBudgetRequest) GetDaysOffset() uint32 {
-	if x != nil && x.DaysOffset != nil {
-		return *x.DaysOffset
-	}
-	return 0
-}
-
-func (x *UpdateAccountBudgetRequest) GetFixedSum() float64 {
-	if x != nil && x.FixedSum != nil {
-		return *x.FixedSum
-	}
-	return 0
-}
-
-func (x *UpdateAccountBudgetRequest) GetGradualFilling() bool {
-	if x != nil && x.GradualFilling != nil {
-		return *x.GradualFilling
-	}
-	return false
 }
 
 type UpdateAccountResponse struct {
@@ -799,7 +639,7 @@ type UpdateAccountResponse struct {
 
 func (x *UpdateAccountResponse) Reset() {
 	*x = UpdateAccountResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -811,7 +651,7 @@ func (x *UpdateAccountResponse) String() string {
 func (*UpdateAccountResponse) ProtoMessage() {}
 
 func (x *UpdateAccountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -824,7 +664,7 @@ func (x *UpdateAccountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateAccountResponse.ProtoReflect.Descriptor instead.
 func (*UpdateAccountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{8}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateAccountResponse) GetError() *Error {
@@ -844,7 +684,7 @@ type DeleteAccountRequest struct {
 
 func (x *DeleteAccountRequest) Reset() {
 	*x = DeleteAccountRequest{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -856,7 +696,7 @@ func (x *DeleteAccountRequest) String() string {
 func (*DeleteAccountRequest) ProtoMessage() {}
 
 func (x *DeleteAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[9]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -869,7 +709,7 @@ func (x *DeleteAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteAccountRequest.ProtoReflect.Descriptor instead.
 func (*DeleteAccountRequest) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{9}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DeleteAccountRequest) GetAccessToken() string {
@@ -895,7 +735,7 @@ type DeleteAccountResponse struct {
 
 func (x *DeleteAccountResponse) Reset() {
 	*x = DeleteAccountResponse{}
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[10]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -907,7 +747,7 @@ func (x *DeleteAccountResponse) String() string {
 func (*DeleteAccountResponse) ProtoMessage() {}
 
 func (x *DeleteAccountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_account_account_endpoint_proto_msgTypes[10]
+	mi := &file_proto_account_account_endpoint_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -920,7 +760,7 @@ func (x *DeleteAccountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteAccountResponse.ProtoReflect.Descriptor instead.
 func (*DeleteAccountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{10}
+	return file_proto_account_account_endpoint_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteAccountResponse) GetError() *Error {
@@ -934,14 +774,7 @@ var File_proto_account_account_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8b\x01\n" +
-	"\rAccountBudget\x12\x16\n" +
-	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12\x1e\n" +
-	"\n" +
-	"daysOffset\x18\x02 \x01(\rR\n" +
-	"daysOffset\x12\x1a\n" +
-	"\bfixedSum\x18\x03 \x01(\x01R\bfixedSum\x12&\n" +
-	"\x0egradualFilling\x18\x04 \x01(\bR\x0egradualFilling\"\xdd\x04\n" +
+	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa3\x04\n" +
 	"\aAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
@@ -957,10 +790,8 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\bisParent\x18\v \x01(\bR\bisParent\x12\x16\n" +
 	"\x06iconID\x18\f \x01(\fR\x06iconID\x12(\n" +
 	"\x0fcreatedByUserID\x18\x0e \x01(\fR\x0fcreatedByUserID\x12B\n" +
-	"\x0edatetimeCreate\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x123\n" +
-	"\x06budget\x18\x10 \x01(\v2\x16.account.AccountBudgetH\x00R\x06budget\x88\x01\x01\x12\x12\n" +
-	"\x04rank\x18\x11 \x01(\tR\x04rankB\t\n" +
-	"\a_budgetJ\x04\b\r\x10\x0e\"\xed\x03\n" +
+	"\x0edatetimeCreate\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12\x12\n" +
+	"\x04rank\x18\x11 \x01(\tR\x04rankJ\x04\b\r\x10\x0eJ\x04\b\x10\x10\x11\"\xed\x03\n" +
 	"\x12GetAccountsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
 	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x123\n" +
@@ -980,7 +811,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x13GetAccountsResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12,\n" +
 	"\baccounts\x18\x02 \x03(\v2\x10.account.AccountR\baccountsB\b\n" +
-	"\x06_error\"\xc3\x04\n" +
+	"\x06_error\"\x89\x04\n" +
 	"\x14CreateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x12\n" +
@@ -994,14 +825,12 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\bisParent\x18\n" +
 	" \x01(\bR\bisParent\x12B\n" +
 	"\x0edatetimeCreate\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12-\n" +
-	"\x0fparentAccountID\x18\f \x01(\fH\x00R\x0fparentAccountID\x88\x01\x01\x123\n" +
-	"\x06budget\x18\x0e \x01(\v2\x16.account.AccountBudgetH\x01R\x06budget\x88\x01\x01\x12\x12\n" +
+	"\x0fparentAccountID\x18\f \x01(\fH\x00R\x0fparentAccountID\x88\x01\x01\x12\x12\n" +
 	"\x04rank\x18\x0f \x01(\tR\x04rankB\x12\n" +
-	"\x10_parentAccountIDB\t\n" +
-	"\a_budgetJ\x04\b\r\x10\x0e\"b\n" +
+	"\x10_parentAccountIDJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0f\"b\n" +
 	"\x15CreateAccountResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_errorJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06\"\xb1\x04\n" +
+	"\x06_errorJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06\"\xfa\x03\n" +
 	"\x14UpdateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x17\n" +
@@ -1011,8 +840,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\bcurrency\x18\x06 \x01(\tH\x03R\bcurrency\x88\x01\x01\x12\x1b\n" +
 	"\x06iconID\x18\a \x01(\fH\x04R\x06iconID\x88\x01\x01\x12-\n" +
 	"\x0fparentAccountID\x18\b \x01(\fH\x05R\x0fparentAccountID\x88\x01\x01\x12\x1d\n" +
-	"\avisible\x18\v \x01(\bH\x06R\avisible\x88\x01\x01\x12;\n" +
-	"\x06budget\x18\f \x01(\v2#.account.UpdateAccountBudgetRequestR\x06budget\x12\x17\n" +
+	"\avisible\x18\v \x01(\bH\x06R\avisible\x88\x01\x01\x12\x17\n" +
 	"\x04rank\x18\r \x01(\tH\aR\x04rank\x88\x01\x01B\a\n" +
 	"\x05_nameB\x15\n" +
 	"\x13_accountingInChartsB\x15\n" +
@@ -1024,18 +852,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\b_visibleB\a\n" +
 	"\x05_rankJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
-	"\x10\v\"\xe6\x01\n" +
-	"\x1aUpdateAccountBudgetRequest\x12\x1b\n" +
-	"\x06amount\x18\x01 \x01(\x01H\x00R\x06amount\x88\x01\x01\x12#\n" +
-	"\n" +
-	"daysOffset\x18\x02 \x01(\rH\x01R\n" +
-	"daysOffset\x88\x01\x01\x12\x1f\n" +
-	"\bfixedSum\x18\x03 \x01(\x01H\x02R\bfixedSum\x88\x01\x01\x12+\n" +
-	"\x0egradualFilling\x18\x04 \x01(\bH\x03R\x0egradualFilling\x88\x01\x01B\t\n" +
-	"\a_amountB\r\n" +
-	"\v_daysOffsetB\v\n" +
-	"\t_fixedSumB\x11\n" +
-	"\x0f_gradualFilling\"J\n" +
+	"\x10\vJ\x04\b\f\x10\r\"J\n" +
 	"\x15UpdateAccountResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"H\n" +
@@ -1063,52 +880,47 @@ func file_proto_account_account_endpoint_proto_rawDescGZIP() []byte {
 	return file_proto_account_account_endpoint_proto_rawDescData
 }
 
-var file_proto_account_account_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_account_account_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_account_account_endpoint_proto_goTypes = []any{
-	(*AccountBudget)(nil),              // 0: account.AccountBudget
-	(*Account)(nil),                    // 1: account.Account
-	(*GetAccountsRequest)(nil),         // 2: account.GetAccountsRequest
-	(*GetAccountsResponse)(nil),        // 3: account.GetAccountsResponse
-	(*CreateAccountRequest)(nil),       // 4: account.CreateAccountRequest
-	(*CreateAccountResponse)(nil),      // 5: account.CreateAccountResponse
-	(*UpdateAccountRequest)(nil),       // 6: account.UpdateAccountRequest
-	(*UpdateAccountBudgetRequest)(nil), // 7: account.UpdateAccountBudgetRequest
-	(*UpdateAccountResponse)(nil),      // 8: account.UpdateAccountResponse
-	(*DeleteAccountRequest)(nil),       // 9: account.DeleteAccountRequest
-	(*DeleteAccountResponse)(nil),      // 10: account.DeleteAccountResponse
-	(AccountType)(0),                   // 11: accountType.AccountType
-	(*timestamppb.Timestamp)(nil),      // 12: google.protobuf.Timestamp
-	(*Error)(nil),                      // 13: error.Error
+	(*Account)(nil),               // 0: account.Account
+	(*GetAccountsRequest)(nil),    // 1: account.GetAccountsRequest
+	(*GetAccountsResponse)(nil),   // 2: account.GetAccountsResponse
+	(*CreateAccountRequest)(nil),  // 3: account.CreateAccountRequest
+	(*CreateAccountResponse)(nil), // 4: account.CreateAccountResponse
+	(*UpdateAccountRequest)(nil),  // 5: account.UpdateAccountRequest
+	(*UpdateAccountResponse)(nil), // 6: account.UpdateAccountResponse
+	(*DeleteAccountRequest)(nil),  // 7: account.DeleteAccountRequest
+	(*DeleteAccountResponse)(nil), // 8: account.DeleteAccountResponse
+	(AccountType)(0),              // 9: accountType.AccountType
+	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	(*Error)(nil),                 // 11: error.Error
 }
 var file_proto_account_account_endpoint_proto_depIdxs = []int32{
-	11, // 0: account.Account.type:type_name -> accountType.AccountType
-	12, // 1: account.Account.datetimeCreate:type_name -> google.protobuf.Timestamp
-	0,  // 2: account.Account.budget:type_name -> account.AccountBudget
-	12, // 3: account.GetAccountsRequest.dateFrom:type_name -> google.protobuf.Timestamp
-	12, // 4: account.GetAccountsRequest.dateTo:type_name -> google.protobuf.Timestamp
-	11, // 5: account.GetAccountsRequest.type:type_name -> accountType.AccountType
-	13, // 6: account.GetAccountsResponse.error:type_name -> error.Error
-	1,  // 7: account.GetAccountsResponse.accounts:type_name -> account.Account
-	11, // 8: account.CreateAccountRequest.type:type_name -> accountType.AccountType
-	12, // 9: account.CreateAccountRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
-	0,  // 10: account.CreateAccountRequest.budget:type_name -> account.AccountBudget
-	13, // 11: account.CreateAccountResponse.error:type_name -> error.Error
-	7,  // 12: account.UpdateAccountRequest.budget:type_name -> account.UpdateAccountBudgetRequest
-	13, // 13: account.UpdateAccountResponse.error:type_name -> error.Error
-	13, // 14: account.DeleteAccountResponse.error:type_name -> error.Error
-	2,  // 15: account.AccountEndpoint.GetAccounts:input_type -> account.GetAccountsRequest
-	4,  // 16: account.AccountEndpoint.CreateAccount:input_type -> account.CreateAccountRequest
-	6,  // 17: account.AccountEndpoint.UpdateAccount:input_type -> account.UpdateAccountRequest
-	9,  // 18: account.AccountEndpoint.DeleteAccount:input_type -> account.DeleteAccountRequest
-	3,  // 19: account.AccountEndpoint.GetAccounts:output_type -> account.GetAccountsResponse
-	5,  // 20: account.AccountEndpoint.CreateAccount:output_type -> account.CreateAccountResponse
-	8,  // 21: account.AccountEndpoint.UpdateAccount:output_type -> account.UpdateAccountResponse
-	10, // 22: account.AccountEndpoint.DeleteAccount:output_type -> account.DeleteAccountResponse
-	19, // [19:23] is the sub-list for method output_type
-	15, // [15:19] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	9,  // 0: account.Account.type:type_name -> accountType.AccountType
+	10, // 1: account.Account.datetimeCreate:type_name -> google.protobuf.Timestamp
+	10, // 2: account.GetAccountsRequest.dateFrom:type_name -> google.protobuf.Timestamp
+	10, // 3: account.GetAccountsRequest.dateTo:type_name -> google.protobuf.Timestamp
+	9,  // 4: account.GetAccountsRequest.type:type_name -> accountType.AccountType
+	11, // 5: account.GetAccountsResponse.error:type_name -> error.Error
+	0,  // 6: account.GetAccountsResponse.accounts:type_name -> account.Account
+	9,  // 7: account.CreateAccountRequest.type:type_name -> accountType.AccountType
+	10, // 8: account.CreateAccountRequest.datetimeCreate:type_name -> google.protobuf.Timestamp
+	11, // 9: account.CreateAccountResponse.error:type_name -> error.Error
+	11, // 10: account.UpdateAccountResponse.error:type_name -> error.Error
+	11, // 11: account.DeleteAccountResponse.error:type_name -> error.Error
+	1,  // 12: account.AccountEndpoint.GetAccounts:input_type -> account.GetAccountsRequest
+	3,  // 13: account.AccountEndpoint.CreateAccount:input_type -> account.CreateAccountRequest
+	5,  // 14: account.AccountEndpoint.UpdateAccount:input_type -> account.UpdateAccountRequest
+	7,  // 15: account.AccountEndpoint.DeleteAccount:input_type -> account.DeleteAccountRequest
+	2,  // 16: account.AccountEndpoint.GetAccounts:output_type -> account.GetAccountsResponse
+	4,  // 17: account.AccountEndpoint.CreateAccount:output_type -> account.CreateAccountResponse
+	6,  // 18: account.AccountEndpoint.UpdateAccount:output_type -> account.UpdateAccountResponse
+	8,  // 19: account.AccountEndpoint.DeleteAccount:output_type -> account.DeleteAccountResponse
+	16, // [16:20] is the sub-list for method output_type
+	12, // [12:16] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_proto_account_account_endpoint_proto_init() }
@@ -1124,16 +936,14 @@ func file_proto_account_account_endpoint_proto_init() {
 	file_proto_account_account_endpoint_proto_msgTypes[4].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
-	file_proto_account_account_endpoint_proto_msgTypes[7].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
-	file_proto_account_account_endpoint_proto_msgTypes[10].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_account_account_endpoint_proto_rawDesc), len(file_proto_account_account_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
