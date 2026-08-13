@@ -23,7 +23,7 @@ const (
 
 type Error struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`                                                                              // Код ошибки
+	Category      ErrorCategory          `protobuf:"varint,1,opt,name=category,proto3,enum=errorCategory.ErrorCategory" json:"category,omitempty"`                                     // Категория ошибки
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`                                                                         // Описание ошибки
 	SystemMessage string                 `protobuf:"bytes,3,opt,name=systemMessage,proto3" json:"systemMessage,omitempty"`                                                             // Системное описание ошибки
 	Params        map[string]string      `protobuf:"bytes,4,rep,name=params,proto3" json:"params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Дополнительная информация об ошибке
@@ -61,11 +61,11 @@ func (*Error) Descriptor() ([]byte, []int) {
 	return file_proto_error_error_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Error) GetCode() int32 {
+func (x *Error) GetCategory() ErrorCategory {
 	if x != nil {
-		return x.Code
+		return x.Category
 	}
-	return 0
+	return ErrorCategory_Unspecified
 }
 
 func (x *Error) GetMessage() string {
@@ -137,9 +137,9 @@ var File_proto_error_error_proto protoreflect.FileDescriptor
 
 const file_proto_error_error_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/error/error.proto\x12\x05error\"\xc8\x01\n" +
-	"\x05Error\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\x17proto/error/error.proto\x12\x05error\x1a\x1fproto/enums/errorCategory.proto\"\xee\x01\n" +
+	"\x05Error\x128\n" +
+	"\bcategory\x18\x01 \x01(\x0e2\x1c.errorCategory.ErrorCategoryR\bcategory\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12$\n" +
 	"\rsystemMessage\x18\x03 \x01(\tR\rsystemMessage\x120\n" +
 	"\x06params\x18\x04 \x03(\v2\x18.error.Error.ParamsEntryR\x06params\x1a9\n" +
@@ -164,18 +164,20 @@ func file_proto_error_error_proto_rawDescGZIP() []byte {
 
 var file_proto_error_error_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_error_error_proto_goTypes = []any{
-	(*Error)(nil),     // 0: error.Error
-	(*OnlyError)(nil), // 1: error.OnlyError
-	nil,               // 2: error.Error.ParamsEntry
+	(*Error)(nil),      // 0: error.Error
+	(*OnlyError)(nil),  // 1: error.OnlyError
+	nil,                // 2: error.Error.ParamsEntry
+	(ErrorCategory)(0), // 3: errorCategory.ErrorCategory
 }
 var file_proto_error_error_proto_depIdxs = []int32{
-	2, // 0: error.Error.params:type_name -> error.Error.ParamsEntry
-	0, // 1: error.OnlyError.error:type_name -> error.Error
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	3, // 0: error.Error.category:type_name -> errorCategory.ErrorCategory
+	2, // 1: error.Error.params:type_name -> error.Error.ParamsEntry
+	0, // 2: error.OnlyError.error:type_name -> error.Error
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_error_error_proto_init() }
@@ -183,6 +185,7 @@ func file_proto_error_error_proto_init() {
 	if File_proto_error_error_proto != nil {
 		return
 	}
+	file_proto_enums_errorCategory_proto_init()
 	file_proto_error_error_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
