@@ -74,24 +74,25 @@ func (x *SyncRequest) GetSinceID() uint32 {
 }
 
 type SyncResponse struct {
-	state                  protoimpl.MessageState `protogen:"open.v1"`
-	Error                  *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                              // Объект ошибки
-	PendingCheckpoint      uint32                 `protobuf:"varint,2,opt,name=pendingCheckpoint,proto3" json:"pendingCheckpoint,omitempty"`           // Новый чекпоинт, который нужно подтвердить вызовом ConfirmSync после применения изменений
-	PendingSyncToken       []byte                 `protobuf:"bytes,3,opt,name=pendingSyncToken,proto3" json:"pendingSyncToken,omitempty"`              // Опорный токен этого ответа, передается в ConfirmSync. Пустой, если изменений не было
-	HasChanges             bool                   `protobuf:"varint,4,opt,name=hasChanges,proto3" json:"hasChanges,omitempty"`                         // true, если в ответе есть изменения (pendingCheckpoint больше sinceID из запроса)
-	ChangedTransactions    []*Transaction         `protobuf:"bytes,5,rep,name=changedTransactions,proto3" json:"changedTransactions,omitempty"`        // Созданные/изменённые транзакции
-	DeletedTransactionIDs  [][]byte               `protobuf:"bytes,6,rep,name=deletedTransactionIDs,proto3" json:"deletedTransactionIDs,omitempty"`    // Удалённые транзакции
-	ChangedAccounts        []*Account             `protobuf:"bytes,7,rep,name=changedAccounts,proto3" json:"changedAccounts,omitempty"`                // Созданные/изменённые счета
-	DeletedAccountIDs      [][]byte               `protobuf:"bytes,8,rep,name=deletedAccountIDs,proto3" json:"deletedAccountIDs,omitempty"`            // Удалённые счета
-	ChangedAccountGroups   []*AccountGroup        `protobuf:"bytes,9,rep,name=changedAccountGroups,proto3" json:"changedAccountGroups,omitempty"`      // Созданные/изменённые группы счетов
-	DeletedAccountGroupIDs [][]byte               `protobuf:"bytes,10,rep,name=deletedAccountGroupIDs,proto3" json:"deletedAccountGroupIDs,omitempty"` // Удалённые группы счетов
-	ChangedTags            []*Tag                 `protobuf:"bytes,11,rep,name=changedTags,proto3" json:"changedTags,omitempty"`                       // Созданные/изменённые подкатегории
-	DeletedTagIDs          [][]byte               `protobuf:"bytes,12,rep,name=deletedTagIDs,proto3" json:"deletedTagIDs,omitempty"`                   // Удалённые подкатегории
-	ChangedAccountBudgets  []*AccountBudget       `protobuf:"bytes,13,rep,name=changedAccountBudgets,proto3" json:"changedAccountBudgets,omitempty"`   // Созданные версии бюджета счетов (версии не удаляются)
-	ChangedUser            *User                  `protobuf:"bytes,14,opt,name=changedUser,proto3" json:"changedUser,omitempty"`                       // Измененные данные текущего пользователя, если менялись (nil, если не менялись)
-	ChangedCurrencies      []*Currency            `protobuf:"bytes,15,rep,name=changedCurrencies,proto3" json:"changedCurrencies,omitempty"`           // Созданные/изменённые валюты (глобальные, без привязки к группе счетов)
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	state                         protoimpl.MessageState   `protogen:"open.v1"`
+	Error                         *Error                   `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`                                            // Объект ошибки
+	PendingCheckpoint             uint32                   `protobuf:"varint,2,opt,name=pendingCheckpoint,proto3" json:"pendingCheckpoint,omitempty"`                         // Новый чекпоинт, который нужно подтвердить вызовом ConfirmSync после применения изменений
+	PendingSyncToken              []byte                   `protobuf:"bytes,3,opt,name=pendingSyncToken,proto3" json:"pendingSyncToken,omitempty"`                            // Опорный токен этого ответа, передается в ConfirmSync. Пустой, если изменений не было
+	HasChanges                    bool                     `protobuf:"varint,4,opt,name=hasChanges,proto3" json:"hasChanges,omitempty"`                                       // true, если в ответе есть изменения (pendingCheckpoint больше sinceID из запроса)
+	ChangedTransactions           []*Transaction           `protobuf:"bytes,5,rep,name=changedTransactions,proto3" json:"changedTransactions,omitempty"`                      // Созданные/изменённые транзакции
+	DeletedTransactionIDs         [][]byte                 `protobuf:"bytes,6,rep,name=deletedTransactionIDs,proto3" json:"deletedTransactionIDs,omitempty"`                  // Удалённые транзакции
+	ChangedAccounts               []*Account               `protobuf:"bytes,7,rep,name=changedAccounts,proto3" json:"changedAccounts,omitempty"`                              // Созданные/изменённые счета
+	DeletedAccountIDs             [][]byte                 `protobuf:"bytes,8,rep,name=deletedAccountIDs,proto3" json:"deletedAccountIDs,omitempty"`                          // Удалённые счета
+	ChangedAccountGroups          []*AccountGroup          `protobuf:"bytes,9,rep,name=changedAccountGroups,proto3" json:"changedAccountGroups,omitempty"`                    // Созданные/изменённые группы счетов
+	DeletedAccountGroupIDs        [][]byte                 `protobuf:"bytes,10,rep,name=deletedAccountGroupIDs,proto3" json:"deletedAccountGroupIDs,omitempty"`               // Удалённые группы счетов
+	ChangedTags                   []*Tag                   `protobuf:"bytes,11,rep,name=changedTags,proto3" json:"changedTags,omitempty"`                                     // Созданные/изменённые подкатегории
+	DeletedTagIDs                 [][]byte                 `protobuf:"bytes,12,rep,name=deletedTagIDs,proto3" json:"deletedTagIDs,omitempty"`                                 // Удалённые подкатегории
+	ChangedAccountBudgets         []*AccountBudget         `protobuf:"bytes,13,rep,name=changedAccountBudgets,proto3" json:"changedAccountBudgets,omitempty"`                 // Созданные версии бюджета счетов (версии не удаляются)
+	ChangedUser                   *User                    `protobuf:"bytes,14,opt,name=changedUser,proto3" json:"changedUser,omitempty"`                                     // Измененные данные текущего пользователя, если менялись (nil, если не менялись)
+	ChangedCurrencies             []*Currency              `protobuf:"bytes,15,rep,name=changedCurrencies,proto3" json:"changedCurrencies,omitempty"`                         // Созданные/изменённые валюты (глобальные, без привязки к группе счетов)
+	ChangedPendingLinkedTransfers []*PendingLinkedTransfer `protobuf:"bytes,16,rep,name=changedPendingLinkedTransfers,proto3" json:"changedPendingLinkedTransfers,omitempty"` // Созданные/изменённые переносы (не удаляются, см. status)
+	unknownFields                 protoimpl.UnknownFields
+	sizeCache                     protoimpl.SizeCache
 }
 
 func (x *SyncResponse) Reset() {
@@ -229,6 +230,13 @@ func (x *SyncResponse) GetChangedCurrencies() []*Currency {
 	return nil
 }
 
+func (x *SyncResponse) GetChangedPendingLinkedTransfers() []*PendingLinkedTransfer {
+	if x != nil {
+		return x.ChangedPendingLinkedTransfers
+	}
+	return nil
+}
+
 type ConfirmSyncRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken      string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`           // Токен доступа
@@ -329,10 +337,10 @@ var File_proto_sync_sync_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_sync_sync_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"\x1eproto/sync/sync-endpoint.proto\x12\x04sync\x1a\x17proto/error/error.proto\x1a,proto/transaction/transaction-endpoint.proto\x1a$proto/account/account-endpoint.proto\x1a.proto/accountGroup/accountGroup-endpoint.proto\x1a\x1cproto/tag/tag-endpoint.proto\x1a0proto/accountBudget/accountBudget-endpoint.proto\x1a\x1eproto/user/user-endpoint.proto\x1a&proto/settings/settings-endpoint.proto\"I\n" +
+	"\x1eproto/sync/sync-endpoint.proto\x12\x04sync\x1a\x17proto/error/error.proto\x1a,proto/transaction/transaction-endpoint.proto\x1a$proto/account/account-endpoint.proto\x1a.proto/accountGroup/accountGroup-endpoint.proto\x1a\x1cproto/tag/tag-endpoint.proto\x1a0proto/accountBudget/accountBudget-endpoint.proto\x1a\x1eproto/user/user-endpoint.proto\x1a&proto/settings/settings-endpoint.proto\x1a@proto/pendingLinkedTransfer/pendingLinkedTransfer-endpoint.proto\"I\n" +
 	"\vSyncRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x18\n" +
-	"\asinceID\x18\x02 \x01(\rR\asinceID\"\xc5\x06\n" +
+	"\asinceID\x18\x02 \x01(\rR\asinceID\"\xb9\a\n" +
 	"\fSyncResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12,\n" +
 	"\x11pendingCheckpoint\x18\x02 \x01(\rR\x11pendingCheckpoint\x12*\n" +
@@ -352,7 +360,8 @@ const file_proto_sync_sync_endpoint_proto_rawDesc = "" +
 	"\x15changedAccountBudgets\x18\r \x03(\v2\x1c.accountBudget.AccountBudgetR\x15changedAccountBudgets\x12,\n" +
 	"\vchangedUser\x18\x0e \x01(\v2\n" +
 	".user.UserR\vchangedUser\x12@\n" +
-	"\x11changedCurrencies\x18\x0f \x03(\v2\x12.settings.CurrencyR\x11changedCurrenciesB\b\n" +
+	"\x11changedCurrencies\x18\x0f \x03(\v2\x12.settings.CurrencyR\x11changedCurrencies\x12r\n" +
+	"\x1dchangedPendingLinkedTransfers\x18\x10 \x03(\v2,.pendingLinkedTransfer.PendingLinkedTransferR\x1dchangedPendingLinkedTransfersB\b\n" +
 	"\x06_error\"b\n" +
 	"\x12ConfirmSyncRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12*\n" +
@@ -378,18 +387,19 @@ func file_proto_sync_sync_endpoint_proto_rawDescGZIP() []byte {
 
 var file_proto_sync_sync_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_sync_sync_endpoint_proto_goTypes = []any{
-	(*SyncRequest)(nil),         // 0: sync.SyncRequest
-	(*SyncResponse)(nil),        // 1: sync.SyncResponse
-	(*ConfirmSyncRequest)(nil),  // 2: sync.ConfirmSyncRequest
-	(*ConfirmSyncResponse)(nil), // 3: sync.ConfirmSyncResponse
-	(*Error)(nil),               // 4: error.Error
-	(*Transaction)(nil),         // 5: transaction.Transaction
-	(*Account)(nil),             // 6: account.Account
-	(*AccountGroup)(nil),        // 7: accountGroup.AccountGroup
-	(*Tag)(nil),                 // 8: tag.Tag
-	(*AccountBudget)(nil),       // 9: accountBudget.AccountBudget
-	(*User)(nil),                // 10: user.User
-	(*Currency)(nil),            // 11: settings.Currency
+	(*SyncRequest)(nil),           // 0: sync.SyncRequest
+	(*SyncResponse)(nil),          // 1: sync.SyncResponse
+	(*ConfirmSyncRequest)(nil),    // 2: sync.ConfirmSyncRequest
+	(*ConfirmSyncResponse)(nil),   // 3: sync.ConfirmSyncResponse
+	(*Error)(nil),                 // 4: error.Error
+	(*Transaction)(nil),           // 5: transaction.Transaction
+	(*Account)(nil),               // 6: account.Account
+	(*AccountGroup)(nil),          // 7: accountGroup.AccountGroup
+	(*Tag)(nil),                   // 8: tag.Tag
+	(*AccountBudget)(nil),         // 9: accountBudget.AccountBudget
+	(*User)(nil),                  // 10: user.User
+	(*Currency)(nil),              // 11: settings.Currency
+	(*PendingLinkedTransfer)(nil), // 12: pendingLinkedTransfer.PendingLinkedTransfer
 }
 var file_proto_sync_sync_endpoint_proto_depIdxs = []int32{
 	4,  // 0: sync.SyncResponse.error:type_name -> error.Error
@@ -400,16 +410,17 @@ var file_proto_sync_sync_endpoint_proto_depIdxs = []int32{
 	9,  // 5: sync.SyncResponse.changedAccountBudgets:type_name -> accountBudget.AccountBudget
 	10, // 6: sync.SyncResponse.changedUser:type_name -> user.User
 	11, // 7: sync.SyncResponse.changedCurrencies:type_name -> settings.Currency
-	4,  // 8: sync.ConfirmSyncResponse.error:type_name -> error.Error
-	0,  // 9: sync.SyncEndpoint.Sync:input_type -> sync.SyncRequest
-	2,  // 10: sync.SyncEndpoint.ConfirmSync:input_type -> sync.ConfirmSyncRequest
-	1,  // 11: sync.SyncEndpoint.Sync:output_type -> sync.SyncResponse
-	3,  // 12: sync.SyncEndpoint.ConfirmSync:output_type -> sync.ConfirmSyncResponse
-	11, // [11:13] is the sub-list for method output_type
-	9,  // [9:11] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	12, // 8: sync.SyncResponse.changedPendingLinkedTransfers:type_name -> pendingLinkedTransfer.PendingLinkedTransfer
+	4,  // 9: sync.ConfirmSyncResponse.error:type_name -> error.Error
+	0,  // 10: sync.SyncEndpoint.Sync:input_type -> sync.SyncRequest
+	2,  // 11: sync.SyncEndpoint.ConfirmSync:input_type -> sync.ConfirmSyncRequest
+	1,  // 12: sync.SyncEndpoint.Sync:output_type -> sync.SyncResponse
+	3,  // 13: sync.SyncEndpoint.ConfirmSync:output_type -> sync.ConfirmSyncResponse
+	12, // [12:14] is the sub-list for method output_type
+	10, // [10:12] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_proto_sync_sync_endpoint_proto_init() }
@@ -425,6 +436,7 @@ func file_proto_sync_sync_endpoint_proto_init() {
 	file_proto_accountBudget_accountBudget_endpoint_proto_init()
 	file_proto_user_user_endpoint_proto_init()
 	file_proto_settings_settings_endpoint_proto_init()
+	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_init()
 	file_proto_sync_sync_endpoint_proto_msgTypes[1].OneofWrappers = []any{}
 	file_proto_sync_sync_endpoint_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}

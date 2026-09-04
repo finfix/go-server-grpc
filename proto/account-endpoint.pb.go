@@ -39,6 +39,7 @@ type Account struct {
 	CreatedByUserID    []byte                 `protobuf:"bytes,14,opt,name=createdByUserID,proto3" json:"createdByUserID,omitempty"`        // Идентификатор пользователя, создавшего счет
 	DatetimeCreate     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=datetimeCreate,proto3" json:"datetimeCreate,omitempty"`          // Дата и время создания счета
 	Rank               string                 `protobuf:"bytes,17,opt,name=rank,proto3" json:"rank,omitempty"`                              // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
+	LinkedAccountID    []byte                 `protobuf:"bytes,18,opt,name=linkedAccountID,proto3,oneof" json:"linkedAccountID,omitempty"`  // Идентификатор счёта-моста (см. UpdateAccountRequest.linkedAccountID), если счёт связан
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -176,6 +177,13 @@ func (x *Account) GetRank() string {
 		return x.Rank
 	}
 	return ""
+}
+
+func (x *Account) GetLinkedAccountID() []byte {
+	if x != nil {
+		return x.LinkedAccountID
+	}
+	return nil
 }
 
 type GetAccountsRequest struct {
@@ -526,8 +534,17 @@ type UpdateAccountRequest struct {
 	ParentAccountID    []byte                 `protobuf:"bytes,8,opt,name=parentAccountID,proto3,oneof" json:"parentAccountID,omitempty"`        // Идентификатор родительского счета
 	Visible            *bool                  `protobuf:"varint,11,opt,name=visible,proto3,oneof" json:"visible,omitempty"`                      // Видимость счета
 	Rank               *string                `protobuf:"bytes,13,opt,name=rank,proto3,oneof" json:"rank,omitempty"`                             // Ранг для сортировки счетов (лексикографический, задаётся клиентом)
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Установка linkedAccountID связывает счёт в мост (счёт может принадлежать другому
+	// пользователю). Бэкенд — тупая точка правды, без проверок доступа/типов/валют: вся валидация
+	// (совпадающая валюта, разрешённая пара типов, общая группа) — на фронтенде.
+	LinkedAccountID []byte `protobuf:"bytes,14,opt,name=linkedAccountID,proto3,oneof" json:"linkedAccountID,omitempty"`
+	// Отсутствие linkedAccountID в запросе означает "не менять" (как и любое другое optional-поле
+	// здесь) — поэтому разрыв связи нужен явным флагом, а не просто пустым значением.
+	// true — снять linkedAccountID (см. Account.linkedAccountID). Игнорируется, если
+	// linkedAccountID тоже передан в этом же запросе.
+	UnlinkAccount bool `protobuf:"varint,15,opt,name=unlinkAccount,proto3" json:"unlinkAccount,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateAccountRequest) Reset() {
@@ -628,6 +645,20 @@ func (x *UpdateAccountRequest) GetRank() string {
 		return *x.Rank
 	}
 	return ""
+}
+
+func (x *UpdateAccountRequest) GetLinkedAccountID() []byte {
+	if x != nil {
+		return x.LinkedAccountID
+	}
+	return nil
+}
+
+func (x *UpdateAccountRequest) GetUnlinkAccount() bool {
+	if x != nil {
+		return x.UnlinkAccount
+	}
+	return false
 }
 
 type UpdateAccountResponse struct {
@@ -774,7 +805,7 @@ var File_proto_account_account_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa3\x04\n" +
+	"$proto/account/account-endpoint.proto\x12\aaccount\x1a\x17proto/error/error.proto\x1a\x1dproto/enums/accountType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe6\x04\n" +
 	"\aAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
@@ -791,7 +822,9 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x06iconID\x18\f \x01(\fR\x06iconID\x12(\n" +
 	"\x0fcreatedByUserID\x18\x0e \x01(\fR\x0fcreatedByUserID\x12B\n" +
 	"\x0edatetimeCreate\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\x0edatetimeCreate\x12\x12\n" +
-	"\x04rank\x18\x11 \x01(\tR\x04rankJ\x04\b\r\x10\x0eJ\x04\b\x10\x10\x11\"\xed\x03\n" +
+	"\x04rank\x18\x11 \x01(\tR\x04rank\x12-\n" +
+	"\x0flinkedAccountID\x18\x12 \x01(\fH\x00R\x0flinkedAccountID\x88\x01\x01B\x12\n" +
+	"\x10_linkedAccountIDJ\x04\b\r\x10\x0eJ\x04\b\x10\x10\x11\"\xed\x03\n" +
 	"\x12GetAccountsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12(\n" +
 	"\x0faccountGroupIDs\x18\x02 \x03(\fR\x0faccountGroupIDs\x123\n" +
@@ -830,7 +863,7 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x10_parentAccountIDJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0f\"b\n" +
 	"\x15CreateAccountResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_errorJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06\"\xfa\x03\n" +
+	"\x06_errorJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06\"\xe3\x04\n" +
 	"\x14UpdateAccountRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\fR\x02id\x12\x17\n" +
@@ -841,7 +874,9 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x06iconID\x18\a \x01(\fH\x04R\x06iconID\x88\x01\x01\x12-\n" +
 	"\x0fparentAccountID\x18\b \x01(\fH\x05R\x0fparentAccountID\x88\x01\x01\x12\x1d\n" +
 	"\avisible\x18\v \x01(\bH\x06R\avisible\x88\x01\x01\x12\x17\n" +
-	"\x04rank\x18\r \x01(\tH\aR\x04rank\x88\x01\x01B\a\n" +
+	"\x04rank\x18\r \x01(\tH\aR\x04rank\x88\x01\x01\x12-\n" +
+	"\x0flinkedAccountID\x18\x0e \x01(\fH\bR\x0flinkedAccountID\x88\x01\x01\x12$\n" +
+	"\runlinkAccount\x18\x0f \x01(\bR\runlinkAccountB\a\n" +
 	"\x05_nameB\x15\n" +
 	"\x13_accountingInChartsB\x15\n" +
 	"\x13_accountingInHeaderB\v\n" +
@@ -850,7 +885,8 @@ const file_proto_account_account_endpoint_proto_rawDesc = "" +
 	"\x10_parentAccountIDB\n" +
 	"\n" +
 	"\b_visibleB\a\n" +
-	"\x05_rankJ\x04\b\t\x10\n" +
+	"\x05_rankB\x12\n" +
+	"\x10_linkedAccountIDJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\vJ\x04\b\f\x10\r\"J\n" +
 	"\x15UpdateAccountResponse\x12'\n" +
@@ -930,6 +966,7 @@ func file_proto_account_account_endpoint_proto_init() {
 	}
 	file_proto_error_error_proto_init()
 	file_proto_enums_accountType_proto_init()
+	file_proto_account_account_endpoint_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[1].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[2].OneofWrappers = []any{}
 	file_proto_account_account_endpoint_proto_msgTypes[3].OneofWrappers = []any{}
