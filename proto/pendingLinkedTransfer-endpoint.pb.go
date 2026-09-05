@@ -457,6 +457,102 @@ func (x *UpdatePendingLinkedTransferResponse) GetError() *Error {
 	return nil
 }
 
+type DeletePendingLinkedTransferRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
+	Id            []byte                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`                   // Идентификатор переноса
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePendingLinkedTransferRequest) Reset() {
+	*x = DeletePendingLinkedTransferRequest{}
+	mi := &file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePendingLinkedTransferRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePendingLinkedTransferRequest) ProtoMessage() {}
+
+func (x *DeletePendingLinkedTransferRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePendingLinkedTransferRequest.ProtoReflect.Descriptor instead.
+func (*DeletePendingLinkedTransferRequest) Descriptor() ([]byte, []int) {
+	return file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DeletePendingLinkedTransferRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *DeletePendingLinkedTransferRequest) GetId() []byte {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+type DeletePendingLinkedTransferResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"` // Объект ошибки
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePendingLinkedTransferResponse) Reset() {
+	*x = DeletePendingLinkedTransferResponse{}
+	mi := &file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePendingLinkedTransferResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePendingLinkedTransferResponse) ProtoMessage() {}
+
+func (x *DeletePendingLinkedTransferResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePendingLinkedTransferResponse.ProtoReflect.Descriptor instead.
+func (*DeletePendingLinkedTransferResponse) Descriptor() ([]byte, []int) {
+	return file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeletePendingLinkedTransferResponse) GetError() *Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDesc = "" +
@@ -496,11 +592,18 @@ const file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawD
 	"\a_status\"X\n" +
 	"#UpdatePendingLinkedTransferResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xe4\x03\n" +
+	"\x06_error\"V\n" +
+	"\"DeletePendingLinkedTransferRequest\x12 \n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\fR\x02id\"X\n" +
+	"#DeletePendingLinkedTransferResponse\x12'\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xfd\x04\n" +
 	"\x1dPendingLinkedTransferEndpoint\x12\x90\x01\n" +
 	"\x19GetPendingLinkedTransfers\x127.pendingLinkedTransfer.GetPendingLinkedTransfersRequest\x1a8.pendingLinkedTransfer.GetPendingLinkedTransfersResponse\"\x00\x12\x96\x01\n" +
 	"\x1bCreatePendingLinkedTransfer\x129.pendingLinkedTransfer.CreatePendingLinkedTransferRequest\x1a:.pendingLinkedTransfer.CreatePendingLinkedTransferResponse\"\x00\x12\x96\x01\n" +
-	"\x1bUpdatePendingLinkedTransfer\x129.pendingLinkedTransfer.UpdatePendingLinkedTransferRequest\x1a:.pendingLinkedTransfer.UpdatePendingLinkedTransferResponse\"\x00B\bZ\x06/protob\x06proto3"
+	"\x1bUpdatePendingLinkedTransfer\x129.pendingLinkedTransfer.UpdatePendingLinkedTransferRequest\x1a:.pendingLinkedTransfer.UpdatePendingLinkedTransferResponse\"\x00\x12\x96\x01\n" +
+	"\x1bDeletePendingLinkedTransfer\x129.pendingLinkedTransfer.DeletePendingLinkedTransferRequest\x1a:.pendingLinkedTransfer.DeletePendingLinkedTransferResponse\"\x00B\bZ\x06/protob\x06proto3"
 
 var (
 	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDescOnce sync.Once
@@ -514,7 +617,7 @@ func file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDe
 	return file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDescData
 }
 
-var file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_goTypes = []any{
 	(*PendingLinkedTransfer)(nil),               // 0: pendingLinkedTransfer.PendingLinkedTransfer
 	(*GetPendingLinkedTransfersRequest)(nil),    // 1: pendingLinkedTransfer.GetPendingLinkedTransfersRequest
@@ -523,28 +626,33 @@ var file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_goType
 	(*CreatePendingLinkedTransferResponse)(nil), // 4: pendingLinkedTransfer.CreatePendingLinkedTransferResponse
 	(*UpdatePendingLinkedTransferRequest)(nil),  // 5: pendingLinkedTransfer.UpdatePendingLinkedTransferRequest
 	(*UpdatePendingLinkedTransferResponse)(nil), // 6: pendingLinkedTransfer.UpdatePendingLinkedTransferResponse
-	(PendingLinkedTransferStatus)(0),            // 7: pendingLinkedTransferStatus.PendingLinkedTransferStatus
-	(*Error)(nil),                               // 8: error.Error
+	(*DeletePendingLinkedTransferRequest)(nil),  // 7: pendingLinkedTransfer.DeletePendingLinkedTransferRequest
+	(*DeletePendingLinkedTransferResponse)(nil), // 8: pendingLinkedTransfer.DeletePendingLinkedTransferResponse
+	(PendingLinkedTransferStatus)(0),            // 9: pendingLinkedTransferStatus.PendingLinkedTransferStatus
+	(*Error)(nil),                               // 10: error.Error
 }
 var file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_depIdxs = []int32{
-	7,  // 0: pendingLinkedTransfer.PendingLinkedTransfer.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
-	7,  // 1: pendingLinkedTransfer.GetPendingLinkedTransfersRequest.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
-	8,  // 2: pendingLinkedTransfer.GetPendingLinkedTransfersResponse.error:type_name -> error.Error
+	9,  // 0: pendingLinkedTransfer.PendingLinkedTransfer.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
+	9,  // 1: pendingLinkedTransfer.GetPendingLinkedTransfersRequest.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
+	10, // 2: pendingLinkedTransfer.GetPendingLinkedTransfersResponse.error:type_name -> error.Error
 	0,  // 3: pendingLinkedTransfer.GetPendingLinkedTransfersResponse.pendingLinkedTransfers:type_name -> pendingLinkedTransfer.PendingLinkedTransfer
-	8,  // 4: pendingLinkedTransfer.CreatePendingLinkedTransferResponse.error:type_name -> error.Error
-	7,  // 5: pendingLinkedTransfer.UpdatePendingLinkedTransferRequest.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
-	8,  // 6: pendingLinkedTransfer.UpdatePendingLinkedTransferResponse.error:type_name -> error.Error
-	1,  // 7: pendingLinkedTransfer.PendingLinkedTransferEndpoint.GetPendingLinkedTransfers:input_type -> pendingLinkedTransfer.GetPendingLinkedTransfersRequest
-	3,  // 8: pendingLinkedTransfer.PendingLinkedTransferEndpoint.CreatePendingLinkedTransfer:input_type -> pendingLinkedTransfer.CreatePendingLinkedTransferRequest
-	5,  // 9: pendingLinkedTransfer.PendingLinkedTransferEndpoint.UpdatePendingLinkedTransfer:input_type -> pendingLinkedTransfer.UpdatePendingLinkedTransferRequest
-	2,  // 10: pendingLinkedTransfer.PendingLinkedTransferEndpoint.GetPendingLinkedTransfers:output_type -> pendingLinkedTransfer.GetPendingLinkedTransfersResponse
-	4,  // 11: pendingLinkedTransfer.PendingLinkedTransferEndpoint.CreatePendingLinkedTransfer:output_type -> pendingLinkedTransfer.CreatePendingLinkedTransferResponse
-	6,  // 12: pendingLinkedTransfer.PendingLinkedTransferEndpoint.UpdatePendingLinkedTransfer:output_type -> pendingLinkedTransfer.UpdatePendingLinkedTransferResponse
-	10, // [10:13] is the sub-list for method output_type
-	7,  // [7:10] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	10, // 4: pendingLinkedTransfer.CreatePendingLinkedTransferResponse.error:type_name -> error.Error
+	9,  // 5: pendingLinkedTransfer.UpdatePendingLinkedTransferRequest.status:type_name -> pendingLinkedTransferStatus.PendingLinkedTransferStatus
+	10, // 6: pendingLinkedTransfer.UpdatePendingLinkedTransferResponse.error:type_name -> error.Error
+	10, // 7: pendingLinkedTransfer.DeletePendingLinkedTransferResponse.error:type_name -> error.Error
+	1,  // 8: pendingLinkedTransfer.PendingLinkedTransferEndpoint.GetPendingLinkedTransfers:input_type -> pendingLinkedTransfer.GetPendingLinkedTransfersRequest
+	3,  // 9: pendingLinkedTransfer.PendingLinkedTransferEndpoint.CreatePendingLinkedTransfer:input_type -> pendingLinkedTransfer.CreatePendingLinkedTransferRequest
+	5,  // 10: pendingLinkedTransfer.PendingLinkedTransferEndpoint.UpdatePendingLinkedTransfer:input_type -> pendingLinkedTransfer.UpdatePendingLinkedTransferRequest
+	7,  // 11: pendingLinkedTransfer.PendingLinkedTransferEndpoint.DeletePendingLinkedTransfer:input_type -> pendingLinkedTransfer.DeletePendingLinkedTransferRequest
+	2,  // 12: pendingLinkedTransfer.PendingLinkedTransferEndpoint.GetPendingLinkedTransfers:output_type -> pendingLinkedTransfer.GetPendingLinkedTransfersResponse
+	4,  // 13: pendingLinkedTransfer.PendingLinkedTransferEndpoint.CreatePendingLinkedTransfer:output_type -> pendingLinkedTransfer.CreatePendingLinkedTransferResponse
+	6,  // 14: pendingLinkedTransfer.PendingLinkedTransferEndpoint.UpdatePendingLinkedTransfer:output_type -> pendingLinkedTransfer.UpdatePendingLinkedTransferResponse
+	8,  // 15: pendingLinkedTransfer.PendingLinkedTransferEndpoint.DeletePendingLinkedTransfer:output_type -> pendingLinkedTransfer.DeletePendingLinkedTransferResponse
+	12, // [12:16] is the sub-list for method output_type
+	8,  // [8:12] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_init() }
@@ -559,13 +667,14 @@ func file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_init(
 	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[4].OneofWrappers = []any{}
 	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
+	file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDesc), len(file_proto_pendingLinkedTransfer_pendingLinkedTransfer_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

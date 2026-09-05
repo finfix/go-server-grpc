@@ -22,6 +22,7 @@ const (
 	PendingLinkedTransferEndpoint_GetPendingLinkedTransfers_FullMethodName   = "/pendingLinkedTransfer.PendingLinkedTransferEndpoint/GetPendingLinkedTransfers"
 	PendingLinkedTransferEndpoint_CreatePendingLinkedTransfer_FullMethodName = "/pendingLinkedTransfer.PendingLinkedTransferEndpoint/CreatePendingLinkedTransfer"
 	PendingLinkedTransferEndpoint_UpdatePendingLinkedTransfer_FullMethodName = "/pendingLinkedTransfer.PendingLinkedTransferEndpoint/UpdatePendingLinkedTransfer"
+	PendingLinkedTransferEndpoint_DeletePendingLinkedTransfer_FullMethodName = "/pendingLinkedTransfer.PendingLinkedTransferEndpoint/DeletePendingLinkedTransfer"
 )
 
 // PendingLinkedTransferEndpointClient is the client API for PendingLinkedTransferEndpoint service.
@@ -37,6 +38,8 @@ type PendingLinkedTransferEndpointClient interface {
 	CreatePendingLinkedTransfer(ctx context.Context, in *CreatePendingLinkedTransferRequest, opts ...grpc.CallOption) (*CreatePendingLinkedTransferResponse, error)
 	// UpdatePendingLinkedTransfer меняет статус переноса (Completed/Ignored)
 	UpdatePendingLinkedTransfer(ctx context.Context, in *UpdatePendingLinkedTransferRequest, opts ...grpc.CallOption) (*UpdatePendingLinkedTransferResponse, error)
+	// DeletePendingLinkedTransfer удаляет перенос (например, если удалили саму транзакцию-инициатор)
+	DeletePendingLinkedTransfer(ctx context.Context, in *DeletePendingLinkedTransferRequest, opts ...grpc.CallOption) (*DeletePendingLinkedTransferResponse, error)
 }
 
 type pendingLinkedTransferEndpointClient struct {
@@ -77,6 +80,16 @@ func (c *pendingLinkedTransferEndpointClient) UpdatePendingLinkedTransfer(ctx co
 	return out, nil
 }
 
+func (c *pendingLinkedTransferEndpointClient) DeletePendingLinkedTransfer(ctx context.Context, in *DeletePendingLinkedTransferRequest, opts ...grpc.CallOption) (*DeletePendingLinkedTransferResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeletePendingLinkedTransferResponse)
+	err := c.cc.Invoke(ctx, PendingLinkedTransferEndpoint_DeletePendingLinkedTransfer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PendingLinkedTransferEndpointServer is the server API for PendingLinkedTransferEndpoint service.
 // All implementations must embed UnimplementedPendingLinkedTransferEndpointServer
 // for forward compatibility.
@@ -90,6 +103,8 @@ type PendingLinkedTransferEndpointServer interface {
 	CreatePendingLinkedTransfer(context.Context, *CreatePendingLinkedTransferRequest) (*CreatePendingLinkedTransferResponse, error)
 	// UpdatePendingLinkedTransfer меняет статус переноса (Completed/Ignored)
 	UpdatePendingLinkedTransfer(context.Context, *UpdatePendingLinkedTransferRequest) (*UpdatePendingLinkedTransferResponse, error)
+	// DeletePendingLinkedTransfer удаляет перенос (например, если удалили саму транзакцию-инициатор)
+	DeletePendingLinkedTransfer(context.Context, *DeletePendingLinkedTransferRequest) (*DeletePendingLinkedTransferResponse, error)
 	mustEmbedUnimplementedPendingLinkedTransferEndpointServer()
 }
 
@@ -108,6 +123,9 @@ func (UnimplementedPendingLinkedTransferEndpointServer) CreatePendingLinkedTrans
 }
 func (UnimplementedPendingLinkedTransferEndpointServer) UpdatePendingLinkedTransfer(context.Context, *UpdatePendingLinkedTransferRequest) (*UpdatePendingLinkedTransferResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdatePendingLinkedTransfer not implemented")
+}
+func (UnimplementedPendingLinkedTransferEndpointServer) DeletePendingLinkedTransfer(context.Context, *DeletePendingLinkedTransferRequest) (*DeletePendingLinkedTransferResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeletePendingLinkedTransfer not implemented")
 }
 func (UnimplementedPendingLinkedTransferEndpointServer) mustEmbedUnimplementedPendingLinkedTransferEndpointServer() {
 }
@@ -185,6 +203,24 @@ func _PendingLinkedTransferEndpoint_UpdatePendingLinkedTransfer_Handler(srv inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PendingLinkedTransferEndpoint_DeletePendingLinkedTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePendingLinkedTransferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PendingLinkedTransferEndpointServer).DeletePendingLinkedTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PendingLinkedTransferEndpoint_DeletePendingLinkedTransfer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PendingLinkedTransferEndpointServer).DeletePendingLinkedTransfer(ctx, req.(*DeletePendingLinkedTransferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PendingLinkedTransferEndpoint_ServiceDesc is the grpc.ServiceDesc for PendingLinkedTransferEndpoint service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -203,6 +239,10 @@ var PendingLinkedTransferEndpoint_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePendingLinkedTransfer",
 			Handler:    _PendingLinkedTransferEndpoint_UpdatePendingLinkedTransfer_Handler,
+		},
+		{
+			MethodName: "DeletePendingLinkedTransfer",
+			Handler:    _PendingLinkedTransferEndpoint_DeletePendingLinkedTransfer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
