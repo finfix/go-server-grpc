@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SyncEndpoint_Sync_FullMethodName        = "/sync.SyncEndpoint/Sync"
-	SyncEndpoint_ConfirmSync_FullMethodName = "/sync.SyncEndpoint/ConfirmSync"
+	SyncEndpoint_Sync_FullMethodName            = "/sync.SyncEndpoint/Sync"
+	SyncEndpoint_ConfirmSync_FullMethodName     = "/sync.SyncEndpoint/ConfirmSync"
+	SyncEndpoint_SubscribeToSync_FullMethodName = "/sync.SyncEndpoint/SubscribeToSync"
 )
 
 // SyncEndpointClient is the client API for SyncEndpoint service.
@@ -35,6 +36,13 @@ type SyncEndpointClient interface {
 	// ConfirmSync подтверждает, что клиент корректно применил изменения, полученные последним
 	// вызовом Sync, и просит бэкенд запомнить новый чекпоинт устройства
 	ConfirmSync(ctx context.Context, in *ConfirmSyncRequest, opts ...grpc.CallOption) (*ConfirmSyncResponse, error)
+	// SubscribeToSync — server-streaming уведомитель: держит соединение открытым и присылает
+	// пустой SyncNotification каждый раз, когда для пользователя появились изменения (создана
+	// новая релевантная запись аудит-лога). НЕ несёт сам payload изменений — получив сигнал,
+	// клиент должен сам вызвать обычный Sync/ConfirmSync. Предназначен для мгновенного отклика,
+	// пока приложение на переднем плане — клиент отключается при уходе в фон и переиспользует
+	// обычный периодический Sync как fallback.
+	SubscribeToSync(ctx context.Context, in *SubscribeToSyncRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[SyncNotification], error)
 }
 
 type syncEndpointClient struct {
@@ -65,6 +73,25 @@ func (c *syncEndpointClient) ConfirmSync(ctx context.Context, in *ConfirmSyncReq
 	return out, nil
 }
 
+func (c *syncEndpointClient) SubscribeToSync(ctx context.Context, in *SubscribeToSyncRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[SyncNotification], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &SyncEndpoint_ServiceDesc.Streams[0], SyncEndpoint_SubscribeToSync_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeToSyncRequest, SyncNotification]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SyncEndpoint_SubscribeToSyncClient = grpc.ServerStreamingClient[SyncNotification]
+
 // SyncEndpointServer is the server API for SyncEndpoint service.
 // All implementations must embed UnimplementedSyncEndpointServer
 // for forward compatibility.
@@ -77,6 +104,13 @@ type SyncEndpointServer interface {
 	// ConfirmSync подтверждает, что клиент корректно применил изменения, полученные последним
 	// вызовом Sync, и просит бэкенд запомнить новый чекпоинт устройства
 	ConfirmSync(context.Context, *ConfirmSyncRequest) (*ConfirmSyncResponse, error)
+	// SubscribeToSync — server-streaming уведомитель: держит соединение открытым и присылает
+	// пустой SyncNotification каждый раз, когда для пользователя появились изменения (создана
+	// новая релевантная запись аудит-лога). НЕ несёт сам payload изменений — получив сигнал,
+	// клиент должен сам вызвать обычный Sync/ConfirmSync. Предназначен для мгновенного отклика,
+	// пока приложение на переднем плане — клиент отключается при уходе в фон и переиспользует
+	// обычный периодический Sync как fallback.
+	SubscribeToSync(*SubscribeToSyncRequest, grpc.ServerStreamingServer[SyncNotification]) error
 	mustEmbedUnimplementedSyncEndpointServer()
 }
 
@@ -92,6 +126,9 @@ func (UnimplementedSyncEndpointServer) Sync(context.Context, *SyncRequest) (*Syn
 }
 func (UnimplementedSyncEndpointServer) ConfirmSync(context.Context, *ConfirmSyncRequest) (*ConfirmSyncResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ConfirmSync not implemented")
+}
+func (UnimplementedSyncEndpointServer) SubscribeToSync(*SubscribeToSyncRequest, grpc.ServerStreamingServer[SyncNotification]) error {
+	return status.Error(codes.Unimplemented, "method SubscribeToSync not implemented")
 }
 func (UnimplementedSyncEndpointServer) mustEmbedUnimplementedSyncEndpointServer() {}
 func (UnimplementedSyncEndpointServer) testEmbeddedByValue()                      {}
@@ -150,6 +187,17 @@ func _SyncEndpoint_ConfirmSync_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncEndpoint_SubscribeToSync_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeToSyncRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SyncEndpointServer).SubscribeToSync(m, &grpc.GenericServerStream[SubscribeToSyncRequest, SyncNotification]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SyncEndpoint_SubscribeToSyncServer = grpc.ServerStreamingServer[SyncNotification]
+
 // SyncEndpoint_ServiceDesc is the grpc.ServiceDesc for SyncEndpoint service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +214,12 @@ var SyncEndpoint_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncEndpoint_ConfirmSync_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeToSync",
+			Handler:       _SyncEndpoint_SubscribeToSync_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/sync/sync-endpoint.proto",
 }

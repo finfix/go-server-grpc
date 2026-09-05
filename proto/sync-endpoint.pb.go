@@ -341,6 +341,87 @@ func (x *ConfirmSyncResponse) GetError() *Error {
 	return nil
 }
 
+type SubscribeToSyncRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeToSyncRequest) Reset() {
+	*x = SubscribeToSyncRequest{}
+	mi := &file_proto_sync_sync_endpoint_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeToSyncRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeToSyncRequest) ProtoMessage() {}
+
+func (x *SubscribeToSyncRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sync_sync_endpoint_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeToSyncRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeToSyncRequest) Descriptor() ([]byte, []int) {
+	return file_proto_sync_sync_endpoint_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SubscribeToSyncRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+// Пустое сообщение-сигнал — "у тебя есть что засинкать", без самих данных.
+type SyncNotification struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncNotification) Reset() {
+	*x = SyncNotification{}
+	mi := &file_proto_sync_sync_endpoint_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncNotification) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncNotification) ProtoMessage() {}
+
+func (x *SyncNotification) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sync_sync_endpoint_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncNotification.ProtoReflect.Descriptor instead.
+func (*SyncNotification) Descriptor() ([]byte, []int) {
+	return file_proto_sync_sync_endpoint_proto_rawDescGZIP(), []int{5}
+}
+
 var File_proto_sync_sync_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_sync_sync_endpoint_proto_rawDesc = "" +
@@ -377,10 +458,14 @@ const file_proto_sync_sync_endpoint_proto_rawDesc = "" +
 	"\x10pendingSyncToken\x18\x02 \x01(\fR\x10pendingSyncToken\"H\n" +
 	"\x13ConfirmSyncResponse\x12'\n" +
 	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\x85\x01\n" +
+	"\x06_error\":\n" +
+	"\x16SubscribeToSyncRequest\x12 \n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\"\x12\n" +
+	"\x10SyncNotification2\xd2\x01\n" +
 	"\fSyncEndpoint\x12/\n" +
 	"\x04Sync\x12\x11.sync.SyncRequest\x1a\x12.sync.SyncResponse\"\x00\x12D\n" +
-	"\vConfirmSync\x12\x18.sync.ConfirmSyncRequest\x1a\x19.sync.ConfirmSyncResponse\"\x00B\bZ\x06/protob\x06proto3"
+	"\vConfirmSync\x12\x18.sync.ConfirmSyncRequest\x1a\x19.sync.ConfirmSyncResponse\"\x00\x12K\n" +
+	"\x0fSubscribeToSync\x12\x1c.sync.SubscribeToSyncRequest\x1a\x16.sync.SyncNotification\"\x000\x01B\bZ\x06/protob\x06proto3"
 
 var (
 	file_proto_sync_sync_endpoint_proto_rawDescOnce sync.Once
@@ -394,39 +479,43 @@ func file_proto_sync_sync_endpoint_proto_rawDescGZIP() []byte {
 	return file_proto_sync_sync_endpoint_proto_rawDescData
 }
 
-var file_proto_sync_sync_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_sync_sync_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_proto_sync_sync_endpoint_proto_goTypes = []any{
-	(*SyncRequest)(nil),           // 0: sync.SyncRequest
-	(*SyncResponse)(nil),          // 1: sync.SyncResponse
-	(*ConfirmSyncRequest)(nil),    // 2: sync.ConfirmSyncRequest
-	(*ConfirmSyncResponse)(nil),   // 3: sync.ConfirmSyncResponse
-	(*Error)(nil),                 // 4: error.Error
-	(*Transaction)(nil),           // 5: transaction.Transaction
-	(*Account)(nil),               // 6: account.Account
-	(*AccountGroup)(nil),          // 7: accountGroup.AccountGroup
-	(*Tag)(nil),                   // 8: tag.Tag
-	(*AccountBudget)(nil),         // 9: accountBudget.AccountBudget
-	(*User)(nil),                  // 10: user.User
-	(*Currency)(nil),              // 11: settings.Currency
-	(*PendingLinkedTransfer)(nil), // 12: pendingLinkedTransfer.PendingLinkedTransfer
+	(*SyncRequest)(nil),            // 0: sync.SyncRequest
+	(*SyncResponse)(nil),           // 1: sync.SyncResponse
+	(*ConfirmSyncRequest)(nil),     // 2: sync.ConfirmSyncRequest
+	(*ConfirmSyncResponse)(nil),    // 3: sync.ConfirmSyncResponse
+	(*SubscribeToSyncRequest)(nil), // 4: sync.SubscribeToSyncRequest
+	(*SyncNotification)(nil),       // 5: sync.SyncNotification
+	(*Error)(nil),                  // 6: error.Error
+	(*Transaction)(nil),            // 7: transaction.Transaction
+	(*Account)(nil),                // 8: account.Account
+	(*AccountGroup)(nil),           // 9: accountGroup.AccountGroup
+	(*Tag)(nil),                    // 10: tag.Tag
+	(*AccountBudget)(nil),          // 11: accountBudget.AccountBudget
+	(*User)(nil),                   // 12: user.User
+	(*Currency)(nil),               // 13: settings.Currency
+	(*PendingLinkedTransfer)(nil),  // 14: pendingLinkedTransfer.PendingLinkedTransfer
 }
 var file_proto_sync_sync_endpoint_proto_depIdxs = []int32{
-	4,  // 0: sync.SyncResponse.error:type_name -> error.Error
-	5,  // 1: sync.SyncResponse.changedTransactions:type_name -> transaction.Transaction
-	6,  // 2: sync.SyncResponse.changedAccounts:type_name -> account.Account
-	7,  // 3: sync.SyncResponse.changedAccountGroups:type_name -> accountGroup.AccountGroup
-	8,  // 4: sync.SyncResponse.changedTags:type_name -> tag.Tag
-	9,  // 5: sync.SyncResponse.changedAccountBudgets:type_name -> accountBudget.AccountBudget
-	10, // 6: sync.SyncResponse.changedUser:type_name -> user.User
-	11, // 7: sync.SyncResponse.changedCurrencies:type_name -> settings.Currency
-	12, // 8: sync.SyncResponse.changedPendingLinkedTransfers:type_name -> pendingLinkedTransfer.PendingLinkedTransfer
-	4,  // 9: sync.ConfirmSyncResponse.error:type_name -> error.Error
+	6,  // 0: sync.SyncResponse.error:type_name -> error.Error
+	7,  // 1: sync.SyncResponse.changedTransactions:type_name -> transaction.Transaction
+	8,  // 2: sync.SyncResponse.changedAccounts:type_name -> account.Account
+	9,  // 3: sync.SyncResponse.changedAccountGroups:type_name -> accountGroup.AccountGroup
+	10, // 4: sync.SyncResponse.changedTags:type_name -> tag.Tag
+	11, // 5: sync.SyncResponse.changedAccountBudgets:type_name -> accountBudget.AccountBudget
+	12, // 6: sync.SyncResponse.changedUser:type_name -> user.User
+	13, // 7: sync.SyncResponse.changedCurrencies:type_name -> settings.Currency
+	14, // 8: sync.SyncResponse.changedPendingLinkedTransfers:type_name -> pendingLinkedTransfer.PendingLinkedTransfer
+	6,  // 9: sync.ConfirmSyncResponse.error:type_name -> error.Error
 	0,  // 10: sync.SyncEndpoint.Sync:input_type -> sync.SyncRequest
 	2,  // 11: sync.SyncEndpoint.ConfirmSync:input_type -> sync.ConfirmSyncRequest
-	1,  // 12: sync.SyncEndpoint.Sync:output_type -> sync.SyncResponse
-	3,  // 13: sync.SyncEndpoint.ConfirmSync:output_type -> sync.ConfirmSyncResponse
-	12, // [12:14] is the sub-list for method output_type
-	10, // [10:12] is the sub-list for method input_type
+	4,  // 12: sync.SyncEndpoint.SubscribeToSync:input_type -> sync.SubscribeToSyncRequest
+	1,  // 13: sync.SyncEndpoint.Sync:output_type -> sync.SyncResponse
+	3,  // 14: sync.SyncEndpoint.ConfirmSync:output_type -> sync.ConfirmSyncResponse
+	5,  // 15: sync.SyncEndpoint.SubscribeToSync:output_type -> sync.SyncNotification
+	13, // [13:16] is the sub-list for method output_type
+	10, // [10:13] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -454,7 +543,7 @@ func file_proto_sync_sync_endpoint_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_sync_sync_endpoint_proto_rawDesc), len(file_proto_sync_sync_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
