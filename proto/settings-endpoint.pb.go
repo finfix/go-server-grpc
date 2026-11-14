@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -89,6 +90,67 @@ func (x *Currency) GetRate() float64 {
 	return 0
 }
 
+// CurrencyRate — точка истории курса: с момента validAt валюта стоит rate единиц за 1 USD
+type CurrencyRate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsoCode       string                 `protobuf:"bytes,1,opt,name=isoCode,proto3" json:"isoCode,omitempty"` // Код валюты
+	ValidAt       *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=validAt,proto3" json:"validAt,omitempty"` // С какого момента действует курс
+	Rate          string                 `protobuf:"bytes,3,opt,name=rate,proto3" json:"rate,omitempty"`       // Единиц валюты за 1 USD, десятичная строка полной точности
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CurrencyRate) Reset() {
+	*x = CurrencyRate{}
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CurrencyRate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CurrencyRate) ProtoMessage() {}
+
+func (x *CurrencyRate) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CurrencyRate.ProtoReflect.Descriptor instead.
+func (*CurrencyRate) Descriptor() ([]byte, []int) {
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CurrencyRate) GetIsoCode() string {
+	if x != nil {
+		return x.IsoCode
+	}
+	return ""
+}
+
+func (x *CurrencyRate) GetValidAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ValidAt
+	}
+	return nil
+}
+
+func (x *CurrencyRate) GetRate() string {
+	if x != nil {
+		return x.Rate
+	}
+	return ""
+}
+
 type Icon struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            []byte                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`       // ID иконки
@@ -100,7 +162,7 @@ type Icon struct {
 
 func (x *Icon) Reset() {
 	*x = Icon{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[1]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -112,7 +174,7 @@ func (x *Icon) String() string {
 func (*Icon) ProtoMessage() {}
 
 func (x *Icon) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[1]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -125,7 +187,7 @@ func (x *Icon) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Icon.ProtoReflect.Descriptor instead.
 func (*Icon) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{1}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Icon) GetId() []byte {
@@ -161,7 +223,7 @@ type Notification struct {
 
 func (x *Notification) Reset() {
 	*x = Notification{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[2]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -173,7 +235,7 @@ func (x *Notification) String() string {
 func (*Notification) ProtoMessage() {}
 
 func (x *Notification) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[2]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -186,7 +248,7 @@ func (x *Notification) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Notification.ProtoReflect.Descriptor instead.
 func (*Notification) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{2}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Notification) GetTitle() string {
@@ -227,7 +289,7 @@ type Version struct {
 
 func (x *Version) Reset() {
 	*x = Version{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[3]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -239,7 +301,7 @@ func (x *Version) String() string {
 func (*Version) ProtoMessage() {}
 
 func (x *Version) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[3]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -252,7 +314,7 @@ func (x *Version) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Version.ProtoReflect.Descriptor instead.
 func (*Version) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{3}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Version) GetVersion() string {
@@ -278,7 +340,7 @@ type GetCurrenciesRequest struct {
 
 func (x *GetCurrenciesRequest) Reset() {
 	*x = GetCurrenciesRequest{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[4]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -290,7 +352,7 @@ func (x *GetCurrenciesRequest) String() string {
 func (*GetCurrenciesRequest) ProtoMessage() {}
 
 func (x *GetCurrenciesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[4]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -303,7 +365,7 @@ func (x *GetCurrenciesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCurrenciesRequest.ProtoReflect.Descriptor instead.
 func (*GetCurrenciesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{4}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetCurrenciesRequest) GetAccessToken() string {
@@ -323,7 +385,7 @@ type GetCurrenciesResponse struct {
 
 func (x *GetCurrenciesResponse) Reset() {
 	*x = GetCurrenciesResponse{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[5]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -335,7 +397,7 @@ func (x *GetCurrenciesResponse) String() string {
 func (*GetCurrenciesResponse) ProtoMessage() {}
 
 func (x *GetCurrenciesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[5]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,7 +410,7 @@ func (x *GetCurrenciesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCurrenciesResponse.ProtoReflect.Descriptor instead.
 func (*GetCurrenciesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{5}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetCurrenciesResponse) GetError() *Error {
@@ -365,6 +427,134 @@ func (x *GetCurrenciesResponse) GetCurrencies() []*Currency {
 	return nil
 }
 
+type GetCurrencyRatesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
+	IsoCodes      []string               `protobuf:"bytes,2,rep,name=isoCodes,proto3" json:"isoCodes,omitempty"`       // Валюты, пусто — все
+	Since         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=since,proto3,oneof" json:"since,omitempty"`       // Только точки строго позже этого момента; нет — вся история
+	Limit         uint32                 `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`            // Сколько точек вернуть, 0 — по умолчанию (10 000), максимум 10 000
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrencyRatesRequest) Reset() {
+	*x = GetCurrencyRatesRequest{}
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrencyRatesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrencyRatesRequest) ProtoMessage() {}
+
+func (x *GetCurrencyRatesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrencyRatesRequest.ProtoReflect.Descriptor instead.
+func (*GetCurrencyRatesRequest) Descriptor() ([]byte, []int) {
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetCurrencyRatesRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *GetCurrencyRatesRequest) GetIsoCodes() []string {
+	if x != nil {
+		return x.IsoCodes
+	}
+	return nil
+}
+
+func (x *GetCurrencyRatesRequest) GetSince() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Since
+	}
+	return nil
+}
+
+func (x *GetCurrencyRatesRequest) GetLimit() uint32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+type GetCurrencyRatesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Error         *Error                 `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error,omitempty"`    // Объект ошибки
+	Rates         []*CurrencyRate        `protobuf:"bytes,2,rep,name=rates,proto3" json:"rates,omitempty"`          // Точки по возрастанию момента
+	Truncated     bool                   `protobuf:"varint,3,opt,name=truncated,proto3" json:"truncated,omitempty"` // Есть ещё точки: запросить снова с since = последний validAt
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrencyRatesResponse) Reset() {
+	*x = GetCurrencyRatesResponse{}
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrencyRatesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrencyRatesResponse) ProtoMessage() {}
+
+func (x *GetCurrencyRatesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrencyRatesResponse.ProtoReflect.Descriptor instead.
+func (*GetCurrencyRatesResponse) Descriptor() ([]byte, []int) {
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetCurrencyRatesResponse) GetError() *Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *GetCurrencyRatesResponse) GetRates() []*CurrencyRate {
+	if x != nil {
+		return x.Rates
+	}
+	return nil
+}
+
+func (x *GetCurrencyRatesResponse) GetTruncated() bool {
+	if x != nil {
+		return x.Truncated
+	}
+	return false
+}
+
 type GetIconsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"` // Токен доступа
@@ -374,7 +564,7 @@ type GetIconsRequest struct {
 
 func (x *GetIconsRequest) Reset() {
 	*x = GetIconsRequest{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[6]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -386,7 +576,7 @@ func (x *GetIconsRequest) String() string {
 func (*GetIconsRequest) ProtoMessage() {}
 
 func (x *GetIconsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[6]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -399,7 +589,7 @@ func (x *GetIconsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetIconsRequest.ProtoReflect.Descriptor instead.
 func (*GetIconsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{6}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetIconsRequest) GetAccessToken() string {
@@ -419,7 +609,7 @@ type GetIconsResponse struct {
 
 func (x *GetIconsResponse) Reset() {
 	*x = GetIconsResponse{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[7]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -431,7 +621,7 @@ func (x *GetIconsResponse) String() string {
 func (*GetIconsResponse) ProtoMessage() {}
 
 func (x *GetIconsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[7]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -444,7 +634,7 @@ func (x *GetIconsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetIconsResponse.ProtoReflect.Descriptor instead.
 func (*GetIconsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{7}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetIconsResponse) GetError() *Error {
@@ -470,7 +660,7 @@ type UpdateCurrenciesRequest struct {
 
 func (x *UpdateCurrenciesRequest) Reset() {
 	*x = UpdateCurrenciesRequest{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[8]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -482,7 +672,7 @@ func (x *UpdateCurrenciesRequest) String() string {
 func (*UpdateCurrenciesRequest) ProtoMessage() {}
 
 func (x *UpdateCurrenciesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[8]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -495,7 +685,7 @@ func (x *UpdateCurrenciesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCurrenciesRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCurrenciesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{8}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateCurrenciesRequest) GetAccessToken() string {
@@ -514,7 +704,7 @@ type UpdateCurrenciesResponse struct {
 
 func (x *UpdateCurrenciesResponse) Reset() {
 	*x = UpdateCurrenciesResponse{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[9]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -526,7 +716,7 @@ func (x *UpdateCurrenciesResponse) String() string {
 func (*UpdateCurrenciesResponse) ProtoMessage() {}
 
 func (x *UpdateCurrenciesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[9]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -539,7 +729,7 @@ func (x *UpdateCurrenciesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCurrenciesResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCurrenciesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{9}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateCurrenciesResponse) GetError() *Error {
@@ -560,7 +750,7 @@ type SendNotificationRequest struct {
 
 func (x *SendNotificationRequest) Reset() {
 	*x = SendNotificationRequest{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[10]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -572,7 +762,7 @@ func (x *SendNotificationRequest) String() string {
 func (*SendNotificationRequest) ProtoMessage() {}
 
 func (x *SendNotificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[10]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -585,7 +775,7 @@ func (x *SendNotificationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendNotificationRequest.ProtoReflect.Descriptor instead.
 func (*SendNotificationRequest) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{10}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *SendNotificationRequest) GetAccessToken() string {
@@ -618,7 +808,7 @@ type SendNotificationResponse struct {
 
 func (x *SendNotificationResponse) Reset() {
 	*x = SendNotificationResponse{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[11]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -630,7 +820,7 @@ func (x *SendNotificationResponse) String() string {
 func (*SendNotificationResponse) ProtoMessage() {}
 
 func (x *SendNotificationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[11]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -643,7 +833,7 @@ func (x *SendNotificationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendNotificationResponse.ProtoReflect.Descriptor instead.
 func (*SendNotificationResponse) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{11}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *SendNotificationResponse) GetError() *Error {
@@ -662,7 +852,7 @@ type GetVersionRequest struct {
 
 func (x *GetVersionRequest) Reset() {
 	*x = GetVersionRequest{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[12]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -674,7 +864,7 @@ func (x *GetVersionRequest) String() string {
 func (*GetVersionRequest) ProtoMessage() {}
 
 func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[12]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -687,7 +877,7 @@ func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionRequest.ProtoReflect.Descriptor instead.
 func (*GetVersionRequest) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{12}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetVersionRequest) GetApplicationType() ApplicationType {
@@ -707,7 +897,7 @@ type GetVersionResponse struct {
 
 func (x *GetVersionResponse) Reset() {
 	*x = GetVersionResponse{}
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[13]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -719,7 +909,7 @@ func (x *GetVersionResponse) String() string {
 func (*GetVersionResponse) ProtoMessage() {}
 
 func (x *GetVersionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[13]
+	mi := &file_proto_settings_settings_endpoint_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -732,7 +922,7 @@ func (x *GetVersionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionResponse.ProtoReflect.Descriptor instead.
 func (*GetVersionResponse) Descriptor() ([]byte, []int) {
-	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{13}
+	return file_proto_settings_settings_endpoint_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetVersionResponse) GetError() *Error {
@@ -753,12 +943,16 @@ var File_proto_settings_settings_endpoint_proto protoreflect.FileDescriptor
 
 const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\n" +
-	"&proto/settings/settings-endpoint.proto\x12\bsettings\x1a\x17proto/error/error.proto\x1a!proto/enums/applicationType.proto\"d\n" +
+	"&proto/settings/settings-endpoint.proto\x12\bsettings\x1a\x17proto/error/error.proto\x1a!proto/enums/applicationType.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"d\n" +
 	"\bCurrency\x12\x18\n" +
 	"\aisoCode\x18\x01 \x01(\tR\aisoCode\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
 	"\x06symbol\x18\x03 \x01(\tR\x06symbol\x12\x12\n" +
-	"\x04rate\x18\x04 \x01(\x01R\x04rate\"@\n" +
+	"\x04rate\x18\x04 \x01(\x01R\x04rate\"r\n" +
+	"\fCurrencyRate\x12\x18\n" +
+	"\aisoCode\x18\x01 \x01(\tR\aisoCode\x124\n" +
+	"\avalidAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\avalidAt\x12\x12\n" +
+	"\x04rate\x18\x03 \x01(\tR\x04rate\"@\n" +
 	"\x04Icon\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -780,6 +974,17 @@ const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\n" +
 	"currencies\x18\x02 \x03(\v2\x12.settings.CurrencyR\n" +
 	"currenciesB\b\n" +
+	"\x06_error\"\xae\x01\n" +
+	"\x17GetCurrencyRatesRequest\x12 \n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\x1a\n" +
+	"\bisoCodes\x18\x02 \x03(\tR\bisoCodes\x125\n" +
+	"\x05since\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\x05since\x88\x01\x01\x12\x14\n" +
+	"\x05limit\x18\x04 \x01(\rR\x05limitB\b\n" +
+	"\x06_since\"\x99\x01\n" +
+	"\x18GetCurrencyRatesResponse\x12'\n" +
+	"\x05error\x18\x01 \x01(\v2\f.error.ErrorH\x00R\x05error\x88\x01\x01\x12,\n" +
+	"\x05rates\x18\x02 \x03(\v2\x16.settings.CurrencyRateR\x05rates\x12\x1c\n" +
+	"\ttruncated\x18\x03 \x01(\bR\ttruncatedB\b\n" +
 	"\x06_error\"3\n" +
 	"\x0fGetIconsRequest\x12 \n" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\"k\n" +
@@ -806,12 +1011,13 @@ const file_proto_settings_settings_endpoint_proto_rawDesc = "" +
 	"\aversion\x18\x02 \x01(\v2\x11.settings.VersionH\x01R\aversion\x88\x01\x01B\b\n" +
 	"\x06_errorB\n" +
 	"\n" +
-	"\b_version2\xb0\x03\n" +
+	"\b_version2\x8d\x04\n" +
 	"\x10SettingsEndpoint\x12R\n" +
 	"\rGetCurrencies\x12\x1e.settings.GetCurrenciesRequest\x1a\x1f.settings.GetCurrenciesResponse\"\x00\x12C\n" +
 	"\bGetIcons\x12\x19.settings.GetIconsRequest\x1a\x1a.settings.GetIconsResponse\"\x00\x12[\n" +
 	"\x10UpdateCurrencies\x12!.settings.UpdateCurrenciesRequest\x1a\".settings.UpdateCurrenciesResponse\"\x00\x12[\n" +
-	"\x10SendNotification\x12!.settings.SendNotificationRequest\x1a\".settings.SendNotificationResponse\"\x00\x12I\n" +
+	"\x10SendNotification\x12!.settings.SendNotificationRequest\x1a\".settings.SendNotificationResponse\"\x00\x12[\n" +
+	"\x10GetCurrencyRates\x12!.settings.GetCurrencyRatesRequest\x1a\".settings.GetCurrencyRatesResponse\"\x00\x12I\n" +
 	"\n" +
 	"GetVersion\x12\x1b.settings.GetVersionRequest\x1a\x1c.settings.GetVersionResponse\"\x00B\bZ\x06/protob\x06proto3"
 
@@ -827,51 +1033,61 @@ func file_proto_settings_settings_endpoint_proto_rawDescGZIP() []byte {
 	return file_proto_settings_settings_endpoint_proto_rawDescData
 }
 
-var file_proto_settings_settings_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_proto_settings_settings_endpoint_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_proto_settings_settings_endpoint_proto_goTypes = []any{
 	(*Currency)(nil),                 // 0: settings.Currency
-	(*Icon)(nil),                     // 1: settings.Icon
-	(*Notification)(nil),             // 2: settings.Notification
-	(*Version)(nil),                  // 3: settings.Version
-	(*GetCurrenciesRequest)(nil),     // 4: settings.GetCurrenciesRequest
-	(*GetCurrenciesResponse)(nil),    // 5: settings.GetCurrenciesResponse
-	(*GetIconsRequest)(nil),          // 6: settings.GetIconsRequest
-	(*GetIconsResponse)(nil),         // 7: settings.GetIconsResponse
-	(*UpdateCurrenciesRequest)(nil),  // 8: settings.UpdateCurrenciesRequest
-	(*UpdateCurrenciesResponse)(nil), // 9: settings.UpdateCurrenciesResponse
-	(*SendNotificationRequest)(nil),  // 10: settings.SendNotificationRequest
-	(*SendNotificationResponse)(nil), // 11: settings.SendNotificationResponse
-	(*GetVersionRequest)(nil),        // 12: settings.GetVersionRequest
-	(*GetVersionResponse)(nil),       // 13: settings.GetVersionResponse
-	(*Error)(nil),                    // 14: error.Error
-	(ApplicationType)(0),             // 15: applicationType.ApplicationType
+	(*CurrencyRate)(nil),             // 1: settings.CurrencyRate
+	(*Icon)(nil),                     // 2: settings.Icon
+	(*Notification)(nil),             // 3: settings.Notification
+	(*Version)(nil),                  // 4: settings.Version
+	(*GetCurrenciesRequest)(nil),     // 5: settings.GetCurrenciesRequest
+	(*GetCurrenciesResponse)(nil),    // 6: settings.GetCurrenciesResponse
+	(*GetCurrencyRatesRequest)(nil),  // 7: settings.GetCurrencyRatesRequest
+	(*GetCurrencyRatesResponse)(nil), // 8: settings.GetCurrencyRatesResponse
+	(*GetIconsRequest)(nil),          // 9: settings.GetIconsRequest
+	(*GetIconsResponse)(nil),         // 10: settings.GetIconsResponse
+	(*UpdateCurrenciesRequest)(nil),  // 11: settings.UpdateCurrenciesRequest
+	(*UpdateCurrenciesResponse)(nil), // 12: settings.UpdateCurrenciesResponse
+	(*SendNotificationRequest)(nil),  // 13: settings.SendNotificationRequest
+	(*SendNotificationResponse)(nil), // 14: settings.SendNotificationResponse
+	(*GetVersionRequest)(nil),        // 15: settings.GetVersionRequest
+	(*GetVersionResponse)(nil),       // 16: settings.GetVersionResponse
+	(*timestamppb.Timestamp)(nil),    // 17: google.protobuf.Timestamp
+	(*Error)(nil),                    // 18: error.Error
+	(ApplicationType)(0),             // 19: applicationType.ApplicationType
 }
 var file_proto_settings_settings_endpoint_proto_depIdxs = []int32{
-	14, // 0: settings.GetCurrenciesResponse.error:type_name -> error.Error
-	0,  // 1: settings.GetCurrenciesResponse.currencies:type_name -> settings.Currency
-	14, // 2: settings.GetIconsResponse.error:type_name -> error.Error
-	1,  // 3: settings.GetIconsResponse.icons:type_name -> settings.Icon
-	14, // 4: settings.UpdateCurrenciesResponse.error:type_name -> error.Error
-	2,  // 5: settings.SendNotificationRequest.notification:type_name -> settings.Notification
-	14, // 6: settings.SendNotificationResponse.error:type_name -> error.Error
-	15, // 7: settings.GetVersionRequest.applicationType:type_name -> applicationType.ApplicationType
-	14, // 8: settings.GetVersionResponse.error:type_name -> error.Error
-	3,  // 9: settings.GetVersionResponse.version:type_name -> settings.Version
-	4,  // 10: settings.SettingsEndpoint.GetCurrencies:input_type -> settings.GetCurrenciesRequest
-	6,  // 11: settings.SettingsEndpoint.GetIcons:input_type -> settings.GetIconsRequest
-	8,  // 12: settings.SettingsEndpoint.UpdateCurrencies:input_type -> settings.UpdateCurrenciesRequest
-	10, // 13: settings.SettingsEndpoint.SendNotification:input_type -> settings.SendNotificationRequest
-	12, // 14: settings.SettingsEndpoint.GetVersion:input_type -> settings.GetVersionRequest
-	5,  // 15: settings.SettingsEndpoint.GetCurrencies:output_type -> settings.GetCurrenciesResponse
-	7,  // 16: settings.SettingsEndpoint.GetIcons:output_type -> settings.GetIconsResponse
-	9,  // 17: settings.SettingsEndpoint.UpdateCurrencies:output_type -> settings.UpdateCurrenciesResponse
-	11, // 18: settings.SettingsEndpoint.SendNotification:output_type -> settings.SendNotificationResponse
-	13, // 19: settings.SettingsEndpoint.GetVersion:output_type -> settings.GetVersionResponse
-	15, // [15:20] is the sub-list for method output_type
-	10, // [10:15] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	17, // 0: settings.CurrencyRate.validAt:type_name -> google.protobuf.Timestamp
+	18, // 1: settings.GetCurrenciesResponse.error:type_name -> error.Error
+	0,  // 2: settings.GetCurrenciesResponse.currencies:type_name -> settings.Currency
+	17, // 3: settings.GetCurrencyRatesRequest.since:type_name -> google.protobuf.Timestamp
+	18, // 4: settings.GetCurrencyRatesResponse.error:type_name -> error.Error
+	1,  // 5: settings.GetCurrencyRatesResponse.rates:type_name -> settings.CurrencyRate
+	18, // 6: settings.GetIconsResponse.error:type_name -> error.Error
+	2,  // 7: settings.GetIconsResponse.icons:type_name -> settings.Icon
+	18, // 8: settings.UpdateCurrenciesResponse.error:type_name -> error.Error
+	3,  // 9: settings.SendNotificationRequest.notification:type_name -> settings.Notification
+	18, // 10: settings.SendNotificationResponse.error:type_name -> error.Error
+	19, // 11: settings.GetVersionRequest.applicationType:type_name -> applicationType.ApplicationType
+	18, // 12: settings.GetVersionResponse.error:type_name -> error.Error
+	4,  // 13: settings.GetVersionResponse.version:type_name -> settings.Version
+	5,  // 14: settings.SettingsEndpoint.GetCurrencies:input_type -> settings.GetCurrenciesRequest
+	9,  // 15: settings.SettingsEndpoint.GetIcons:input_type -> settings.GetIconsRequest
+	11, // 16: settings.SettingsEndpoint.UpdateCurrencies:input_type -> settings.UpdateCurrenciesRequest
+	13, // 17: settings.SettingsEndpoint.SendNotification:input_type -> settings.SendNotificationRequest
+	7,  // 18: settings.SettingsEndpoint.GetCurrencyRates:input_type -> settings.GetCurrencyRatesRequest
+	15, // 19: settings.SettingsEndpoint.GetVersion:input_type -> settings.GetVersionRequest
+	6,  // 20: settings.SettingsEndpoint.GetCurrencies:output_type -> settings.GetCurrenciesResponse
+	10, // 21: settings.SettingsEndpoint.GetIcons:output_type -> settings.GetIconsResponse
+	12, // 22: settings.SettingsEndpoint.UpdateCurrencies:output_type -> settings.UpdateCurrenciesResponse
+	14, // 23: settings.SettingsEndpoint.SendNotification:output_type -> settings.SendNotificationResponse
+	8,  // 24: settings.SettingsEndpoint.GetCurrencyRates:output_type -> settings.GetCurrencyRatesResponse
+	16, // 25: settings.SettingsEndpoint.GetVersion:output_type -> settings.GetVersionResponse
+	20, // [20:26] is the sub-list for method output_type
+	14, // [14:20] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_proto_settings_settings_endpoint_proto_init() }
@@ -881,18 +1097,20 @@ func file_proto_settings_settings_endpoint_proto_init() {
 	}
 	file_proto_error_error_proto_init()
 	file_proto_enums_applicationType_proto_init()
-	file_proto_settings_settings_endpoint_proto_msgTypes[5].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[6].OneofWrappers = []any{}
 	file_proto_settings_settings_endpoint_proto_msgTypes[7].OneofWrappers = []any{}
-	file_proto_settings_settings_endpoint_proto_msgTypes[9].OneofWrappers = []any{}
-	file_proto_settings_settings_endpoint_proto_msgTypes[11].OneofWrappers = []any{}
-	file_proto_settings_settings_endpoint_proto_msgTypes[13].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[8].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[10].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[12].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[14].OneofWrappers = []any{}
+	file_proto_settings_settings_endpoint_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_settings_settings_endpoint_proto_rawDesc), len(file_proto_settings_settings_endpoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

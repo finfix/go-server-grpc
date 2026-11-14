@@ -23,6 +23,7 @@ const (
 	SettingsEndpoint_GetIcons_FullMethodName         = "/settings.SettingsEndpoint/GetIcons"
 	SettingsEndpoint_UpdateCurrencies_FullMethodName = "/settings.SettingsEndpoint/UpdateCurrencies"
 	SettingsEndpoint_SendNotification_FullMethodName = "/settings.SettingsEndpoint/SendNotification"
+	SettingsEndpoint_GetCurrencyRates_FullMethodName = "/settings.SettingsEndpoint/GetCurrencyRates"
 	SettingsEndpoint_GetVersion_FullMethodName       = "/settings.SettingsEndpoint/GetVersion"
 )
 
@@ -38,6 +39,8 @@ type SettingsEndpointClient interface {
 	UpdateCurrencies(ctx context.Context, in *UpdateCurrenciesRequest, opts ...grpc.CallOption) (*UpdateCurrenciesResponse, error)
 	// SendNotification отправка уведомления пользователю
 	SendNotification(ctx context.Context, in *SendNotificationRequest, opts ...grpc.CallOption) (*SendNotificationResponse, error)
+	// GetCurrencyRates история курсов валют: точки после момента since, по возрастанию момента
+	GetCurrencyRates(ctx context.Context, in *GetCurrencyRatesRequest, opts ...grpc.CallOption) (*GetCurrencyRatesResponse, error)
 	// GetVersion получение текущей версии сервера
 	GetVersion(ctx context.Context, in *GetVersionRequest, opts ...grpc.CallOption) (*GetVersionResponse, error)
 }
@@ -90,6 +93,16 @@ func (c *settingsEndpointClient) SendNotification(ctx context.Context, in *SendN
 	return out, nil
 }
 
+func (c *settingsEndpointClient) GetCurrencyRates(ctx context.Context, in *GetCurrencyRatesRequest, opts ...grpc.CallOption) (*GetCurrencyRatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCurrencyRatesResponse)
+	err := c.cc.Invoke(ctx, SettingsEndpoint_GetCurrencyRates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *settingsEndpointClient) GetVersion(ctx context.Context, in *GetVersionRequest, opts ...grpc.CallOption) (*GetVersionResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetVersionResponse)
@@ -112,6 +125,8 @@ type SettingsEndpointServer interface {
 	UpdateCurrencies(context.Context, *UpdateCurrenciesRequest) (*UpdateCurrenciesResponse, error)
 	// SendNotification отправка уведомления пользователю
 	SendNotification(context.Context, *SendNotificationRequest) (*SendNotificationResponse, error)
+	// GetCurrencyRates история курсов валют: точки после момента since, по возрастанию момента
+	GetCurrencyRates(context.Context, *GetCurrencyRatesRequest) (*GetCurrencyRatesResponse, error)
 	// GetVersion получение текущей версии сервера
 	GetVersion(context.Context, *GetVersionRequest) (*GetVersionResponse, error)
 	mustEmbedUnimplementedSettingsEndpointServer()
@@ -135,6 +150,9 @@ func (UnimplementedSettingsEndpointServer) UpdateCurrencies(context.Context, *Up
 }
 func (UnimplementedSettingsEndpointServer) SendNotification(context.Context, *SendNotificationRequest) (*SendNotificationResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SendNotification not implemented")
+}
+func (UnimplementedSettingsEndpointServer) GetCurrencyRates(context.Context, *GetCurrencyRatesRequest) (*GetCurrencyRatesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCurrencyRates not implemented")
 }
 func (UnimplementedSettingsEndpointServer) GetVersion(context.Context, *GetVersionRequest) (*GetVersionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetVersion not implemented")
@@ -232,6 +250,24 @@ func _SettingsEndpoint_SendNotification_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SettingsEndpoint_GetCurrencyRates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrencyRatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingsEndpointServer).GetCurrencyRates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingsEndpoint_GetCurrencyRates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingsEndpointServer).GetCurrencyRates(ctx, req.(*GetCurrencyRatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SettingsEndpoint_GetVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetVersionRequest)
 	if err := dec(in); err != nil {
@@ -272,6 +308,10 @@ var SettingsEndpoint_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendNotification",
 			Handler:    _SettingsEndpoint_SendNotification_Handler,
+		},
+		{
+			MethodName: "GetCurrencyRates",
+			Handler:    _SettingsEndpoint_GetCurrencyRates_Handler,
 		},
 		{
 			MethodName: "GetVersion",
